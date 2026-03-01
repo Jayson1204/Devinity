@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LearningApp.Views.MainPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             Title="lala"
+             BackgroundColor="#30364F">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20" Spacing="25">
+
+                <VerticalStackLayout Spacing="4" Margin="0,10,0,0">
+                    <Label Text="Welcome back!" FontSize="28" FontAttributes="Bold" TextColor="#ACBAC4" />
+                    <Label Text="Ready to learn something new?" FontSize="14" TextColor="#ACBAC4" />
+                </VerticalStackLayout>
+
+                <Border Stroke="#333333" StrokeThickness="1" BackgroundColor="#E1D9BC" Padding="15,8">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0" Text="🔍" FontSize="18" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Placeholder="Search for courses" PlaceholderColor="#705D56" TextColor="White" BackgroundColor="Transparent" />
+                    </Grid>
+                </Border>
+
+                <Grid RowDefinitions="Auto">
+                    <Label Text="Categories" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="See all" FontSize="14" TextColor="#A7BBEC" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center" />
+                </Grid>
+
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*" RowSpacing="15" ColumnSpacing="15">
+
+                    <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#6B7280" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="PHP" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#7B7FB8" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="PHP" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Php" FontSize="16" FontAttributes="Bold" TextColor="#E1D9BC" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#E1D9BC" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.Column="1" BackgroundColor="#1D546C" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Java" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#F89820" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="☕" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Java" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="0" BackgroundColor="#1D546C" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="JavaScript" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#F0DB4F" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="JS" FontSize="14" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Javascript" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="#1D546C" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Python" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#4584B6" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="🐍" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Python" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="2" Grid.Column="0" BackgroundColor="#1D546C" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="C++" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#659AD2" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="C++" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="C++" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="2" Grid.Column="1" BackgroundColor="#1A1A1A" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="C" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#A8B9CC" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="C" FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="C" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="3" Grid.Column="0" BackgroundColor="#1A1A1A" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="C#" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#68217A" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="C#" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="C#" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="3" Grid.Column="1" BackgroundColor="#1A1A1A" Stroke="#333333" StrokeThickness="1" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="MySQL" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="10">
+                            <Border BackgroundColor="#00758F" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Label Text="SQL" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Mysql" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="250 videos" FontSize="12" TextColor="#9097C0" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Label Text="Featured Courses" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
+                <Border BackgroundColor="#1A1A1A" Stroke="#333333" StrokeThickness="1" Padding="0" Margin="0,0,0,20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout>
+                        <Border BackgroundColor="#503B31" HeightRequest="150" StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="24,24,0,0" />
+                            </Border.StrokeShape>
+                            <Label Text="💻" FontSize="60" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Padding="16" Spacing="5">
+                            <Label Text="Complete Web Development Course" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="By: Martin, Romualdez" FontSize="13" TextColor="#9097C0" />
+                            <Label Text="52 hours" FontSize="13" TextColor="#A7BBEC" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <BoxView HeightRequest="40" Color="Transparent" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border Grid.Row="1" 
+        Margin="20,0,20,25"
+        BackgroundColor="#1A1A1A" 
+        Stroke="#333333" 
+        StrokeThickness="1" 
+        HeightRequest="70"
+        VerticalOptions="End">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="35" />
+            </Border.StrokeShape>
+
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.4" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*,*,*">
+
+                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHomeTapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="🏠" FontSize="22" HorizontalOptions="Center" />
+                    <Label Text="Home" TextColor="#A7BBEC" HorizontalOptions="Center" FontSize="11" FontAttributes="Bold" />
+                    <BoxView HeightRequest="4" WidthRequest="4" Color="#A7BBEC" HorizontalOptions="Center" Margin="0,2,0,0">
+                        <BoxView.Clip>
+                            <EllipseGeometry Center="2,2" RadiusX="2" RadiusY="2" />
+                        </BoxView.Clip>
+                    </BoxView>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2" Opacity="0.6">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMyLearningTabTapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="📚" FontSize="22" HorizontalOptions="Center" />
+                    <Label Text="Learning" TextColor="White" HorizontalOptions="Center" FontSize="11" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="2" Opacity="0.6">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnProfileTabTapped" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="👤" FontSize="22" HorizontalOptions="Center" />
+                    <Label Text="Profile" TextColor="White" HorizontalOptions="Center" FontSize="11" />
+                </VerticalStackLayout>
+
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>
