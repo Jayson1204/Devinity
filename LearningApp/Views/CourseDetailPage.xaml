@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LearningApp.Views.CourseDetailPage"
+             BackgroundColor="#30364F"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Grid Grid.Row="0"
+              BackgroundColor="#30364F"
+              Padding="20,52,20,20"
+              RowDefinitions="Auto,Auto"
+              RowSpacing="6">
+
+            <!-- Back + Title -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+                <Border Grid.Column="0"
+                        BackgroundColor="#1B2250"
+                        StrokeThickness="0"
+                        WidthRequest="40"
+                        HeightRequest="40">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Label Text="←"
+                           FontSize="18"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackClicked"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Border>
+
+                <Label Grid.Column="1"
+                       x:Name="CourseTitleLabel"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+
+                <!-- Loading indicator top right -->
+                <ActivityIndicator Grid.Column="2"
+                                   x:Name="LoadingIndicator"
+                                   IsVisible="False"
+                                   IsRunning="False"
+                                   Color="#4A90D9"
+                                   WidthRequest="24"
+                                   HeightRequest="24"/>
+            </Grid>
+
+            <!-- Subtitle -->
+            <Label Grid.Row="1"
+                   Text="Videos &amp; Assessments"
+                   FontSize="13"
+                   TextColor="#6B7FBF"
+                   HorizontalOptions="Center"/>
+        </Grid>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout x:Name="LearningPathContainer" Spacing="0" Padding="0,8,0,24"/>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

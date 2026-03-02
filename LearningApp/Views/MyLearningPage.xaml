@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LearningApp.Views.MyLearningPage"
+             BackgroundColor="#F5F5F5"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,50,20,16" BackgroundColor="#F5F5F5" Spacing="4">
+            <Label Text="My learning"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#1A1A1A"/>
+            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="16" Margin="0,4,0,0">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="Enrolled 📋"
+                           FontSize="12"
+                           TextColor="#888"/>
+                    <Label x:Name="EnrolledLabel"
+                           Text="0 courses"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A1A"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="2" Spacing="2">
+                    <Label Text="Total hours ⏱"
+                           FontSize="12"
+                           TextColor="#888"/>
+                    <Label x:Name="TotalHoursLabel"
+                           Text="0h"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A1A"/>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- Tab Switcher -->
+        <Border Grid.Row="1"
+                BackgroundColor="#E8E8E8"
+                StrokeThickness="0"
+                Margin="20,0,20,12"
+                Padding="4">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="25"/>
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,*">
+                <Border x:Name="InProgressTab"
+                        BackgroundColor="White"
+                        StrokeThickness="0"
+                        Grid.Column="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22"/>
+                    </Border.StrokeShape>
+                    <Label Text="In Progress"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A1A"
+                           HorizontalOptions="Center"
+                           Padding="0,10"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInProgressTapped"/>
+                    </Border.GestureRecognizers>
+                </Border>
+                <Border x:Name="CompletedTab"
+                        BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        Grid.Column="1">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22"/>
+                    </Border.StrokeShape>
+                    <Label Text="Completed"
+                           FontSize="14"
+                           TextColor="#888"
+                           HorizontalOptions="Center"
+                           Padding="0,10"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCompletedTapped"/>
+                    </Border.GestureRecognizers>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Loading -->
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           Grid.Row="2"
+                           IsVisible="True"
+                           IsRunning="True"
+                           Color="#6C5CE7"
+                           HeightRequest="40"/>
+
+        <!-- Course List -->
+        <ScrollView Grid.Row="3">
+            <VerticalStackLayout x:Name="CourseListContainer"
+                                 Padding="20,10,20,20"
+                                 Spacing="16">
+
+                <!-- Empty State -->
+                <VerticalStackLayout x:Name="EmptyState"
+                                     IsVisible="False"
+                                     Spacing="12"
+                                     Margin="0,60,0,0">
+                    <Label Text="📚"
+                           FontSize="60"
+                           HorizontalOptions="Center"/>
+                    <Label Text="No courses yet!"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A1A"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Start watching videos and completing assessments to track your progress here."
+                           FontSize="14"
+                           TextColor="#666"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

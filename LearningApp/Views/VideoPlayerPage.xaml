@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="LearningApp.Views.VideoPlayerPage"
+             BackgroundColor="#000000">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Title -->
+        <Label x:Name="VideoTitleLabel"
+               Grid.Row="0"
+               FontSize="15"
+               FontAttributes="Bold"
+               TextColor="White"
+               Padding="16,12"
+               MaxLines="2"
+               LineBreakMode="TailTruncation"/>
+
+        <!-- MediaElement Video Player -->
+        <toolkit:MediaElement
+            x:Name="VideoPlayer"
+            Grid.Row="1"
+            ShouldAutoPlay="True"
+            ShouldShowPlaybackControls="True"
+            ShouldLoopPlayback="False"
+            BackgroundColor="Black"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"/>
+
+        <!-- Duration + Close -->
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*,Auto"
+              Padding="16,8"
+              BackgroundColor="#111111">
+            <Label x:Name="DurationLabel"
+                   Grid.Column="0"
+                   TextColor="#AAAAAA"
+                   FontSize="13"
+                   VerticalOptions="Center"/>
+            <Button Grid.Column="1"
+                    Text="✕ Close"
+                    Clicked="OnCloseClicked"
+                    BackgroundColor="#6C5CE7"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="16,8"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

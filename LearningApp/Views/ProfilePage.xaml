@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LearningApp.Views.ProfilePage"
+             BackgroundColor="#F0F0F0"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Profile Header -->
+            <VerticalStackLayout BackgroundColor="#E8E8E8"
+                                 Padding="20,60,20,24"
+                                 Spacing="6">
+                <!-- Avatar -->
+                <Border BackgroundColor="#CCCCCC"
+                        StrokeThickness="0"
+                        WidthRequest="72"
+                        HeightRequest="72"
+                        HorizontalOptions="Start">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="36"/>
+                    </Border.StrokeShape>
+                    <Label Text="👤"
+                           FontSize="40"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <Label x:Name="FullNameLabel"
+                       Text="Loading..."
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#1A1A1A"/>
+
+                <Label x:Name="EmailLabel"
+                       Text=""
+                       FontSize="13"
+                       TextColor="#666666"/>
+            </VerticalStackLayout>
+
+            <!-- Stats Row -->
+            <Grid ColumnDefinitions="*,*,*"
+                  BackgroundColor="#E8E8E8"
+                  Padding="12,0,12,20"
+                  ColumnSpacing="10">
+
+                <!-- Courses Completed -->
+                <Border Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="12,16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="🏅"
+                               FontSize="24"
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="CoursesCompletedLabel"
+                               Text="0"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#1A1A1A"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Courses&#10;Completed"
+                               FontSize="11"
+                               TextColor="#888"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Total Hours -->
+                <Border Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="12,16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="⏱"
+                               FontSize="24"
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="TotalHoursLabel"
+                               Text="0"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#1A1A1A"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Total&#10;Hours"
+                               FontSize="11"
+                               TextColor="#888"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Certificates -->
+                <Border Grid.Column="2"
+                        BackgroundColor="White"
+                        StrokeThickness="0"
+                        Padding="12,16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="📜"
+                               FontSize="24"
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="CertificatesLabel"
+                               Text="0"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#1A1A1A"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Certifi-&#10;cates"
+                               FontSize="11"
+                               TextColor="#888"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Spacer -->
+            <BoxView HeightRequest="12" Color="Transparent"/>
+
+            <!-- Menu Items -->
+            <VerticalStackLayout BackgroundColor="White" Margin="0,0,0,0" Spacing="0">
+
+                <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" Text="👤" FontSize="18" VerticalOptions="Center" Margin="0,0,12,0"/>
+                    <Label Grid.Column="1" Text="Edit Profile" FontSize="15" TextColor="#1A1A1A" VerticalOptions="Center"/>
+                    <Label Grid.Column="2" Text="☰" FontSize="18" TextColor="#CCCCCC" VerticalOptions="Center"/>
+                </Grid>
+                <BoxView HeightRequest="1" Color="#F0F0F0" Margin="20,0"/>
+
+                <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" Text="🔔" FontSize="18" VerticalOptions="Center" Margin="0,0,12,0"/>
+                    <Label Grid.Column="1" Text="Notifications" FontSize="15" TextColor="#1A1A1A" VerticalOptions="Center"/>
+                    <Switch Grid.Column="2" IsToggled="True" OnColor="#6C5CE7"/>
+                </Grid>
+                <BoxView HeightRequest="1" Color="#F0F0F0" Margin="20,0"/>
+
+                <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" Text="🔒" FontSize="18" VerticalOptions="Center" Margin="0,0,12,0"/>
+                    <Label Grid.Column="1" Text="Privacy &amp; Security" FontSize="15" TextColor="#1A1A1A" VerticalOptions="Center"/>
+                    <Label Grid.Column="2" Text="☰" FontSize="18" TextColor="#CCCCCC" VerticalOptions="Center"/>
+                </Grid>
+                <BoxView HeightRequest="1" Color="#F0F0F0" Margin="20,0"/>
+
+                <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" Text="❓" FontSize="18" VerticalOptions="Center" Margin="0,0,12,0"/>
+                    <Label Grid.Column="1" Text="Help &amp; Support" FontSize="15" TextColor="#1A1A1A" VerticalOptions="Center"/>
+                    <Label Grid.Column="2" Text="☰" FontSize="18" TextColor="#CCCCCC" VerticalOptions="Center"/>
+                </Grid>
+                <BoxView HeightRequest="1" Color="#F0F0F0" Margin="20,0"/>
+
+                <Grid Padding="20,16" ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" Text="👥" FontSize="18" VerticalOptions="Center" Margin="0,0,12,0"/>
+                    <Label Grid.Column="1" Text="Meetings" FontSize="15" TextColor="#1A1A1A" VerticalOptions="Center"/>
+                    <Label Grid.Column="2" Text="☰" FontSize="18" TextColor="#CCCCCC" VerticalOptions="Center"/>
+                </Grid>
+
+            </VerticalStackLayout>
+
+            <!-- Spacer -->
+            <BoxView HeightRequest="20" Color="Transparent"/>
+
+            <!-- Logout Button -->
+            <Border Margin="20,0"
+                    BackgroundColor="White"
+                    StrokeThickness="1.5"
+                    Stroke="#E74C3C"
+                    Padding="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <Button Text="⬅  Logout"
+                        TextColor="#E74C3C"
+                        BackgroundColor="Transparent"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        HeightRequest="50"
+                        Clicked="OnLogoutClicked"/>
+            </Border>
+
+            <!-- Version -->
+            <Label Text="Version 1.0"
+                   FontSize="12"
+                   TextColor="#AAAAAA"
+                   HorizontalOptions="Center"
+                   Margin="0,16,0,32"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
