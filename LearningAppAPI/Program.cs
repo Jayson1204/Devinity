@@ -105,7 +105,6 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        await db.Database.MigrateAsync();
         Console.WriteLine("Database migration successful.");
     }
     catch (Exception ex)
