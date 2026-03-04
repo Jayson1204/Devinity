@@ -8,12 +8,10 @@ using LearningApp.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-
-// Swagger configuration with JWT support
+// Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -22,17 +20,14 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Learning App API with JWT Authentication"
     });
-
-    // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token.",
+        Description = "JWT Authorization header using the Bearer scheme.",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -49,12 +44,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Database configuration (MySQL)
+// Database — fixed version (no AutoDetect)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
 
-// JWT Authentication
+// JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
@@ -80,7 +75,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// CORS configuration
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -91,72 +86,55 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-// Register services
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-
-// Logging
 builder.Services.AddLogging(logging =>
 {
     logging.ClearProviders();
     logging.AddConsole();
-    logging.AddDebug();
 });
 
-// Health checks
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
 
-
 var app = builder.Build();
 
-// Seed assessment data
+// Migrate database — wrapped in try/catch so app still starts on error
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.MigrateAsync(); // ensure tables exist
-    
-}
-
-
-
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    try
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Learning App API V1");
-        c.RoutePrefix = string.Empty; // Swagger at root
-    });
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await db.Database.MigrateAsync();
+        Console.WriteLine("Database migration successful.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Migration error: {ex.Message}");
+    }
 }
+
+// Swagger — always on (not just Development)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Learning App API V1");
+    c.RoutePrefix = string.Empty;
+});
 
 app.UseCors("AllowAll");
-
-
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
-// Health check endpoint
 app.MapHealthChecks("/health");
 
-// Welcome endpoint
-app.MapGet("/", () => new
+app.MapGet("/info", () => new
 {
     message = "Learning App API",
     version = "1.0.0",
     status = "running",
-    timestamp = DateTime.UtcNow,
-    endpoints = new
-    {
-        swagger = "/swagger",
-        health = "/health",
-        auth = "/api/auth"
-    }
+    timestamp = DateTime.UtcNow
 });
 
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Run($"http://0.0.0.0:{port}");
