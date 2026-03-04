@@ -6,48 +6,47 @@ namespace LearningApp.Views
         {
             InitializeComponent();
         }
-        private async void OnHomeTapped(object sender, EventArgs e)
+
+        protected override async void OnAppearing()
         {
-            
-            await DisplayAlert("Navigation", "You are already on Home!", "OK");
+            base.OnAppearing();
+
+            var name = Preferences.Get("UserFullName", "");
+            if (!string.IsNullOrEmpty(name))
+                WelcomeLabel.Text = $"Welcome back, {name.Split(' ')[0]}!";
+
+            SkeletonGrid.IsVisible = true;
+            CategoryGrid.IsVisible = false;
+            FeaturedSkeleton.IsVisible = true;
+            FeaturedCourse.IsVisible = false;
+
+            await Task.Delay(600);
+
+            SkeletonGrid.IsVisible = false;
+            CategoryGrid.IsVisible = true;
+            FeaturedSkeleton.IsVisible = false;
+            FeaturedCourse.IsVisible = true;
         }
+
         private async void OnCategoryTapped(object sender, TappedEventArgs e)
         {
             var border = (Border)sender;
             var courseName = e.Parameter.ToString();
-
-            
-            await border.ScaleTo(0.95, 50);
-            await border.ScaleTo(1, 50);
-
-            
-           await Navigation.PushAsync(new CourseDetailPage(courseName));
+            _ = border.ScaleTo(0.95, 50).ContinueWith(_ => border.ScaleTo(1.0, 50));
+            await Navigation.PushAsync(new CourseDetailPage(courseName));
         }
 
         private async void OnFeaturedCourseTapped(object sender, TappedEventArgs e)
         {
             var border = (Border)sender;
-
-            
-            await border.ScaleTo(0.98, 50);
-            await border.ScaleTo(1, 50);
-
-            
+            _ = border.ScaleTo(0.98, 50).ContinueWith(_ => border.ScaleTo(1.0, 50));
             await Navigation.PushAsync(new CourseDetailPage("Web Development"));
         }
-        private void OnHomeTabTapped(object sender, EventArgs e)
-        {
-            
-            DisplayAlert("Navigation", "Already on Home", "OK");
-        }
 
-        private async void OnMyLearningTabTapped(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new MyLearningPage ());           
-        }
-        private async void OnProfileTabTapped(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ProfilePage ());          
-        }
+        private async void OnHomeTapped(object sender, EventArgs e) { }
+
+
+
+
     }
 }

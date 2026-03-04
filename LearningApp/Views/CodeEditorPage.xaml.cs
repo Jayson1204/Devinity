@@ -1,6 +1,8 @@
 ﻿using LearningApp.Models;
+using LearningApp.Services;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
+using LearningApp.Constants;
 
 namespace LearningApp.Views
 {
@@ -15,7 +17,7 @@ namespace LearningApp.Views
         private int _hintsUsed = 0;
         private bool _hintVisible = false;
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "NGROK_URL";
+        
 
         public CodeEditorPage(Assessment assessment, string courseName, int assessmentId)
         {
@@ -23,9 +25,8 @@ namespace LearningApp.Views
             _assessment = assessment;
             _courseName = courseName;
             _assessmentId = assessmentId;
-            _httpClient = new HttpClient();
-            //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
-            LoadChallenge();
+            _httpClient = ApiClient.Instance;
+            
         }
 
         private void LoadChallenge()
@@ -492,7 +493,7 @@ namespace LearningApp.Views
             {
                 var userId = Preferences.Get("UserId", "");
                 if (string.IsNullOrEmpty(userId)) return;
-                await _httpClient.PostAsJsonAsync($"{BaseUrl}/api/progress/complete", new
+                await _httpClient.PostAsJsonAsync($"{AppConfig.BaseUrl}/api/progress/complete", new
                 {
                     UserId = userId,
                     AssessmentId = _assessmentId,

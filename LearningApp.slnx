@@ -1,6 +1,6 @@
 <Solution>
   <Project Path="LearningApp/LearningApp.csproj">
-    <Deploy Solution="Debug|*" />
+    <Deploy />
   </Project>
   <Project Path="LearningAppAPI/LearningApp.Api.csproj" Id="b871ab64-0143-4297-b005-b375a8ae1d0f" />
 </Solution>

@@ -1,124 +1,325 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:LearningApp.Controls"
+             xmlns:local="clr-namespace:LearningApp.Views"
              x:Class="LearningApp.Views.MyLearningPage"
-             BackgroundColor="#F5F5F5"
-             Shell.NavBarIsVisible="False">
+             BackgroundColor="#0F172A"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*">
+    <!--
+        Color tokens
+        BG      #0F172A  – page background  (Slate 900)
+        Surface #1E293B  – cards, panels    (Slate 800)
+        Text    #F8FAFC  – primary text     (Slate 50)
+        Muted   #64748B  – secondary labels (Slate 500)
+        Accent  #38BDF8  – sky-blue         (Sky 400)
+        Border  #334155  – subtle dividers  (Slate 700)
+    -->
 
-        <!-- Header -->
-        <VerticalStackLayout Grid.Row="0" Padding="20,50,20,16" BackgroundColor="#F5F5F5" Spacing="4">
-            <Label Text="My learning"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="#1A1A1A"/>
-            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="16" Margin="0,4,0,0">
-                <VerticalStackLayout Grid.Column="0" Spacing="2">
-                    <Label Text="Enrolled 📋"
-                           FontSize="12"
-                           TextColor="#888"/>
-                    <Label x:Name="EnrolledLabel"
-                           Text="0 courses"
-                           FontSize="13"
-                           FontAttributes="Bold"
-                           TextColor="#1A1A1A"/>
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- ══════════════════════════════════════
+             HEADER
+        ══════════════════════════════════════ -->
+        <Grid Grid.Row="0" Padding="24,54,24,24"
+              RowDefinitions="Auto,Auto" RowSpacing="18"
+              BackgroundColor="#0F172A">
+
+            <!-- Title row -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="MY LEARNING"
+                           FontSize="11" FontAttributes="Bold"
+                           TextColor="#38BDF8"/>
+                    <Label Text="Your Progress"
+                           FontSize="26" FontAttributes="Bold"
+                           TextColor="#F8FAFC"/>
                 </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="2" Spacing="2">
-                    <Label Text="Total hours ⏱"
-                           FontSize="12"
-                           TextColor="#888"/>
-                    <Label x:Name="TotalHoursLabel"
-                           Text="0h"
-                           FontSize="13"
-                           FontAttributes="Bold"
-                           TextColor="#1A1A1A"/>
-                </VerticalStackLayout>
+
+                <!-- Badge pill -->
+                <Border Grid.Column="1"
+                        BackgroundColor="#1E293B"
+                        StrokeThickness="1" Stroke="#334155"
+                        WidthRequest="46" HeightRequest="46"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="23"/>
+                    </Border.StrokeShape>
+                    <Label Text="🎓" FontSize="22"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
             </Grid>
-        </VerticalStackLayout>
 
-        <!-- Tab Switcher -->
+            <!-- Stats row -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,12,*">
+
+                <!-- Enrolled card -->
+                <Border Grid.Column="0"
+                        BackgroundColor="#1E293B"
+                        StrokeThickness="1" Stroke="#334155"
+                        Padding="16,14">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="ENROLLED" FontSize="10"
+                               FontAttributes="Bold" TextColor="#64748B"/>
+                        <Label x:Name="EnrolledLabel" Text="0 courses"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="#F8FAFC"/>
+                        <Label Text="📋 active courses" FontSize="11" TextColor="#64748B"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <BoxView Grid.Column="1" Color="Transparent"/>
+
+                <!-- Hours card -->
+                <Border Grid.Column="2"
+                        BackgroundColor="#1E293B"
+                        StrokeThickness="1" Stroke="#334155"
+                        Padding="16,14">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="TOTAL TIME" FontSize="10"
+                               FontAttributes="Bold" TextColor="#64748B"/>
+                        <Label x:Name="TotalHoursLabel" Text="0h"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="#F8FAFC"/>
+                        <Label Text="⏱ hours studied" FontSize="11" TextColor="#64748B"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- ══════════════════════════════════════
+             TAB SWITCHER
+        ══════════════════════════════════════ -->
         <Border Grid.Row="1"
-                BackgroundColor="#E8E8E8"
-                StrokeThickness="0"
-                Margin="20,0,20,12"
+                BackgroundColor="#1E293B"
+                StrokeThickness="1" Stroke="#334155"
+                Margin="24,12,24,8"
                 Padding="4">
             <Border.StrokeShape>
-                <RoundRectangle CornerRadius="25"/>
+                <RoundRectangle CornerRadius="14"/>
             </Border.StrokeShape>
             <Grid ColumnDefinitions="*,*">
+
+                <!-- In Progress (active) -->
                 <Border x:Name="InProgressTab"
-                        BackgroundColor="White"
+                        BackgroundColor="#38BDF8"
                         StrokeThickness="0"
                         Grid.Column="0">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="22"/>
+                        <RoundRectangle CornerRadius="11"/>
                     </Border.StrokeShape>
-                    <Label Text="In Progress"
-                           FontSize="14"
-                           FontAttributes="Bold"
-                           TextColor="#1A1A1A"
-                           HorizontalOptions="Center"
-                           Padding="0,10"/>
+                    <Border.Shadow>
+                        <Shadow Brush="#38BDF8" Offset="0,3" Radius="12" Opacity="0.4"/>
+                    </Border.Shadow>
+                    <Label Text="In Progress" FontSize="14" FontAttributes="Bold"
+                           TextColor="#0F172A"
+                           HorizontalOptions="Center" Padding="0,10"/>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnInProgressTapped"/>
                     </Border.GestureRecognizers>
                 </Border>
+
+                <!-- Completed (inactive) -->
                 <Border x:Name="CompletedTab"
                         BackgroundColor="Transparent"
                         StrokeThickness="0"
                         Grid.Column="1">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="22"/>
+                        <RoundRectangle CornerRadius="11"/>
                     </Border.StrokeShape>
-                    <Label Text="Completed"
-                           FontSize="14"
-                           TextColor="#888"
-                           HorizontalOptions="Center"
-                           Padding="0,10"/>
+                    <Label Text="Completed" FontSize="14"
+                           TextColor="#64748B"
+                           HorizontalOptions="Center" Padding="0,10"/>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnCompletedTapped"/>
                     </Border.GestureRecognizers>
                 </Border>
+
             </Grid>
         </Border>
 
-        <!-- Loading -->
-        <ActivityIndicator x:Name="LoadingIndicator"
-                           Grid.Row="2"
-                           IsVisible="True"
-                           IsRunning="True"
-                           Color="#6C5CE7"
-                           HeightRequest="40"/>
+        <!-- ══════════════════════════════════════
+             CONTENT AREA
+        ══════════════════════════════════════ -->
+        <Grid Grid.Row="2">
 
-        <!-- Course List -->
-        <ScrollView Grid.Row="3">
-            <VerticalStackLayout x:Name="CourseListContainer"
-                                 Padding="20,10,20,20"
-                                 Spacing="16">
-
-                <!-- Empty State -->
-                <VerticalStackLayout x:Name="EmptyState"
-                                     IsVisible="False"
-                                     Spacing="12"
-                                     Margin="0,60,0,0">
-                    <Label Text="📚"
-                           FontSize="60"
-                           HorizontalOptions="Center"/>
-                    <Label Text="No courses yet!"
-                           FontSize="20"
-                           FontAttributes="Bold"
-                           TextColor="#1A1A1A"
-                           HorizontalOptions="Center"/>
-                    <Label Text="Start watching videos and completing assessments to track your progress here."
-                           FontSize="14"
-                           TextColor="#666"
-                           HorizontalOptions="Center"
-                           HorizontalTextAlignment="Center"/>
+            <!-- Skeleton placeholders -->
+            <ScrollView x:Name="SkeletonScroll" IsVisible="True">
+                <VerticalStackLayout Padding="24,8,24,24" Spacing="14">
+                    <controls:SkeletonView HeightRequest="264" CornerRadius="20"/>
+                    <controls:SkeletonView HeightRequest="264" CornerRadius="20"/>
+                    <controls:SkeletonView HeightRequest="264" CornerRadius="20"/>
                 </VerticalStackLayout>
+            </ScrollView>
 
-            </VerticalStackLayout>
-        </ScrollView>
+            <!-- Course list -->
+            <CollectionView x:Name="CourseCollectionView"
+                            IsVisible="False"
+                            ItemsSource="{Binding FilteredCourses}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="14"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <BoxView HeightRequest="8" Color="Transparent"/>
+                </CollectionView.Header>
+                <CollectionView.Footer>
+                    <BoxView HeightRequest="28" Color="Transparent"/>
+                </CollectionView.Footer>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:CourseProgressItem">
+
+                        <!--
+                            Grid wrapper with Padding is the reliable cross-platform
+                            way to inset CollectionView items from screen edges.
+                            Margin on the Border itself is ignored by WinUI.
+                        -->
+                        <Grid Padding="24,0">
+
+                            <Border BackgroundColor="#1E293B"
+                                    StrokeThickness="1" Stroke="#334155">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20"/>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <OnPlatform x:TypeArguments="Shadow">
+                                        <On Platform="Android" Value="{x:Null}"/>
+                                        <On Platform="WinUI,iOS">
+                                            <Shadow Brush="#000000" Offset="0,8" Radius="24" Opacity="0.35"/>
+                                        </On>
+                                    </OnPlatform>
+                                </Border.Shadow>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.CourseTappedCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Spacing="0">
+
+                                    <!-- Banner -->
+                                    <Grid HeightRequest="130">
+                                        <!-- Fallback surface bg -->
+                                        <Border BackgroundColor="#2D3F55"
+                                                StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="19,19,0,0"/>
+                                            </Border.StrokeShape>
+                                        </Border>
+                                        <!-- BgColor tint layer -->
+                                        <Border BackgroundColor="{Binding BgColor}"
+                                                StrokeThickness="0"
+                                                Opacity="0.55">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="19,19,0,0"/>
+                                            </Border.StrokeShape>
+                                        </Border>
+                                        <!-- Emoji -->
+                                        <Label Text="{Binding Emoji}" FontSize="60"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+
+                                    <!-- Info section -->
+                                    <VerticalStackLayout Padding="18,14,18,16" Spacing="10">
+
+                                        <!-- Course title -->
+                                        <Label Text="{Binding Category}"
+                                               FontSize="16" FontAttributes="Bold"
+                                               TextColor="#F8FAFC"/>
+
+                                        <!-- Progress detail -->
+                                        <Label Text="{Binding ProgressDetail}"
+                                               FontSize="12" TextColor="#64748B"/>
+
+                                        <!-- Divider -->
+                                        <BoxView HeightRequest="1" Color="#334155" Margin="0,2"/>
+
+                                        <!-- Progress bar row -->
+                                        <Grid ColumnDefinitions="*,Auto"
+                                              RowDefinitions="Auto,Auto"
+                                              RowSpacing="8">
+                                            <Label Grid.Row="0" Grid.Column="0"
+                                                   Text="Progress"
+                                                   FontSize="12" TextColor="#64748B"
+                                                   VerticalOptions="Center"/>
+                                            <Label Grid.Row="0" Grid.Column="1"
+                                                   Text="{Binding PercentageText}"
+                                                   FontSize="13" FontAttributes="Bold"
+                                                   TextColor="#38BDF8"
+                                                   HorizontalOptions="End"/>
+                                            <!-- Track -->
+                                            <Border Grid.Row="1" Grid.ColumnSpan="2"
+                                                    BackgroundColor="#334155"
+                                                    StrokeThickness="0"
+                                                    HeightRequest="6">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="3"/>
+                                                </Border.StrokeShape>
+                                            </Border>
+                                            <ProgressBar Grid.Row="1" Grid.ColumnSpan="2"
+                                                         Progress="{Binding ProgressValue}"
+                                                         ProgressColor="#38BDF8"
+                                                         BackgroundColor="Transparent"
+                                                         HeightRequest="6"/>
+                                        </Grid>
+
+                                        <!-- Hours -->
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6">
+                                            <Label Grid.Column="0" Text="🕐"
+                                                   FontSize="12" VerticalOptions="Center"/>
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding HoursEstimate}"
+                                                   FontSize="12" TextColor="#64748B"
+                                                   VerticalOptions="Center"/>
+                                        </Grid>
+
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </Grid>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <!-- Empty state -->
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Spacing="16" Margin="0,80,0,0" Padding="40,0">
+                        <Border BackgroundColor="#1E293B"
+                                StrokeThickness="1" Stroke="#334155"
+                                WidthRequest="88" HeightRequest="88"
+                                HorizontalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="44"/>
+                            </Border.StrokeShape>
+                            <Label Text="📚" FontSize="40"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="No courses yet!"
+                               FontSize="20" FontAttributes="Bold"
+                               TextColor="#F8FAFC"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Start watching videos and completing assessments to track your progress here."
+                               FontSize="14" TextColor="#64748B"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               LineHeight="1.5"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+            </CollectionView>
+        </Grid>
 
     </Grid>
 </ContentPage>

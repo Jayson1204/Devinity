@@ -1,34 +1,141 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:LearningApp.Controls"
+             xmlns:models="clr-namespace:LearningApp.Models"
+             xmlns:selectors="clr-namespace:LearningApp.Selectors"
              x:Class="LearningApp.Views.CourseDetailPage"
-             BackgroundColor="#30364F"
+             BackgroundColor="#0A0F2E"
              Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <!-- ── Section Header Template ── -->
+            <DataTemplate x:Key="SectionHeaderTemplate" x:DataType="models:SectionHeaderItem">
+                <Grid Padding="16,20,16,10" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Grid.Column="0"
+                           Text="{Binding LevelLabel}"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{Binding AccentHex}"
+                           VerticalOptions="Center"/>
+                    <BoxView Grid.Column="1" HeightRequest="1"
+                             BackgroundColor="{Binding AccentHex}"
+                             Opacity="0.2" VerticalOptions="Center"/>
+                </Grid>
+            </DataTemplate>
+
+            <!-- ── Sub Section Label Template ── -->
+            <DataTemplate x:Key="SubSectionTemplate" x:DataType="models:SubSectionItem">
+                <Label Text="{Binding Label}" FontSize="13" FontAttributes="Bold"
+                       TextColor="#8A9BC8" Margin="20,10,20,6"/>
+            </DataTemplate>
+
+            <!-- ── Video Card Template ── -->
+            <DataTemplate x:Key="VideoTemplate" x:DataType="models:VideoItem">
+                <Border BackgroundColor="#1B2250" StrokeThickness="0" Margin="16,4" Padding="14,12">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VideoTappedCommand}"
+                                             CommandParameter="{Binding .}"/>
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="48,*" ColumnSpacing="12">
+                        <Border Grid.Column="0" BackgroundColor="{Binding AccentHex}" Opacity="0.15"
+                                StrokeThickness="0" WidthRequest="48" HeightRequest="48">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14"/>
+                            </Border.StrokeShape>
+                            <Label Text="▶" FontSize="20" TextColor="{Binding AccentHex}"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                            <Label Text="{Binding Title}" FontSize="14" FontAttributes="Bold"
+                                   TextColor="White" LineBreakMode="TailTruncation" MaxLines="2"/>
+                            <Label Text="{Binding Duration, StringFormat='⏱ {0}'}" FontSize="12"
+                                   TextColor="#8A9BC8"
+                                   IsVisible="{Binding Duration, Converter={x:StaticResource StringNotEmptyConverter}}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- ── Assessment Card Template ── -->
+            <DataTemplate x:Key="AssessmentTemplate" x:DataType="models:AssessmentItem">
+                <Border BackgroundColor="#1B2250" StrokeThickness="1" Margin="16,4" Padding="14,12">
+                    <Border.Stroke>
+                        <SolidColorBrush Color="{Binding IsCompleted, Converter={x:StaticResource CompletedToColorConverter}}"/>
+                    </Border.Stroke>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AssessmentTappedCommand}"
+                                             CommandParameter="{Binding .}"/>
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="48,*,Auto" ColumnSpacing="12">
+                        <Border Grid.Column="0" StrokeThickness="0" WidthRequest="48" HeightRequest="48">
+                            <Border.Background>
+                                <SolidColorBrush Color="{Binding IsCompleted, Converter={x:StaticResource CompletedToColorConverter}}"/>
+                            </Border.Background>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14"/>
+                            </Border.StrokeShape>
+                            <Label Text="{Binding IsCompleted, Converter={x:StaticResource CompletedToIconConverter}}"
+                                   FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                            <Label Text="{Binding Title}" FontSize="14" FontAttributes="Bold"
+                                   TextColor="White" LineBreakMode="TailTruncation" MaxLines="2"/>
+                            <Label Text="{Binding Level}" FontSize="11" TextColor="#8A9BC8"/>
+                        </VerticalStackLayout>
+                        <Border Grid.Column="2" StrokeThickness="0" Padding="10,6" VerticalOptions="Center">
+                            <Border.Background>
+                                <SolidColorBrush Color="{Binding IsCompleted, Converter={x:StaticResource CompletedToBadgeBgConverter}}"/>
+                            </Border.Background>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <Label Text="{Binding IsCompleted, Converter={x:StaticResource CompletedToStatusConverter}}"
+                                   FontSize="11" FontAttributes="Bold"
+                                   TextColor="{Binding IsCompleted, Converter={x:StaticResource CompletedToTextColorConverter}}"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- ── Empty Note Template ── -->
+            <DataTemplate x:Key="EmptyNoteTemplate" x:DataType="models:EmptyNoteItem">
+                <Label Text="{Binding Message}" FontSize="13" TextColor="#8A9BC8" Margin="20,0,20,8"/>
+            </DataTemplate>
+
+            <!-- ── Template Selector ── -->
+            <selectors:CourseItemTemplateSelector x:Key="CourseItemSelector"
+                SectionHeaderTemplate="{StaticResource SectionHeaderTemplate}"
+                SubSectionTemplate="{StaticResource SubSectionTemplate}"
+                VideoTemplate="{StaticResource VideoTemplate}"
+                AssessmentTemplate="{StaticResource AssessmentTemplate}"
+                EmptyNoteTemplate="{StaticResource EmptyNoteTemplate}"/>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- Header -->
-        <Grid Grid.Row="0"
-              BackgroundColor="#30364F"
+        <!-- ── Header ── -->
+        <Grid Grid.Row="0" BackgroundColor="#0A0F2E"
               Padding="20,52,20,20"
-              RowDefinitions="Auto,Auto"
-              RowSpacing="6">
+              RowDefinitions="Auto,Auto" RowSpacing="6">
 
-            <!-- Back + Title -->
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
-                <Border Grid.Column="0"
-                        BackgroundColor="#1B2250"
-                        StrokeThickness="0"
-                        WidthRequest="40"
-                        HeightRequest="40">
+                <Border Grid.Column="0" BackgroundColor="#1B2250" StrokeThickness="0"
+                        WidthRequest="40" HeightRequest="40">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="12"/>
                     </Border.StrokeShape>
-                    <Label Text="←"
-                           FontSize="18"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center">
+                    <Label Text="←" FontSize="18" TextColor="White"
+                           HorizontalOptions="Center" VerticalOptions="Center">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnBackClicked"/>
                         </Label.GestureRecognizers>
@@ -37,34 +144,69 @@
 
                 <Label Grid.Column="1"
                        x:Name="CourseTitleLabel"
-                       FontSize="20"
-                       FontAttributes="Bold"
+                       FontSize="20" FontAttributes="Bold"
                        TextColor="White"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"/>
 
-                <!-- Loading indicator top right -->
+                <!-- Kept for API compat but hidden; skeleton replaces the loading indicator -->
                 <ActivityIndicator Grid.Column="2"
                                    x:Name="LoadingIndicator"
                                    IsVisible="False"
                                    IsRunning="False"
                                    Color="#4A90D9"
-                                   WidthRequest="24"
-                                   HeightRequest="24"/>
+                                   WidthRequest="24" HeightRequest="24"/>
             </Grid>
 
-            <!-- Subtitle -->
             <Label Grid.Row="1"
                    Text="Videos &amp; Assessments"
-                   FontSize="13"
-                   TextColor="#6B7FBF"
+                   FontSize="13" TextColor="#6B7FBF"
                    HorizontalOptions="Center"/>
         </Grid>
 
-        <!-- Content -->
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout x:Name="LearningPathContainer" Spacing="0" Padding="0,8,0,24"/>
-        </ScrollView>
+        <!-- Content area: skeleton or real list -->
+        <Grid Grid.Row="1">
+
+            <!-- ── Skeleton State ── -->
+            <ScrollView x:Name="SkeletonScroll" IsVisible="True">
+                <VerticalStackLayout Padding="16,12" Spacing="10">
+                    <!-- Section header skeleton -->
+                    <controls:SkeletonView HeightRequest="22" WidthRequest="120"
+                                           CornerRadius="6" HorizontalOptions="Start" Margin="0,8,0,0"/>
+                    <!-- Video card skeletons -->
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <!-- Section header skeleton -->
+                    <controls:SkeletonView HeightRequest="22" WidthRequest="140"
+                                           CornerRadius="6" HorizontalOptions="Start" Margin="0,12,0,0"/>
+                    <!-- Assessment card skeletons -->
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="14"/>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- ── Real Content ── -->
+            <CollectionView x:Name="CourseCollectionView"
+                            IsVisible="False"
+                            ItemsSource="{Binding CourseItems}"
+                            ItemTemplate="{StaticResource CourseItemSelector}"
+                            ItemsLayout="VerticalList"
+                            RemainingItemsThreshold="3"
+                            Margin="0,8,0,0">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Spacing="12" Margin="0,60,0,0">
+                        <Label Text="📭" FontSize="48" HorizontalOptions="Center"/>
+                        <Label Text="No content available yet." FontSize="15"
+                               TextColor="#8A9BC8" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+        </Grid>
 
     </Grid>
 </ContentPage>

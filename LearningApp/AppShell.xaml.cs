@@ -8,12 +8,12 @@ namespace LearningApp
         {
             InitializeComponent();
 
-            // Register routes for navigation
+            // Only register non-tab routes here
+            // Tab routes (MainPage, MyLearningPage, ProfilePage) are auto-registered by TabBar
+            Routing.RegisterRoute("LoginPage", typeof(LoginPage));
             Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
             Routing.RegisterRoute("CourseDetailPage", typeof(CourseDetailPage));
             Routing.RegisterRoute("CodeEditorPage", typeof(CodeEditorPage));
-            Routing.RegisterRoute("MyLearningPage", typeof(MyLearningPage));
-            Routing.RegisterRoute("ProfilePage", typeof(ProfilePage));
         }
     }
 }

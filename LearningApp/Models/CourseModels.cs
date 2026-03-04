@@ -1,5 +1,6 @@
 ﻿namespace LearningApp.Models
 {
+    // ── Existing models (unchanged) ──────────────────────────────
     public class Course
     {
         public string Id { get; set; }
@@ -17,7 +18,7 @@
         public string Title { get; set; }
         public string YouTubeVideoId { get; set; }
         public string Duration { get; set; }
-        public string Level { get; set; } // Beginner, Intermediate, Advanced
+        public string Level { get; set; }
         public string Description { get; set; }
         public int Order { get; set; }
     }
@@ -43,5 +44,52 @@
     {
         public string Input { get; set; }
         public string ExpectedOutput { get; set; }
+    }
+
+    // ── CollectionView UI models ─────────────────────────────────
+    // Base item for DataTemplateSelector
+    public abstract class CourseItem
+    {
+        public string Level { get; set; }
+        public string AccentHex { get; set; }
+    }
+
+    // Section header e.g. "🟢 Beginner"
+    public class SectionHeaderItem : CourseItem
+    {
+        public string LevelLabel { get; set; }
+    }
+
+    // Sub-section label e.g. "🎬 Videos"
+    public class SubSectionItem : CourseItem
+    {
+        public string Label { get; set; }
+    }
+
+    // Video row
+    public class VideoItem : CourseItem
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Duration { get; set; }
+        public string FirebaseUrl { get; set; }
+        public string Category { get; set; }
+    }
+
+    // Assessment row
+    public class AssessmentItem : CourseItem
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Question { get; set; }
+        public string StarterCode { get; set; }
+        public string ExpectedOutput { get; set; }
+        public bool IsCompleted { get; set; }
+    }
+
+    // Empty note row
+    public class EmptyNoteItem : CourseItem
+    {
+        public string Message { get; set; }
     }
 }

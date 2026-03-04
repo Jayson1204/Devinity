@@ -6,7 +6,7 @@ namespace LearningApp.Services
     public class AssessmentService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "NGROK_URL";
+        private const string BaseUrl = "https://proportionless-jackelyn-pectinately.ngrok-free.dev";
 
         public AssessmentService()
         {

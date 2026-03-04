@@ -4,25 +4,39 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:LearningApp.Views"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False">
 
+    <!-- Login — no tab bar -->
     <ShellContent
         Title="Login"
         ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage" />
+        Route="LoginPage"
+        Shell.TabBarIsVisible="False"/>
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="MainPage" />
+    <!-- Main Tab Bar -->
+    <TabBar>
 
-    <ShellContent
-      Title="Home"
-      ContentTemplate="{DataTemplate views:MyLearningPage}"
-      Route="MyLearningPage" />
+        <Tab Title="Home" Icon="home.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:MainPage}"
+                Route="MainPage"/>
+        </Tab>
 
-    <ShellContent
-   Title="Home"
-   ContentTemplate="{DataTemplate views:ProfilePage}"
-   Route="ProfilePage" />
+        <Tab Title="Learning" Icon="learning.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:MyLearningPage}"
+                Route="MyLearningPage"/>
+        </Tab>
+
+        <Tab Title="Profile" Icon="profile.png">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:ProfilePage}"
+                Route="ProfilePage"/>
+        </Tab>
+
+    </TabBar>
+    
+    
+
 </Shell>

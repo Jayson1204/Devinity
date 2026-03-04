@@ -7,20 +7,10 @@ namespace LearningApp.Services
     public class AuthService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "NGROK_URL";
 
         public AuthService()
         {
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-            };
-
-            _httpClient = new HttpClient(handler)
-            {
-                BaseAddress = new Uri(BaseUrl),
-                Timeout = TimeSpan.FromSeconds(30)
-            };
+            _httpClient = ApiClient.Instance;
 
         }
 

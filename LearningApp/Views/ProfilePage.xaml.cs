@@ -1,16 +1,18 @@
+ï»¿using LearningApp.Services;
 using System.Net.Http.Json;
+using LearningApp.Constants;
 
 namespace LearningApp.Views
 {
     public partial class ProfilePage : ContentPage
     {
-        private const string BaseUrl = "NGROK_URL";
         private readonly HttpClient _httpClient;
 
         public ProfilePage()
         {
             InitializeComponent();
-            _httpClient = new HttpClient();
+            NavigationPage.SetHasNavigationBar(this, false);
+            _httpClient = ApiClient.Instance;
         }
 
         protected override void OnAppearing()
@@ -21,9 +23,16 @@ namespace LearningApp.Views
 
         private async void LoadProfile()
         {
+            SkeletonScroll.IsVisible = true;
+            ContentScroll.IsVisible = false;
+
             FullNameLabel.Text = Preferences.Get("UserFullName", "User");
             EmailLabel.Text = Preferences.Get("UserEmail", "");
+
             await LoadStats();
+
+            SkeletonScroll.IsVisible = false;
+            ContentScroll.IsVisible = true;
         }
 
         private async Task LoadStats()
@@ -33,7 +42,7 @@ namespace LearningApp.Views
                 var userId = Preferences.Get("UserId", "");
                 if (string.IsNullOrEmpty(userId)) return;
 
-                var url = $"{BaseUrl}/api/learning/{Uri.EscapeDataString(userId)}/overview";
+                var url = $"{AppConfig.BaseUrl}/api/learning/{Uri.EscapeDataString(userId)}/overview";
                 var response = await _httpClient.GetAsync(url);
                 var content = await response.Content.ReadAsStringAsync();
 
@@ -54,6 +63,8 @@ namespace LearningApp.Views
             catch { }
         }
 
+      
+
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
             bool confirm = await DisplayAlert("Logout", "Are you sure you want to logout?", "Logout", "Cancel");
@@ -61,7 +72,6 @@ namespace LearningApp.Views
 
             try
             {
-                // Step 1 — Revoke refresh token on server
                 var refreshToken = await SecureStorage.GetAsync("refresh_token");
                 var authToken = await SecureStorage.GetAsync("auth_token");
 
@@ -72,14 +82,13 @@ namespace LearningApp.Views
                 if (!string.IsNullOrEmpty(refreshToken))
                 {
                     await _httpClient.PostAsJsonAsync(
-                        $"{BaseUrl}/api/auth/logout",
+                        $"{AppConfig.BaseUrl}/api/auth/logout",
                         new { RefreshToken = refreshToken });
                 }
             }
-            catch { /* still proceed with local logout even if server call fails */ }
+            catch { }
             finally
             {
-                // Step 2 — Clear all local data regardless of server response
                 Preferences.Remove("UserId");
                 Preferences.Remove("UserEmail");
                 Preferences.Remove("UserFullName");
@@ -91,7 +100,6 @@ namespace LearningApp.Views
                 }
                 catch { }
 
-                // Step 3 — Navigate to login
                 await Shell.Current.GoToAsync("///LoginPage");
             }
         }

@@ -6,13 +6,21 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <!-- Value Converters -->
-            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
-            <converters:StringToBorderColorConverter x:Key="StringToBorderColorConverter" />
-            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
-            <converters:PasswordIconConverter x:Key="PasswordIconConverter" />
+            <!-- ── Existing Converters ── -->
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
+            <converters:StringToBorderColorConverter x:Key="StringToBorderColorConverter"/>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+            <converters:PasswordIconConverter x:Key="PasswordIconConverter"/>
 
-            <!-- Colors -->
+            <!-- ── Course Detail Converters ── -->
+            <converters:CompletedToColorConverter     x:Key="CompletedToColorConverter"/>
+            <converters:CompletedToIconConverter      x:Key="CompletedToIconConverter"/>
+            <converters:CompletedToStatusConverter    x:Key="CompletedToStatusConverter"/>
+            <converters:CompletedToBadgeBgConverter   x:Key="CompletedToBadgeBgConverter"/>
+            <converters:CompletedToTextColorConverter x:Key="CompletedToTextColorConverter"/>
+            <converters:StringNotEmptyConverter       x:Key="StringNotEmptyConverter"/>
+
+            <!-- ── Colors ── -->
             <Color x:Key="Primary">#4F46E5</Color>
             <Color x:Key="Secondary">#A855F7</Color>
             <Color x:Key="Accent">#EC4899</Color>

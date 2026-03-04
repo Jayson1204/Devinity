@@ -1,23 +1,81 @@
-﻿using System.Net.Http.Json;
+﻿using LearningApp.Services;
+using LearningApp.Constants;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace LearningApp.Views
 {
+    // ── Display model ──
+    public class CourseProgressItem
+    {
+        public string Category { get; set; }
+        public int TotalVideos { get; set; }
+        public int WatchedVideos { get; set; }
+        public int TotalAssessments { get; set; }
+        public int CompletedAssessments { get; set; }
+        public double Percentage { get; set; }
+
+        public string Emoji => Category switch
+        {
+            "PHP" => "🐘",
+            "Python" => "🐍",
+            "JavaScript" => "⚡",
+            "Java" => "☕",
+            "C#" => "C#",
+            "C++" => "⚙️",
+            "C" => "🔧",
+            "MySQL" => "🗄️",
+            _ => "📘"
+        };
+
+        public string BgColor => Category switch
+        {
+            "PHP" => "#7B68EE",
+            "Python" => "#3776AB",
+            "JavaScript" => "#F7DF1E",
+            "Java" => "#ED8B00",
+            "C#" => "#020202",
+            "C++" => "#004482",
+            "C" => "#555555",
+            "MySQL" => "#4479A1",
+            _ => "#6C5CE7"
+        };
+
+        public string ProgressDetail =>
+            $"{WatchedVideos}/{TotalVideos} videos · {CompletedAssessments}/{TotalAssessments} assessments";
+        public string PercentageText => $"{Percentage:F0} %";
+        public double ProgressValue => Percentage / 100;
+        public string HoursEstimate => $"⏱ {Math.Round(TotalVideos * 0.5, 0)}h estimated";
+    }
+
+    // ── ViewModel ──
+    public class MyLearningViewModel : Microsoft.Maui.Controls.BindableObject
+    {
+        private ObservableCollection<CourseProgressItem> _filteredCourses = new();
+        public ObservableCollection<CourseProgressItem> FilteredCourses
+        {
+            get => _filteredCourses;
+            set { _filteredCourses = value; OnPropertyChanged(); }
+        }
+
+        public ICommand CourseTappedCommand { get; }
+
+        public MyLearningViewModel(Action<CourseProgressItem> onCourseTapped)
+        {
+            CourseTappedCommand = new Command<CourseProgressItem>(onCourseTapped);
+        }
+
+        public void SetCourses(IEnumerable<CourseProgressItem> courses)
+            => FilteredCourses = new ObservableCollection<CourseProgressItem>(courses);
+    }
+
+    // ── Page ──
     public partial class MyLearningPage : ContentPage
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "NGROK_URL";
+        private readonly MyLearningViewModel _viewModel;
         private List<CourseProgressItem> _allCourses = new();
         private bool _showingInProgress = true;
-
-        public class CourseProgressItem
-        {
-            public string Category { get; set; }
-            public int TotalVideos { get; set; }
-            public int WatchedVideos { get; set; }
-            public int TotalAssessments { get; set; }
-            public int CompletedAssessments { get; set; }
-            public double Percentage { get; set; }
-        }
 
         public class OverviewResponse
         {
@@ -29,7 +87,10 @@ namespace LearningApp.Views
         public MyLearningPage()
         {
             InitializeComponent();
-            _httpClient = new HttpClient();           
+            NavigationPage.SetHasNavigationBar(this, false);
+            _httpClient = ApiClient.Instance;
+            _viewModel = new MyLearningViewModel(OnCourseTapped);
+            BindingContext = _viewModel;
         }
 
         protected override void OnAppearing()
@@ -40,21 +101,20 @@ namespace LearningApp.Views
 
         private async void LoadProgress()
         {
+            SkeletonScroll.IsVisible = true;
+            CourseCollectionView.IsVisible = false;
+
             try
             {
-                LoadingIndicator.IsVisible = true;
-                LoadingIndicator.IsRunning = true;
-                CourseListContainer.Children.Clear();
-                EmptyState.IsVisible = false;
-
                 var userId = Preferences.Get("UserId", "");
                 if (string.IsNullOrEmpty(userId))
                 {
-                    EmptyState.IsVisible = true;
+                    _allCourses = new();
+                    RenderCourses();
                     return;
                 }
 
-                var url = $"{BaseUrl}/api/learning/{Uri.EscapeDataString(userId)}/overview";
+                var url = $"{AppConfig.BaseUrl}/api/learning/{Uri.EscapeDataString(userId)}/overview";
                 var response = await _httpClient.GetAsync(url);
                 var content = await response.Content.ReadAsStringAsync();
 
@@ -62,58 +122,41 @@ namespace LearningApp.Views
                     content,
                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                if (overview == null) { ShowEmpty(); return; }
+                if (overview == null) { _allCourses = new(); RenderCourses(); return; }
 
-                // Header stats
                 _allCourses = overview.CourseProgress?
                     .Where(c => c.TotalVideos > 0 || c.TotalAssessments > 0)
                     .ToList() ?? new();
 
                 EnrolledLabel.Text = $"{_allCourses.Count} courses";
-
-                // Estimate total hours (avg 30 min per video)
-                var totalVideos = _allCourses.Sum(c => c.TotalVideos);
-                var totalHours = Math.Round(totalVideos * 0.5, 0);
-                TotalHoursLabel.Text = $"{totalHours}h";
+                TotalHoursLabel.Text = $"{Math.Round(_allCourses.Sum(c => c.TotalVideos) * 0.5, 0)}h";
 
                 RenderCourses();
             }
-            catch (Exception)
+            catch
             {
-                await DisplayAlert("Error", "Failed to load", "OK");
+                await DisplayAlert("Error", "Failed to load progress.", "OK");
             }
             finally
             {
-                LoadingIndicator.IsVisible = false;
-                LoadingIndicator.IsRunning = false;
+                SkeletonScroll.IsVisible = false;
+                CourseCollectionView.IsVisible = true;
             }
         }
 
         private void RenderCourses()
         {
-            CourseListContainer.Children.Clear();
-            EmptyState.IsVisible = false;
-
             var filtered = _showingInProgress
-                ? _allCourses.Where(c => c.Percentage < 100 && c.Percentage > 0).ToList()
-                : _allCourses.Where(c => c.Percentage >= 100).ToList();
+                ? _allCourses.Where(c => c.Percentage < 100 && c.Percentage > 0)
+                             .OrderByDescending(c => c.Percentage)
+                : _allCourses.Where(c => c.Percentage >= 100)
+                             .OrderByDescending(c => c.Percentage);
 
-            if (filtered.Count == 0)
-            {
-                ShowEmpty();
-                return;
-            }
-
-            foreach (var course in filtered.OrderByDescending(c => c.Percentage))
-                CourseListContainer.Children.Add(CreateCourseCard(course));
+            _viewModel.SetCourses(filtered);
         }
 
-        private void ShowEmpty()
-        {
-            CourseListContainer.Children.Clear();
-            EmptyState.IsVisible = true;
-            CourseListContainer.Children.Add(EmptyState);
-        }
+        private async void OnCourseTapped(CourseProgressItem course)
+            => await Navigation.PushAsync(new CourseDetailPage(course.Category));
 
         private void OnInProgressTapped(object sender, EventArgs e)
         {
@@ -139,152 +182,7 @@ namespace LearningApp.Views
             RenderCourses();
         }
 
-        private View CreateCourseCard(CourseProgressItem course)
-        {
-            var emoji = course.Category switch
-            {
-                "PHP" => "🐘",
-                "Python" => "🐍",
-                "JavaScript" => "⚡",
-                "Java" => "☕",
-                "C#" => "C#",
-                "C++" => "⚙️",
-                "C" => "🔧",
-                "MySQL" => "🗄️",
-                _ => "📘"
-            };
 
-            var bgColor = course.Category switch
-            {
-                "PHP" => "#7B68EE",
-                "Python" => "#3776AB",
-                "JavaScript" => "#F7DF1E",
-                "Java" => "#ED8B00",
-                "C#" => "#020202",
-                "C++" => "#004482",
-                "C" => "#555555",
-                "MySQL" => "#4479A1",
-                _ => "#6C5CE7"
-            };
-
-            var card = new Border
-            {
-                BackgroundColor = Colors.White,
-                StrokeThickness = 0,
-                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 16 }
-            };
-
-            var cardContent = new VerticalStackLayout { Spacing = 0 };
-
-            // Course banner (colored with emoji)
-            var banner = new Border
-            {
-                BackgroundColor = Color.FromArgb(bgColor),
-                StrokeThickness = 0,
-                HeightRequest = 140,
-                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = 16 }
-            };
-
-            var bannerContent = new Grid();
-            bannerContent.Children.Add(new Label
-            {
-                Text = emoji,
-                FontSize = 64,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center
-            });
-            banner.Content = bannerContent;
-            cardContent.Children.Add(banner);
-
-            // Card info
-            var info = new VerticalStackLayout
-            {
-                Padding = new Thickness(16, 12),
-                Spacing = 8
-            };
-
-            info.Children.Add(new Label
-            {
-                Text = course.Category,
-                FontSize = 17,
-                FontAttributes = FontAttributes.Bold,
-                TextColor = Color.FromArgb("#1A1A1A")
-            });
-
-            info.Children.Add(new Label
-            {
-                Text = $"{course.WatchedVideos}/{course.TotalVideos} videos · {course.CompletedAssessments}/{course.TotalAssessments} assessments",
-                FontSize = 12,
-                TextColor = Colors.Gray
-            });
-
-            // Progress row
-            var progressRow = new Grid
-            {
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = GridLength.Star },
-                    new ColumnDefinition { Width = GridLength.Auto }
-                },
-                RowDefinitions =
-                {
-                    new RowDefinition { Height = GridLength.Auto },
-                    new RowDefinition { Height = GridLength.Auto }
-                },
-                RowSpacing = 6
-            };
-
-            progressRow.Children.Add(new Label
-            {
-                Text = "Progress",
-                FontSize = 12,
-                TextColor = Colors.Gray,
-                VerticalOptions = LayoutOptions.Center
-            });
-
-            var pctLabel = new Label
-            {
-                Text = $"{course.Percentage:F0} %",
-                FontSize = 13,
-                FontAttributes = FontAttributes.Bold,
-                TextColor = Color.FromArgb("#1A1A1A"),
-                HorizontalOptions = LayoutOptions.End
-            };
-            Grid.SetColumn(pctLabel, 1);
-            progressRow.Children.Add(pctLabel);
-
-            var progressBar = new ProgressBar
-            {
-                Progress = course.Percentage / 100,
-                ProgressColor = Color.FromArgb("#1A1A1A"),
-                BackgroundColor = Color.FromArgb("#E8E8E8"),
-                HeightRequest = 6
-            };
-            Grid.SetRow(progressBar, 1);
-            Grid.SetColumnSpan(progressBar, 2);
-            progressRow.Children.Add(progressBar);
-
-            info.Children.Add(progressRow);
-
-            // Hours estimate
-            var hours = Math.Round(course.TotalVideos * 0.5, 0);
-            info.Children.Add(new Label
-            {
-                Text = $"⏱ {hours}h estimated",
-                FontSize = 12,
-                TextColor = Colors.Gray
-            });
-
-            cardContent.Children.Add(info);
-            card.Content = cardContent;
-
-            // Tap to navigate to course
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += async (s, e) =>
-                await Navigation.PushAsync(new CourseDetailPage(course.Category));
-            card.GestureRecognizers.Add(tap);
-
-            return card;
-        }
+       
     }
 }
