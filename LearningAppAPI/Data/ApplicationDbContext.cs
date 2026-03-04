@@ -26,8 +26,8 @@ namespace LearningApp.Api.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Email).IsUnique();
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
             });
 
             // RefreshToken configuration

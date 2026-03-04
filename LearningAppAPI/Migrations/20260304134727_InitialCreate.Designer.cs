@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningApp.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260304134204_InitialCreate")]
+    [Migration("20260304134727_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -162,7 +162,7 @@ namespace LearningApp.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -198,7 +198,7 @@ namespace LearningApp.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.HasKey("Id");
 
