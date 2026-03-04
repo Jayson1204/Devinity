@@ -100,18 +100,7 @@ builder.Services.AddHealthChecks()
 var app = builder.Build();
 
 // Migrate database — wrapped in try/catch so app still starts on error
-using (var scope = app.Services.CreateScope())
-{
-    try
-    {
-        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        Console.WriteLine("Database migration successful.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Migration error: {ex.Message}");
-    }
-}
+
 
 // Swagger — always on (not just Development)
 app.UseSwagger();
