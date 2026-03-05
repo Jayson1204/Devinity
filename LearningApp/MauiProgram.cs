@@ -1,6 +1,7 @@
-﻿using LearningApp.Services;
+﻿using CommunityToolkit.Maui;
+using LearningApp.Services;
 using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace LearningApp
 {
@@ -13,6 +14,7 @@ namespace LearningApp
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitMediaElement()
+                .UseSkiaSharp()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -25,6 +27,8 @@ namespace LearningApp
 
             // Register AuthService as a singleton
             builder.Services.AddSingleton<AuthService>();
+
+
 
             return builder.Build();
         }

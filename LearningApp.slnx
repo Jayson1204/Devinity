@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/" />
   <Project Path="LearningApp/LearningApp.csproj">
-    <Deploy />
+    <Deploy Solution="Debug|*" />
   </Project>
   <Project Path="LearningAppAPI/LearningApp.Api.csproj" Id="b871ab64-0143-4297-b005-b375a8ae1d0f" />
 </Solution>

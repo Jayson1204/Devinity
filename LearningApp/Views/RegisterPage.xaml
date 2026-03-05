@@ -2,194 +2,248 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:LearningApp.ViewModels"
+             xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
              x:Class="LearningApp.Views.RegisterPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#30364F">
+             BackgroundColor="#0F172A">
     <ContentPage.BindingContext>
         <viewmodels:RegisterViewModel />
     </ContentPage.BindingContext>
 
     <Grid>
-        
+
+        <!-- Background accent blobs -->
+        <Ellipse Fill="#8B5CF6"
+                 WidthRequest="300" HeightRequest="300"
+                 VerticalOptions="Start" HorizontalOptions="Start"
+                 TranslationX="-100" TranslationY="-100"
+                 Opacity="0.06"/>
+        <Ellipse Fill="#3B82F6"
+                 WidthRequest="250" HeightRequest="250"
+                 VerticalOptions="End" HorizontalOptions="End"
+                 TranslationX="80" TranslationY="80"
+                 Opacity="0.06"/>
 
         <ScrollView>
-            <VerticalStackLayout Padding="30" Spacing="0" VerticalOptions="Center">
+            <VerticalStackLayout Padding="28" Spacing="0" VerticalOptions="Center">
 
-                <VerticalStackLayout Spacing="8" Margin="0,20,0,30">
-                    <Label Text="Create Account" 
-                           FontSize="32" 
-                           FontAttributes="Bold"
-                           TextColor="#ACBAC4"
-                           HorizontalOptions="Center" />
-
-                    <Label Text="Join and start learning today" 
-                           FontSize="16" 
-                           TextColor="#ACBAC4"
-                           HorizontalOptions="Center" />
+                <!-- ── Header ── -->
+                <VerticalStackLayout Spacing="10" Margin="0,60,0,32" HorizontalOptions="Center">
+                    <Label Text="Create Account"
+                           FontSize="30" FontAttributes="Bold"
+                           TextColor="#F8FAFC"
+                           HorizontalOptions="Center"
+                           Margin="0,8,0,0"/>
+                    <Label Text="Join and start learning today"
+                           FontSize="15" TextColor="#64748B"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Spacing="10" Margin="0,0,0,20">
-                    <Border BackgroundColor="#FEE2E2"
-                            Stroke="#FCA5A5"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12"
-                            Padding="16"
+                <!-- ── Error / Success Banners ── -->
+                <VerticalStackLayout Spacing="10" Margin="0,0,0,16">
+                    <Border BackgroundColor="#7F1D1D20" Stroke="#EF4444"
+                            StrokeThickness="1" Padding="16,12"
                             IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="🐛 Debug Error" 
-                                   TextColor="#991B1B"
-                                   FontSize="13"
-                                   FontAttributes="Bold" />
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="⚠️" FontSize="16" VerticalOptions="Center"/>
                             <Label Text="{Binding ErrorMessage}"
-                                   TextColor="#991B1B"
-                                   FontSize="12"
-                                   LineBreakMode="WordWrap" />
-                        </VerticalStackLayout>
+                                   TextColor="#EF4444" FontSize="13"
+                                   LineBreakMode="WordWrap" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
                     </Border>
-
-                    <Border BackgroundColor="#DCFCE7"
-                            Stroke="#86EFAC"
-                            StrokeThickness="1"
-                            StrokeShape="RoundRectangle 12"
-                            Padding="16"
+                    <Border BackgroundColor="#14532D20" Stroke="#22C55E"
+                            StrokeThickness="1" Padding="16,12"
                             IsVisible="{Binding SuccessMessage, Converter={StaticResource StringToBoolConverter}}">
-                        <HorizontalStackLayout Spacing="8">
-                            <Label Text="✓" TextColor="#15803D" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
-                            <Label Text="{Binding SuccessMessage}" TextColor="#15803D" FontSize="14" VerticalOptions="Center" />
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="✅" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="{Binding SuccessMessage}"
+                                   TextColor="#22C55E" FontSize="13"
+                                   VerticalOptions="Center"/>
                         </HorizontalStackLayout>
                     </Border>
                 </VerticalStackLayout>
 
-                <Border BackgroundColor="White" 
-                        StrokeThickness="0"
-                        StrokeShape="RoundRectangle 32" 
-                        Padding="28"
-                        MaximumWidthRequest="450">
-                    <Border.Shadow>
-                        <Shadow Brush="#020202" Offset="0,10" Radius="30" Opacity="0.1" />
-                    </Border.Shadow>
+                <!-- ── Form Card ── -->
+                <Border BackgroundColor="#1E293B"
+                        StrokeThickness="1" Stroke="#334155"
+                        Padding="28,36" MaximumWidthRequest="450">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="28"/>
+                    </Border.StrokeShape>
 
-                    <VerticalStackLayout Spacing="18">
+                    <VerticalStackLayout Spacing="28">
 
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Full Name" TextColor="#503B31" FontSize="14" FontAttributes="Bold" Margin="4,0"/>
-                            <Border Stroke="{Binding FullNameError, Converter={StaticResource StringToBorderColorConverter}}"
-                                    StrokeThickness="1.5"
-                                    BackgroundColor="#F0F0DB"
-                                    StrokeShape="RoundRectangle 16">
-                                <Entry Text="{Binding FullName}"
-                                       Placeholder="Enter your full name"
-                                       TextColor="#020202"
-                                       PlaceholderColor="#9097C0"
-                                       FontSize="15"
-                                       Margin="15,5" />
-                            </Border>
-                            <Label Text="{Binding FullNameError}" TextColor="#EF4444" FontSize="12" Margin="4,0"
-                                   IsVisible="{Binding FullNameError, Converter={StaticResource StringToBoolConverter}}" />
+                        <!-- Full Name -->
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="FULL NAME"
+                                   TextColor="#475569" FontSize="11"
+                                   FontAttributes="Bold" CharacterSpacing="2"
+                                   Margin="0,0,0,8"/>
+                            <Entry Text="{Binding FullName}"
+                                   Placeholder="Enter your full name"
+                                   TextColor="#F8FAFC"
+                                   PlaceholderColor="#334155"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"/>
+                            <BoxView HeightRequest="1.5"
+                                     BackgroundColor="#475569"
+                                     Margin="0,1,0,0"/>
+                            <Label Text="{Binding FullNameError}"
+                                   TextColor="#EF4444" FontSize="12"
+                                   Margin="0,6,0,0"
+                                   IsVisible="{Binding FullNameError, Converter={StaticResource StringToBoolConverter}}"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Email Address" TextColor="#503B31" FontSize="14" FontAttributes="Bold" Margin="4,0"/>
-                            <Border Stroke="{Binding EmailError, Converter={StaticResource StringToBorderColorConverter}}"
-                                    StrokeThickness="1.5"
-                                    BackgroundColor="#F0F0DB"
-                                    StrokeShape="RoundRectangle 16">
-                                <Entry Text="{Binding Email}"
-                                       Placeholder="name@example.com"
-                                       Keyboard="Email"
-                                       TextColor="#020202"
-                                       PlaceholderColor="#9097C0"
-                                       FontSize="15"
-                                       Margin="15,5" />
-                            </Border>
-                            <Label Text="{Binding EmailError}" TextColor="#EF4444" FontSize="12" Margin="4,0"
-                                   IsVisible="{Binding EmailError, Converter={StaticResource StringToBoolConverter}}" />
+                        <!-- Email -->
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="EMAIL"
+                                   TextColor="#475569" FontSize="11"
+                                   FontAttributes="Bold" CharacterSpacing="2"
+                                   Margin="0,0,0,8"/>
+                            <Entry Text="{Binding Email}"
+                                   Placeholder="name@example.com"
+                                   Keyboard="Email"
+                                   TextColor="#F8FAFC"
+                                   PlaceholderColor="#334155"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"/>
+                            <BoxView HeightRequest="1.5"
+                                     BackgroundColor="#475569"
+                                     Margin="0,1,0,0"/>
+                            <Label Text="{Binding EmailError}"
+                                   TextColor="#EF4444" FontSize="12"
+                                   Margin="0,6,0,0"
+                                   IsVisible="{Binding EmailError, Converter={StaticResource StringToBoolConverter}}"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Password" TextColor="#503B31" FontSize="14" FontAttributes="Bold" Margin="4,0"/>
-                            <Border Stroke="{Binding PasswordError, Converter={StaticResource StringToBorderColorConverter}}"
-                                    StrokeThickness="1.5"
-                                    BackgroundColor="#F0F0DB"
-                                    StrokeShape="RoundRectangle 16">
-                                <Grid ColumnDefinitions="*,Auto" Margin="15,5">
-                                    <Entry Grid.Column="0"
-                                           Text="{Binding Password}"
-                                           Placeholder="••••••••"
-                                           IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
-                                           TextColor="#020202"
-                                           PlaceholderColor="#9097C0"
-                                           FontSize="15" />
-                                    <ImageButton Grid.Column="1"
-                                                 Command="{Binding TogglePasswordVisibilityCommand}"
-                                                 Source="{Binding IsPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
-                                                 WidthRequest="22" HeightRequest="22"
-                                                 BackgroundColor="Transparent" VerticalOptions="Center" />
-                                </Grid>
-                            </Border>
-                            <Label Text="{Binding PasswordError}" TextColor="#EF4444" FontSize="12" Margin="4,0"
-                                   IsVisible="{Binding PasswordError, Converter={StaticResource StringToBoolConverter}}" />
+                        <!-- Password -->
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="PASSWORD"
+                                   TextColor="#475569" FontSize="11"
+                                   FontAttributes="Bold" CharacterSpacing="2"
+                                   Margin="0,0,0,8"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Entry Grid.Column="0"
+                                       Text="{Binding Password}"
+                                       Placeholder="••••••••"
+                                       IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
+                                       TextColor="#F8FAFC"
+                                       PlaceholderColor="#334155"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"/>
+                                <ImageButton Grid.Column="1"
+                                             Command="{Binding TogglePasswordVisibilityCommand}"
+                                             Source="{Binding IsPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
+                                             WidthRequest="22" HeightRequest="22"
+                                             BackgroundColor="Transparent"
+                                             VerticalOptions="Center"/>
+                            </Grid>
+                            <BoxView HeightRequest="1.5"
+                                     BackgroundColor="#475569"
+                                     Margin="0,1,0,0"/>
+                            <Label Text="{Binding PasswordError}"
+                                   TextColor="#EF4444" FontSize="12"
+                                   Margin="0,6,0,0"
+                                   IsVisible="{Binding PasswordError, Converter={StaticResource StringToBoolConverter}}"/>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Confirm Password" TextColor="#503B31" FontSize="14" FontAttributes="Bold" Margin="4,0"/>
-                            <Border Stroke="{Binding ConfirmPasswordError, Converter={StaticResource StringToBorderColorConverter}}"
-                                    StrokeThickness="1.5"
-                                    BackgroundColor="#F0F0DB"
-                                    StrokeShape="RoundRectangle 16">
-                                <Grid ColumnDefinitions="*,Auto" Margin="15,5">
-                                    <Entry Grid.Column="0"
-                                           Text="{Binding ConfirmPassword}"
-                                           Placeholder="••••••••"
-                                           IsPassword="{Binding IsConfirmPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
-                                           TextColor="#020202"
-                                           PlaceholderColor="#9097C0"
-                                           FontSize="15" />
-                                    <ImageButton Grid.Column="1"
-                                                 Command="{Binding ToggleConfirmPasswordVisibilityCommand}"
-                                                 Source="{Binding IsConfirmPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
-                                                 WidthRequest="22" HeightRequest="22"
-                                                 BackgroundColor="Transparent" VerticalOptions="Center" />
-                                </Grid>
-                            </Border>
-                            <Label Text="{Binding ConfirmPasswordError}" TextColor="#EF4444" FontSize="12" Margin="4,0"
-                                   IsVisible="{Binding ConfirmPasswordError, Converter={StaticResource StringToBoolConverter}}" />
+                        <!-- Confirm Password -->
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="CONFIRM PASSWORD"
+                                   TextColor="#475569" FontSize="11"
+                                   FontAttributes="Bold" CharacterSpacing="2"
+                                   Margin="0,0,0,8"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Entry Grid.Column="0"
+                                       Text="{Binding ConfirmPassword}"
+                                       Placeholder="••••••••"
+                                       IsPassword="{Binding IsConfirmPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
+                                       TextColor="#F8FAFC"
+                                       PlaceholderColor="#334155"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"/>
+                                <ImageButton Grid.Column="1"
+                                             Command="{Binding ToggleConfirmPasswordVisibilityCommand}"
+                                             Source="{Binding IsConfirmPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
+                                             WidthRequest="22" HeightRequest="22"
+                                             BackgroundColor="Transparent"
+                                             VerticalOptions="Center"/>
+                            </Grid>
+                            <BoxView HeightRequest="1.5"
+                                     BackgroundColor="#475569"
+                                     Margin="0,1,0,0"/>
+                            <Label Text="{Binding ConfirmPasswordError}"
+                                   TextColor="#EF4444" FontSize="12"
+                                   Margin="0,6,0,0"
+                                   IsVisible="{Binding ConfirmPasswordError, Converter={StaticResource StringToBoolConverter}}"/>
                         </VerticalStackLayout>
 
-                        <Button Text="Create Account"
-                                Command="{Binding RegisterCommand}"
-                                IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
-                                BackgroundColor="#30364F" 
-                                TextColor="White"
-                                FontSize="17"
-                                FontAttributes="Bold"
-                                CornerRadius="16"
-                                HeightRequest="58"
-                                Margin="0,10,0,0">
-                            <Button.Triggers>
-                                <DataTrigger TargetType="Button" Binding="{Binding IsLoading}" Value="True">
-                                    <Setter Property="Text" Value="Creating Account..." />
-                                    <Setter Property="Opacity" Value="0.8" />
-                                </DataTrigger>
-                            </Button.Triggers>
-                        </Button>
+                        <!-- Create Account Button -->
+                        <Border BackgroundColor="#3B82F6"
+                                StrokeThickness="0" Margin="0,4,0,0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16"/>
+                            </Border.StrokeShape>
+                            <Button Text="Create Account"
+                                    Command="{Binding RegisterCommand}"
+                                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"
+                                    FontSize="16" FontAttributes="Bold"
+                                    HeightRequest="54">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding IsLoading}" Value="True">
+                                        <Setter Property="Text" Value="Creating Account..."/>
+                                        <Setter Property="Opacity" Value="0.7"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </Border>
 
                     </VerticalStackLayout>
                 </Border>
 
-                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,25">
-                    <Label Text="Already have an account?" TextColor="#ACBAC4" FontSize="15" />
-                    <Label Text="Login" 
-                           TextColor="#ACBAC4"
-                           FontSize="15"
-                           FontAttributes="Bold">
+                <!-- ── Login Link ── -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="6" Margin="0,24,0,40">
+                    <Label Text="Already have an account?" TextColor="#64748B" FontSize="14"/>
+                    <Label Text="Sign In" TextColor="#3B82F6"
+                           FontSize="14" FontAttributes="Bold">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
+                            <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
                 </HorizontalStackLayout>
 
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- ── Loading Overlay ── -->
+        <Grid IsVisible="{Binding IsLoading}" BackgroundColor="#990F172A">
+            <Border BackgroundColor="#1E293B"
+                    StrokeThickness="1" Stroke="#334155"
+                    Padding="40,32"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <skia:SKLottieView Source="loading.json"
+                                       RepeatCount="-1"
+                                       WidthRequest="80"
+                                       HeightRequest="80"
+                                       HorizontalOptions="Center"/>
+                    <Label Text="Creating Account..."
+                           TextColor="#F8FAFC" FontSize="15"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
     </Grid>
 </ContentPage>

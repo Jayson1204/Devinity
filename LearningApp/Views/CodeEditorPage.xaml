@@ -5,281 +5,506 @@
              BackgroundColor="#0A0F2E"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto">
+    <Grid>
 
-        <!-- ── Header ── -->
-        <Grid Grid.Row="0"
-              BackgroundColor="#0A0F2E"
-              Padding="20,52,20,16"
-              RowDefinitions="Auto,Auto,Auto"
-              RowSpacing="10">
+        <!-- ── Main Page Layout ── -->
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
 
-            <!-- Back + Title -->
-            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
-                <Border Grid.Column="0"
-                        BackgroundColor="#1B2250"
-                        StrokeThickness="0"
-                        WidthRequest="40"
-                        HeightRequest="40">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="12"/>
-                    </Border.StrokeShape>
-                    <Button Text="←"
-                            FontSize="18"
-                            BackgroundColor="Transparent"
-                            TextColor="White"
-                            Padding="0"
-                            Clicked="OnBackClicked"/>
-                </Border>
+            <!-- ── Header ── -->
+            <Grid Grid.Row="0"
+                  BackgroundColor="#0A0F2E"
+                  Padding="20,52,20,16"
+                  RowDefinitions="Auto,Auto,Auto"
+                  RowSpacing="10">
 
-                <Label Grid.Column="1"
-                       x:Name="AssessmentTitleLabel"
-                       FontSize="16"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center"
-                       MaxLines="1"
-                       LineBreakMode="TailTruncation"/>
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+                    <Border Grid.Column="0"
+                            BackgroundColor="#1B2250"
+                            StrokeThickness="0"
+                            WidthRequest="40"
+                            HeightRequest="40">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <Button Text="←"
+                                FontSize="18"
+                                BackgroundColor="Transparent"
+                                TextColor="White"
+                                Padding="0"
+                                Clicked="OnBackClicked"/>
+                    </Border>
 
-                <!-- Level Badge -->
-                <Border Grid.Column="2"
-                        x:Name="LevelBadgeBorder"
-                        BackgroundColor="#1B2250"
-                        StrokeThickness="0"
-                        Padding="10,6">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10"/>
-                    </Border.StrokeShape>
-                    <Label x:Name="LevelBadgeLabel"
-                           FontSize="11"
-                           FontAttributes="Bold"
-                           TextColor="#4A90D9"/>
-                </Border>
-            </Grid>
-
-            <!-- Progress Bar -->
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                <ProgressBar Grid.Column="0"
-                             x:Name="ChallengeProgressBar"
-                             Progress="0"
-                             ProgressColor="#4A90D9"
-                             BackgroundColor="#1B2250"
-                             VerticalOptions="Center"/>
-                <Label Grid.Column="1"
-                       x:Name="ChallengeCountLabel"
-                       Text="1 of 1"
-                       TextColor="#6B7FBF"
-                       FontSize="11"
-                       VerticalOptions="Center"/>
-            </Grid>
-
-            <!-- Score -->
-            <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
-                <Label Grid.Column="0"
-                       Text="📋 Challenge"
-                       FontSize="12"
-                       TextColor="#6B7FBF"
-                       VerticalOptions="Center"/>
-                <Border Grid.Column="1"
-                        BackgroundColor="#1B2250"
-                        StrokeThickness="0"
-                        Padding="10,5">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="8"/>
-                    </Border.StrokeShape>
-                    <Label x:Name="ScoreLabel"
-                           Text="Score: 0"
-                           TextColor="#00C9A7"
-                           FontSize="12"
-                           FontAttributes="Bold"/>
-                </Border>
-            </Grid>
-        </Grid>
-
-        <!-- ── Question Card ── -->
-        <Border Grid.Row="1"
-                BackgroundColor="#1B2250"
-                StrokeThickness="1"
-                Stroke="#2A3470"
-                Margin="16,0,16,0"
-                Padding="16,14">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="16"/>
-            </Border.StrokeShape>
-            <VerticalStackLayout Spacing="8">
-                <Label Text="Question"
-                       FontSize="11"
-                       TextColor="#4A90D9"
-                       FontAttributes="Bold"
-                       CharacterSpacing="1.5"/>
-                <Label x:Name="QuestionLabel"
-                       FontSize="14"
-                       TextColor="#E8EEFF"
-                       LineBreakMode="WordWrap"
-                       LineHeight="1.4"/>
-            </VerticalStackLayout>
-        </Border>
-
-        <!-- ── Code Editor + Output ── -->
-        <ScrollView Grid.Row="2" Margin="0,12,0,0">
-            <VerticalStackLayout Padding="16,0" Spacing="12">
-
-                <!-- Editor Header -->
-                <Grid ColumnDefinitions="*,Auto">
-                    <Label Grid.Column="0"
-                           Text="✏️  Your Code"
-                           FontSize="13"
+                    <Label Grid.Column="1"
+                           x:Name="AssessmentTitleLabel"
+                           FontSize="16"
                            FontAttributes="Bold"
                            TextColor="White"
-                           VerticalOptions="Center"/>
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           MaxLines="1"
+                           LineBreakMode="TailTruncation"/>
+
+                    <Border Grid.Column="2"
+                            x:Name="LevelBadgeBorder"
+                            BackgroundColor="#1B2250"
+                            StrokeThickness="0"
+                            Padding="10,6">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Label x:Name="LevelBadgeLabel"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#4A90D9"/>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <ProgressBar Grid.Column="0"
+                                 x:Name="ChallengeProgressBar"
+                                 Progress="0"
+                                 ProgressColor="#4A90D9"
+                                 BackgroundColor="#1B2250"
+                                 VerticalOptions="Center"/>
                     <Label Grid.Column="1"
-                           x:Name="LanguageLabel"
+                           x:Name="ChallengeCountLabel"
+                           Text="1 of 1"
+                           TextColor="#6B7FBF"
                            FontSize="11"
-                           TextColor="#4A90D9"
                            VerticalOptions="Center"/>
                 </Grid>
 
-                <!-- Code Editor -->
-                <Border BackgroundColor="#0D1225"
-                        StrokeThickness="1"
-                        Stroke="#2A3470"
-                        Padding="14">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="14"/>
-                    </Border.StrokeShape>
-                    <Editor x:Name="CodeEditor"
-                            FontFamily="Courier New"
-                            FontSize="14"
-                            TextColor="#A8C7FF"
-                            BackgroundColor="Transparent"
-                            MinimumHeightRequest="200"
-                            AutoSize="TextChanges"
-                            Placeholder="Write your code here..."
-                            PlaceholderColor="#2A3470"/>
-                </Border>
-
-                <!-- Output Header -->
-                <Grid ColumnDefinitions="*,Auto">
+                <Grid Grid.Row="2" ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0"
-                           Text="⚡  Output"
-                           FontSize="13"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           VerticalOptions="Center"/>
-                    <Label Grid.Column="1"
-                           x:Name="OutputStatusLabel"
-                           FontSize="11"
+                           Text="📋 Challenge"
+                           FontSize="12"
                            TextColor="#6B7FBF"
                            VerticalOptions="Center"/>
+                    <Border Grid.Column="1"
+                            BackgroundColor="#1B2250"
+                            StrokeThickness="0"
+                            Padding="10,5">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8"/>
+                        </Border.StrokeShape>
+                        <Label x:Name="ScoreLabel"
+                               Text="Score: 0"
+                               TextColor="#00C9A7"
+                               FontSize="12"
+                               FontAttributes="Bold"/>
+                    </Border>
                 </Grid>
+            </Grid>
 
-                <!-- Output Console -->
-                <Border BackgroundColor="#060B1E"
-                        StrokeThickness="1"
-                        Stroke="#2A3470"
-                        Padding="14">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="14"/>
-                    </Border.StrokeShape>
-                    <Label x:Name="OutputLabel"
-                           FontFamily="Courier New"
-                           FontSize="13"
-                           TextColor="#00C9A7"
-                           MinimumHeightRequest="90"
-                           Text="Run your code to see output..."/>
-                </Border>
+            <!-- ── Question Card ── -->
+            <Border Grid.Row="1"
+                    BackgroundColor="#1B2250"
+                    StrokeThickness="1"
+                    Stroke="#2A3470"
+                    Margin="16,0,16,0"
+                    Padding="16,14">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Question"
+                           FontSize="11"
+                           TextColor="#4A90D9"
+                           FontAttributes="Bold"
+                           CharacterSpacing="1.5"/>
+                    <Label x:Name="QuestionLabel"
+                           FontSize="14"
+                           TextColor="#E8EEFF"
+                           LineBreakMode="WordWrap"
+                           LineHeight="1.4"/>
+                </VerticalStackLayout>
+            </Border>
 
-                <!-- Hint Card (hidden by default) -->
-                <Border x:Name="HintCard"
+            <!-- ── Code Editor + Output ── -->
+            <ScrollView Grid.Row="2" Margin="0,12,0,0">
+                <VerticalStackLayout Padding="16,0" Spacing="12">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="✏️  Your Code"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               x:Name="LanguageLabel"
+                               FontSize="11"
+                               TextColor="#4A90D9"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Border BackgroundColor="#0D1225"
+                            StrokeThickness="1"
+                            Stroke="#2A3470"
+                            Padding="14">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <Editor x:Name="CodeEditor"
+                                FontFamily="Courier New"
+                                FontSize="14"
+                                TextColor="#A8C7FF"
+                                BackgroundColor="Transparent"
+                                MinimumHeightRequest="200"
+                                AutoSize="TextChanges"
+                                Placeholder="Write your code here..."
+                                PlaceholderColor="#2A3470"/>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="⚡  Output"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               x:Name="OutputStatusLabel"
+                               FontSize="11"
+                               TextColor="#6B7FBF"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Border BackgroundColor="#060B1E"
+                            StrokeThickness="1"
+                            Stroke="#2A3470"
+                            Padding="14">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <Label x:Name="OutputLabel"
+                               FontFamily="Courier New"
+                               FontSize="13"
+                               TextColor="#00C9A7"
+                               MinimumHeightRequest="90"
+                               Text="Run your code to see output..."/>
+                    </Border>
+
+                    <Border x:Name="HintCard"
+                            BackgroundColor="#1A1830"
+                            StrokeThickness="1"
+                            Stroke="#4A3F8F"
+                            Padding="14"
+                            IsVisible="False">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="💡  Hint"
+                                   FontSize="12"
+                                   TextColor="#A78BFA"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1"/>
+                            <Label x:Name="HintLabel"
+                                   FontSize="13"
+                                   TextColor="#C4B5FD"
+                                   LineBreakMode="WordWrap"
+                                   LineHeight="1.4"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <BoxView HeightRequest="8" Color="Transparent"/>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- ── Action Buttons ── -->
+            <Grid Grid.Row="3"
+                  BackgroundColor="#0D1225"
+                  Padding="16,12"
+                  ColumnDefinitions="52,*,*"
+                  ColumnSpacing="10">
+
+                <Border Grid.Column="0"
                         BackgroundColor="#1A1830"
                         StrokeThickness="1"
                         Stroke="#4A3F8F"
-                        Padding="14"
-                        IsVisible="False">
+                        WidthRequest="52"
+                        HeightRequest="52">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="14"/>
                     </Border.StrokeShape>
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="💡  Hint"
-                               FontSize="12"
-                               TextColor="#A78BFA"
-                               FontAttributes="Bold"
-                               CharacterSpacing="1"/>
-                        <Label x:Name="HintLabel"
-                               FontSize="13"
-                               TextColor="#C4B5FD"
-                               LineBreakMode="WordWrap"
-                               LineHeight="1.4"/>
-                    </VerticalStackLayout>
+                    <Button Text="💡"
+                            FontSize="20"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            Clicked="OnHintClicked"/>
                 </Border>
 
-                <!-- Bottom padding -->
-                <BoxView HeightRequest="8" Color="Transparent"/>
+                <Border Grid.Column="1"
+                        BackgroundColor="#0E3A6E"
+                        StrokeThickness="1"
+                        Stroke="#4A90D9"
+                        HeightRequest="52">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Button Text="▶  Run"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            BackgroundColor="Transparent"
+                            TextColor="#4A90D9"
+                            Padding="0"
+                            Clicked="OnRunCodeClicked"/>
+                </Border>
+
+                <Border Grid.Column="2"
+                        BackgroundColor="#00C9A7"
+                        StrokeThickness="0"
+                        HeightRequest="52">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Button Text="✓  Submit"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            BackgroundColor="Transparent"
+                            TextColor="#0A0F2E"
+                            Padding="0"
+                            Clicked="OnSubmitClicked"/>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- ── Dim Overlay ── -->
+        <BoxView x:Name="DimOverlay"
+                 Color="#000000"
+                 Opacity="0.6"
+                 IsVisible="False"
+                 InputTransparent="False"/>
+
+        <!-- ── Result Popup Card ── -->
+        <Border x:Name="ResultPopup"
+                IsVisible="False"
+                BackgroundColor="#0D1225"
+                StrokeThickness="1"
+                Stroke="#2A3470"
+                Padding="28,32"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Margin="24,0"
+                MaximumWidthRequest="420">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="28"/>
+            </Border.StrokeShape>
+            <VerticalStackLayout Spacing="20">
+
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label x:Name="PopupEmoji"
+                           FontSize="52"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="PopupTitle"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="1" Color="#2A3470"/>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="YOUR OUTPUT"
+                           FontSize="10"
+                           FontAttributes="Bold"
+                           TextColor="#6B7FBF"
+                           CharacterSpacing="1.5"/>
+                    <Border BackgroundColor="#060B1E"
+                            StrokeThickness="1"
+                            Stroke="#2A3470"
+                            Padding="12,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Label x:Name="PopupOutputLabel"
+                               FontFamily="Courier New"
+                               FontSize="13"
+                               TextColor="#A8C7FF"
+                               LineBreakMode="WordWrap"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout x:Name="PopupExpectedSection" Spacing="6" IsVisible="False">
+                    <Label Text="EXPECTED OUTPUT"
+                           FontSize="10"
+                           FontAttributes="Bold"
+                           TextColor="#6B7FBF"
+                           CharacterSpacing="1.5"/>
+                    <Border BackgroundColor="#060B1E"
+                            StrokeThickness="1"
+                            Stroke="#2A3470"
+                            Padding="12,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Label x:Name="PopupExpectedLabel"
+                               FontFamily="Courier New"
+                               FontSize="13"
+                               TextColor="#F48771"
+                               LineBreakMode="WordWrap"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Border x:Name="PopupPointsBadge"
+                        BackgroundColor="#00C9A720"
+                        StrokeThickness="1"
+                        Stroke="#00C9A7"
+                        Padding="14,10"
+                        IsVisible="False"
+                        HorizontalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Label x:Name="PopupPointsLabel"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#00C9A7"
+                           HorizontalOptions="Center"/>
+                </Border>
+
+                <Label x:Name="PopupMessage"
+                       FontSize="13"
+                       TextColor="#94A3B8"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"/>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0"
+                            BackgroundColor="#1B2250"
+                            StrokeThickness="1"
+                            Stroke="#2A3470"
+                            HeightRequest="48">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <Button x:Name="PopupSecondaryBtn"
+                                Text="Exit"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                BackgroundColor="Transparent"
+                                TextColor="#94A3B8"
+                                Padding="0"
+                                Clicked="OnPopupSecondaryClicked"/>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            x:Name="PopupPrimaryBorder"
+                            BackgroundColor="#00C9A7"
+                            StrokeThickness="0"
+                            HeightRequest="48">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14"/>
+                        </Border.StrokeShape>
+                        <Button x:Name="PopupPrimaryBtn"
+                                Text="Next"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                BackgroundColor="Transparent"
+                                TextColor="#0A0F2E"
+                                Padding="0"
+                                Clicked="OnPopupPrimaryClicked"/>
+                    </Border>
+                </Grid>
 
             </VerticalStackLayout>
-        </ScrollView>
+        </Border>
 
-        <!-- ── Action Buttons ── -->
-        <Grid Grid.Row="3"
-              BackgroundColor="#0D1225"
-              Padding="16,12"
-              ColumnDefinitions="52,*,*"
-              ColumnSpacing="10">
+        <!-- ── Completion Popup Card ── -->
+        <Border x:Name="CompletionPopup"
+                IsVisible="False"
+                BackgroundColor="#0D1225"
+                StrokeThickness="1"
+                Stroke="#2A3470"
+                Padding="28,32"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Margin="24,0"
+                MaximumWidthRequest="420">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="28"/>
+            </Border.StrokeShape>
+            <VerticalStackLayout Spacing="20">
 
-            <!-- Hint Button -->
-            <Border Grid.Column="0"
-                    BackgroundColor="#1A1830"
-                    StrokeThickness="1"
-                    Stroke="#4A3F8F"
-                    WidthRequest="52"
-                    HeightRequest="52">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="14"/>
-                </Border.StrokeShape>
-                <Button Text="💡"
-                        FontSize="20"
-                        BackgroundColor="Transparent"
-                        Padding="0"
-                        Clicked="OnHintClicked"/>
-            </Border>
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label x:Name="CompletionEmoji"
+                           FontSize="60"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="CompletionGradeLabel"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
 
-            <!-- Run Button -->
-            <Border Grid.Column="1"
-                    BackgroundColor="#0E3A6E"
-                    StrokeThickness="1"
-                    Stroke="#4A90D9"
-                    HeightRequest="52">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="14"/>
-                </Border.StrokeShape>
-                <Button Text="▶  Run"
-                        FontSize="14"
-                        FontAttributes="Bold"
-                        BackgroundColor="Transparent"
-                        TextColor="#4A90D9"
-                        Padding="0"
-                        Clicked="OnRunCodeClicked"/>
-            </Border>
+                <BoxView HeightRequest="1" Color="#2A3470"/>
 
-            <!-- Submit Button -->
-            <Border Grid.Column="2"
-                    BackgroundColor="#00C9A7"
-                    StrokeThickness="0"
-                    HeightRequest="52">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="14"/>
-                </Border.StrokeShape>
-                <Button Text="✓  Submit"
-                        FontSize="14"
-                        FontAttributes="Bold"
-                        BackgroundColor="Transparent"
-                        TextColor="#0A0F2E"
-                        Padding="0"
-                        Clicked="OnSubmitClicked"/>
-            </Border>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="CompletionScoreLabel"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#00C9A7"
+                               HorizontalOptions="Center"/>
+                        <Label Text="SCORE"
+                               FontSize="10"
+                               TextColor="#6B7FBF"
+                               FontAttributes="Bold"
+                               CharacterSpacing="1"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
 
-        </Grid>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="CompletionAccuracyLabel"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#4A90D9"
+                               HorizontalOptions="Center"/>
+                        <Label Text="ACCURACY"
+                               FontSize="10"
+                               TextColor="#6B7FBF"
+                               FontAttributes="Bold"
+                               CharacterSpacing="1"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="CompletionCourseLabel"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#A78BFA"
+                               HorizontalOptions="Center"/>
+                        <Label Text="COURSE"
+                               FontSize="10"
+                               TextColor="#6B7FBF"
+                               FontAttributes="Bold"
+                               CharacterSpacing="1"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <BoxView HeightRequest="1" Color="#2A3470"/>
+
+                <Border BackgroundColor="#00C9A7"
+                        StrokeThickness="0"
+                        HeightRequest="52">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="14"/>
+                    </Border.StrokeShape>
+                    <Button Text="🎉  Done!"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            BackgroundColor="Transparent"
+                            TextColor="#0A0F2E"
+                            Padding="0"
+                            Clicked="OnCompletionDoneClicked"/>
+                </Border>
+
+            </VerticalStackLayout>
+        </Border>
 
     </Grid>
 </ContentPage>
