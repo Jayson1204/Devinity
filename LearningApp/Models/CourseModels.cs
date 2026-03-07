@@ -74,6 +74,17 @@
         public string Duration { get; set; }
         public string FirebaseUrl { get; set; }
         public string Category { get; set; }
+        public string CategoryIcon => Category?.ToLower() switch
+        {
+            "c#" or "csharp" => "csharp.png",
+            "python" => "python.png",
+            "javascript" or "js" => "javascript.png",
+            "php" => "php.png",
+            "java" => "java.png",
+            "c" => "cprog.png",
+            "c++" => "cplusplus.png",
+            _ => "video_placeholder.png"
+        };
     }
 
     // Assessment row

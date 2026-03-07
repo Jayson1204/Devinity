@@ -14,7 +14,6 @@ namespace LearningApp.Views
         public int TotalAssessments { get; set; }
         public int CompletedAssessments { get; set; }
         public double Percentage { get; set; }
-
         public string Emoji => Category switch
         {
             "PHP" => "🐘",
@@ -27,7 +26,6 @@ namespace LearningApp.Views
             "MySQL" => "🗄️",
             _ => "📘"
         };
-
         public string BgColor => Category switch
         {
             "PHP" => "#7B68EE",
@@ -40,7 +38,6 @@ namespace LearningApp.Views
             "MySQL" => "#4479A1",
             _ => "#6C5CE7"
         };
-
         public string ProgressDetail =>
             $"{WatchedVideos}/{TotalVideos} videos · {CompletedAssessments}/{TotalAssessments} assessments";
         public string PercentageText => $"{Percentage:F0} %";
@@ -57,14 +54,11 @@ namespace LearningApp.Views
             get => _filteredCourses;
             set { _filteredCourses = value; OnPropertyChanged(); }
         }
-
         public ICommand CourseTappedCommand { get; }
-
         public MyLearningViewModel(Action<CourseProgressItem> onCourseTapped)
         {
             CourseTappedCommand = new Command<CourseProgressItem>(onCourseTapped);
         }
-
         public void SetCourses(IEnumerable<CourseProgressItem> courses)
             => FilteredCourses = new ObservableCollection<CourseProgressItem>(courses);
     }
@@ -103,7 +97,6 @@ namespace LearningApp.Views
         {
             SkeletonScroll.IsVisible = true;
             CourseCollectionView.IsVisible = false;
-
             try
             {
                 var userId = Preferences.Get("UserId", "");
@@ -117,19 +110,21 @@ namespace LearningApp.Views
                 var url = $"{AppConfig.BaseUrl}/api/learning/{Uri.EscapeDataString(userId)}/overview";
                 var response = await _httpClient.GetAsync(url);
                 var content = await response.Content.ReadAsStringAsync();
-
                 var overview = System.Text.Json.JsonSerializer.Deserialize<OverviewResponse>(
                     content,
                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 if (overview == null) { _allCourses = new(); RenderCourses(); return; }
 
+                // Only count courses the user has actually started
                 _allCourses = overview.CourseProgress?
-                    .Where(c => c.TotalVideos > 0 || c.TotalAssessments > 0)
+                    .Where(c => c.WatchedVideos > 0 || c.CompletedAssessments > 0)
                     .ToList() ?? new();
 
                 EnrolledLabel.Text = $"{_allCourses.Count} courses";
-                TotalHoursLabel.Text = $"{Math.Round(_allCourses.Sum(c => c.TotalVideos) * 0.5, 0)}h";
+
+                // Hours based on watched videos, not total available
+                TotalHoursLabel.Text = $"{Math.Round(_allCourses.Sum(c => c.WatchedVideos) * 0.5, 0)}h";
 
                 RenderCourses();
             }
@@ -151,12 +146,20 @@ namespace LearningApp.Views
                              .OrderByDescending(c => c.Percentage)
                 : _allCourses.Where(c => c.Percentage >= 100)
                              .OrderByDescending(c => c.Percentage);
-
             _viewModel.SetCourses(filtered);
         }
 
         private async void OnCourseTapped(CourseProgressItem course)
-            => await Navigation.PushAsync(new CourseDetailPage(course.Category));
+        {
+            if (course.Percentage >= 100)
+            {
+                await Navigation.PushAsync(new CertificatePage(course.Category));
+            }
+            else
+            {
+                await Navigation.PushAsync(new CourseDetailPage(course.Category));
+            }
+        }
 
         private void OnInProgressTapped(object sender, EventArgs e)
         {
@@ -181,8 +184,5 @@ namespace LearningApp.Views
             ((Label)InProgressTab.Content).TextColor = Color.FromArgb("#888888");
             RenderCourses();
         }
-
-
-       
     }
 }

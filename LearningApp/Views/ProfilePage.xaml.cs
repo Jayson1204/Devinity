@@ -7,6 +7,7 @@ namespace LearningApp.Views
     public partial class ProfilePage : ContentPage
     {
         private readonly HttpClient _httpClient;
+        private bool _settingsExpanded = false;
 
         public ProfilePage()
         {
@@ -54,7 +55,7 @@ namespace LearningApp.Views
 
                 var courses = overview.CourseProgress ?? new();
                 int completed = courses.Count(c => c.Percentage >= 100);
-                double hours = Math.Round(courses.Sum(c => c.TotalVideos) * 0.5, 0);
+                double hours = Math.Round(courses.Sum(c => c.WatchedVideos) * 0.5, 0);
 
                 CoursesCompletedLabel.Text = completed.ToString();
                 TotalHoursLabel.Text = hours.ToString();
@@ -63,7 +64,31 @@ namespace LearningApp.Views
             catch { }
         }
 
-      
+        // ── Settings Accordion ────────────────────────────────────────
+
+        private void OnSettingsToggled(object sender, EventArgs e)
+        {
+            _settingsExpanded = !_settingsExpanded;
+            SettingsPanel.IsVisible = _settingsExpanded;
+            SettingsChevron.Text = _settingsExpanded ? "⌄" : "›";
+        }
+
+        private async void OnEditProfileTapped(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditProfilePage());
+        }
+
+        private async void OnPrivacyTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Privacy & Security", "Coming soon.", "OK");
+        }
+
+        private async void OnHelpTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Help & Support", "Contact us at support@devinity.com", "OK");
+        }
+
+        // ── Logout ────────────────────────────────────────────────────
 
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
@@ -103,6 +128,8 @@ namespace LearningApp.Views
                 await Shell.Current.GoToAsync("///LoginPage");
             }
         }
+
+        // ── Models ────────────────────────────────────────────────────
 
         public class CourseProgressItem
         {

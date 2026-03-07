@@ -111,7 +111,7 @@
 
                 <!-- In Progress (active) -->
                 <Border x:Name="InProgressTab"
-                        BackgroundColor="#38BDF8"
+                        BackgroundColor="Gray"
                         StrokeThickness="0"
                         Grid.Column="0">
                     <Border.StrokeShape>

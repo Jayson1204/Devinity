@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using LearningApp.Services;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;          // ← new
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace LearningApp
@@ -9,6 +9,8 @@ namespace LearningApp
     {
         public static MauiApp CreateMauiApp()
         {
+            // ← new: must run before any PdfSharpCore type is touched
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -24,12 +26,7 @@ namespace LearningApp
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
-            // Register AuthService as a singleton
             builder.Services.AddSingleton<AuthService>();
-
-
-
             return builder.Build();
         }
     }

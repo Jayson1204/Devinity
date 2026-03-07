@@ -133,6 +133,36 @@ namespace LearningApp.Api.Controllers
             return Ok(user);
         }
 
+        // ── ADDED: Update profile (name + optional password change) ──
+        // 60 req/min — inherits controller-level "api" policy
+        [HttpPut("profile")]
+        [Authorize]
+        [ProducesResponseType(typeof(UpdateProfileResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new UpdateProfileResponse
+                {
+                    Success = false,
+                    Message = "Invalid request data"
+                });
+
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var result = await _authService.UpdateProfileAsync(userId, request);
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
         // 200 req/min — relaxed, same as health/info endpoints
         [HttpGet("health")]
         [EnableRateLimiting("static")]

@@ -20,20 +20,20 @@
                 </VerticalStackLayout>
 
                 <!-- Search Bar -->
-                <Border StrokeThickness="0" 
-                    Background="#1E293B" 
-                    HeightRequest="50"
-                    Padding="15,0"> 
+                <Border StrokeThickness="0"
+                        Background="#1E293B"
+                        HeightRequest="50"
+                        Padding="15,10">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="25"/>
                     </Border.StrokeShape>
                     <Grid ColumnDefinitions="Auto,*">
                         <Label Text="⌕" TextColor="#94A3B8" FontSize="20" VerticalOptions="Center"/>
-                        <Entry Grid.Column="1" 
-               Placeholder="Search for courses..."
-               PlaceholderColor="#64748B"
-               TextColor="White"
-               BackgroundColor="Transparent"/>
+                        <Entry Grid.Column="1"
+                               Placeholder="Search for courses..."
+                               PlaceholderColor="#64748B"
+                               TextColor="White"
+                               BackgroundColor="Transparent"/>
                     </Grid>
                 </Border>
 
@@ -41,9 +41,6 @@
                 <Grid>
                     <Label Text="Categories" FontSize="20"
                            FontAttributes="Bold" TextColor="White"/>
-                    <Label Text="See all" FontSize="14" TextColor="#38BDF8"
-                           FontAttributes="Bold" HorizontalOptions="End"
-                           VerticalOptions="Center"/>
                 </Grid>
 
                 <!-- Skeleton State -->
@@ -69,7 +66,9 @@
                       RowSpacing="15" ColumnSpacing="15"
                       IsVisible="False">
 
-                    <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- PHP -->
+                    <Border Grid.Row="0" Grid.Column="0"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -77,18 +76,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="PHP"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#7B7FB8" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="PHP" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="PHP" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="php.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="PHP" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="0" Grid.Column="1" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- Java -->
+                    <Border Grid.Row="0" Grid.Column="1"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -96,18 +93,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Java"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#F89820" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="☕" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="Java" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="java.png" HeightRequest="45" WidthRequest="45" 
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="Java" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" Grid.Column="0" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- JavaScript -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -115,18 +110,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="JavaScript"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#F0DB4F" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="JS" FontSize="14" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="JavaScript" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="javascript.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="JavaScript" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- Python -->
+                    <Border Grid.Row="1" Grid.Column="1"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -134,18 +127,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Python"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#4584B6" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="🐍" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="Python" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="python.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="Python" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="2" Grid.Column="0" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- C++ -->
+                    <Border Grid.Row="2" Grid.Column="0"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -153,18 +144,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="C++"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#659AD2" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="C++" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="C++" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="cplusplus.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="C++" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="2" Grid.Column="1" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- C -->
+                    <Border Grid.Row="2" Grid.Column="1"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -172,18 +161,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="C"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#A8B9CC" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="C" FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="C" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="cprog.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="C" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="3" Grid.Column="0" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- C# -->
+                    <Border Grid.Row="3" Grid.Column="0"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -191,18 +178,16 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="C#"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#68217A" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="C#" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="C#" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="csharp.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="C#" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="3" Grid.Column="1" BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
+                    <!-- GO -->
+                    <Border Grid.Row="3" Grid.Column="1"
+                            BackgroundColor="#1E293B" Stroke="#333333" StrokeThickness="1" Padding="16">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
@@ -210,16 +195,13 @@
                             <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="MySQL"/>
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="10">
-                            <Border BackgroundColor="#00758F" HeightRequest="45" WidthRequest="45" StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12"/>
-                                </Border.StrokeShape>
-                                <Label Text="SQL" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                            </Border>
-                            <Label Text="MySQL" FontSize="16" FontAttributes="Bold" TextColor="#94A3B8"/>
+                            <Image Source="go.png" HeightRequest="45" WidthRequest="45"
+                                   Aspect="AspectFit" HorizontalOptions="Center"/>
+                            <Label Text="GO" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC"/>
                             <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
+
                 </Grid>
 
                 <!-- Featured Course skeleton -->
@@ -238,11 +220,15 @@
                         <TapGestureRecognizer Tapped="OnFeaturedCourseTapped"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout>
-                        <Border BackgroundColor="#503B31" HeightRequest="150" StrokeThickness="0">
+                        <Border BackgroundColor="#1E293B" HeightRequest="150" StrokeThickness="0">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="24,24,0,0"/>
                             </Border.StrokeShape>
-                            <Label Text="💻" FontSize="60" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            <Image Source="web.jpg"
+                               Aspect="AspectFill"
+                               HorizontalOptions="Fill"
+                               VerticalOptions="Fill"
+                                HeightRequest="150"/>
                         </Border>
                         <VerticalStackLayout Padding="16" Spacing="5">
                             <Label Text="Complete Web Development Course"
@@ -254,8 +240,9 @@
                 </Border>
 
                 <BoxView HeightRequest="40" Color="Transparent"/>
+
             </VerticalStackLayout>
         </ScrollView>
-
     </Grid>
+
 </ContentPage>

@@ -85,15 +85,19 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Entry Text="{Binding FullName}"
-                                   Placeholder="Enter your full name"
-                                   TextColor="#F8FAFC"
-                                   PlaceholderColor="#334155"
-                                   FontSize="16"
-                                   BackgroundColor="Transparent"/>
-                            <BoxView HeightRequest="1.5"
-                                     BackgroundColor="#475569"
-                                     Margin="0,1,0,0"/>
+                            <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0"/>
+                                </Border.StrokeShape>
+                                <Entry Text="{Binding FullName}"
+                                       Placeholder="Enter your full name"
+                                       TextColor="#F8FAFC"
+                                       PlaceholderColor="#334155"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,-6,0,-6"/>
+                            </Border>
+                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
                             <Label Text="{Binding FullNameError}"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0"
@@ -106,16 +110,20 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Entry Text="{Binding Email}"
-                                   Placeholder="name@example.com"
-                                   Keyboard="Email"
-                                   TextColor="#F8FAFC"
-                                   PlaceholderColor="#334155"
-                                   FontSize="16"
-                                   BackgroundColor="Transparent"/>
-                            <BoxView HeightRequest="1.5"
-                                     BackgroundColor="#475569"
-                                     Margin="0,1,0,0"/>
+                            <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0"/>
+                                </Border.StrokeShape>
+                                <Entry Text="{Binding Email}"
+                                       Placeholder="user@example.com"
+                                       Keyboard="Email"
+                                       TextColor="#F8FAFC"
+                                       PlaceholderColor="#334155"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,-6,0,-6"/>
+                            </Border>
+                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
                             <Label Text="{Binding EmailError}"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0"
@@ -128,25 +136,33 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <Entry Grid.Column="0"
-                                       Text="{Binding Password}"
-                                       Placeholder="••••••••"
-                                       IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
-                                       TextColor="#F8FAFC"
-                                       PlaceholderColor="#334155"
-                                       FontSize="16"
-                                       BackgroundColor="Transparent"/>
-                                <ImageButton Grid.Column="1"
-                                             Command="{Binding TogglePasswordVisibilityCommand}"
-                                             Source="{Binding IsPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
-                                             WidthRequest="22" HeightRequest="22"
-                                             BackgroundColor="Transparent"
-                                             VerticalOptions="Center"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Border Grid.Column="0" StrokeThickness="0"
+                                        BackgroundColor="Transparent" Padding="0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="0"/>
+                                    </Border.StrokeShape>
+                                    <Entry Text="{Binding Password}"
+                                           Placeholder="••••••••"
+                                           IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
+                                           TextColor="#F8FAFC"
+                                           PlaceholderColor="#334155"
+                                           FontSize="16"
+                                           BackgroundColor="Transparent"
+                                           Margin="0,-6,0,-6"/>
+                                </Border>
+                                <Label Grid.Column="1"
+                                       Text="{Binding IsPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
+                                       FontSize="20"
+                                       TextColor="#64748B"
+                                       VerticalOptions="Center"
+                                       Padding="8,0,0,0">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding TogglePasswordVisibilityCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
-                            <BoxView HeightRequest="1.5"
-                                     BackgroundColor="#475569"
-                                     Margin="0,1,0,0"/>
+                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
                             <Label Text="{Binding PasswordError}"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0"
@@ -159,25 +175,33 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <Entry Grid.Column="0"
-                                       Text="{Binding ConfirmPassword}"
-                                       Placeholder="••••••••"
-                                       IsPassword="{Binding IsConfirmPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
-                                       TextColor="#F8FAFC"
-                                       PlaceholderColor="#334155"
-                                       FontSize="16"
-                                       BackgroundColor="Transparent"/>
-                                <ImageButton Grid.Column="1"
-                                             Command="{Binding ToggleConfirmPasswordVisibilityCommand}"
-                                             Source="{Binding IsConfirmPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
-                                             WidthRequest="22" HeightRequest="22"
-                                             BackgroundColor="Transparent"
-                                             VerticalOptions="Center"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Border Grid.Column="0" StrokeThickness="0"
+                                        BackgroundColor="Transparent" Padding="0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="0"/>
+                                    </Border.StrokeShape>
+                                    <Entry Text="{Binding ConfirmPassword}"
+                                           Placeholder="••••••••"
+                                           IsPassword="{Binding IsConfirmPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
+                                           TextColor="#F8FAFC"
+                                           PlaceholderColor="#334155"
+                                           FontSize="16"
+                                           BackgroundColor="Transparent"
+                                           Margin="0,-6,0,-6"/>
+                                </Border>
+                                <Label Grid.Column="1"
+                                       Text="{Binding IsConfirmPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
+                                       FontSize="20"
+                                       TextColor="#64748B"
+                                       VerticalOptions="Center"
+                                       Padding="8,0,0,0">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ToggleConfirmPasswordVisibilityCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
-                            <BoxView HeightRequest="1.5"
-                                     BackgroundColor="#475569"
-                                     Margin="0,1,0,0"/>
+                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
                             <Label Text="{Binding ConfirmPasswordError}"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0"

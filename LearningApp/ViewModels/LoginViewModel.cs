@@ -100,10 +100,8 @@ namespace LearningApp.ViewModels
 
             if (response.Success)
             {
-                // Save access token
+                // Save tokens
                 await SecureStorage.SetAsync("auth_token", response.Token ?? "");
-
-                // Save refresh token for proper server-side logout
                 await SecureStorage.SetAsync("refresh_token", response.RefreshToken ?? "");
 
                 // Save user info
@@ -114,7 +112,14 @@ namespace LearningApp.ViewModels
                     Preferences.Set("UserFullName", response.User.FullName ?? "");
                 }
 
+                // Navigate to main page
                 await Shell.Current.GoToAsync("///MainPage");
+
+                // Start quote timer now that user is logged in
+                // Small delay so MainPage finishes rendering before popup appears
+                await Task.Delay(2000);
+                if (Application.Current is App app)
+                    app.StartQuoteTimer();
             }
             else
             {
