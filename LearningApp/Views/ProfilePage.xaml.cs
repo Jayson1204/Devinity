@@ -30,10 +30,28 @@ namespace LearningApp.Views
             FullNameLabel.Text = Preferences.Get("UserFullName", "User");
             EmailLabel.Text = Preferences.Get("UserEmail", "");
 
+            LoadAvatar();
+
             await LoadStats();
 
             SkeletonScroll.IsVisible = false;
             ContentScroll.IsVisible = true;
+        }
+
+        private void LoadAvatar()
+        {
+            var savedAvatar = Preferences.Get("UserAvatarPath", "");
+            if (!string.IsNullOrEmpty(savedAvatar) && File.Exists(savedAvatar))
+            {
+                AvatarImage.Source = ImageSource.FromFile(savedAvatar);
+                AvatarImage.IsVisible = true;
+                AvatarLabel.IsVisible = false;
+            }
+            else
+            {
+                AvatarImage.IsVisible = false;
+                AvatarLabel.IsVisible = true;
+            }
         }
 
         private async Task LoadStats()
@@ -88,6 +106,22 @@ namespace LearningApp.Views
             await DisplayAlert("Help & Support", "Contact us at support@devinity.com", "OK");
         }
 
+        // ── ADDED: Leaderboard ────────────────────────────────────────
+
+        private async void OnLeaderboardTapped(object sender, EventArgs e)
+        {
+            
+             await Navigation.PushAsync(new LeaderboardPage());
+        }
+
+        // ── ADDED: Meetings ──────────────────────────────────────────
+
+        private async void OnMeetingsTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Meetings", "Coming soon.", "OK");
+            // Replace with: await Navigation.PushAsync(new MeetingsPage());
+        }
+
         // ── Logout ────────────────────────────────────────────────────
 
         private async void OnLogoutClicked(object sender, EventArgs e)
@@ -117,6 +151,7 @@ namespace LearningApp.Views
                 Preferences.Remove("UserId");
                 Preferences.Remove("UserEmail");
                 Preferences.Remove("UserFullName");
+                Preferences.Remove("UserAvatarPath");
 
                 try
                 {

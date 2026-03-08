@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:LearningApp.Controls"
+             x:Class="LearningApp.Views.LeaderboardPage"
+             BackgroundColor="#0F172A"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- ── Top Bar ── -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto"
+              Padding="20,52,20,16" BackgroundColor="#0F172A">
+            <Border Grid.Column="0" BackgroundColor="#1E293B"
+                    StrokeThickness="1" Stroke="#334155"
+                    WidthRequest="40" HeightRequest="40">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+                <Label Text="←" FontSize="18" TextColor="#F8FAFC"
+                       HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Border>
+            <Label Grid.Column="1" Text="Leaderboard"
+                   FontSize="18" FontAttributes="Bold"
+                   TextColor="#F8FAFC"
+                   HorizontalOptions="Center" VerticalOptions="Center"/>
+            <BoxView Grid.Column="2" WidthRequest="40" Color="Transparent"/>
+        </Grid>
+
+        <!-- ── Content ── -->
+        <Grid Grid.Row="1">
+
+            <!-- Skeleton -->
+            <ScrollView x:Name="SkeletonScroll" IsVisible="True">
+                <VerticalStackLayout Padding="24,8,24,24" Spacing="12">
+                    <controls:SkeletonView HeightRequest="180" CornerRadius="24"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                    <controls:SkeletonView HeightRequest="72" CornerRadius="16"/>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Real Content -->
+            <ScrollView x:Name="ContentScroll" IsVisible="False">
+                <VerticalStackLayout Spacing="0" Padding="0,0,0,32">
+
+                    <!-- ── Podium Top 3 ── -->
+                    <Border Margin="24,8,24,0"
+                            BackgroundColor="#1E293B"
+                            StrokeThickness="1" Stroke="#334155"
+                            Padding="16,24,16,20">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24"/>
+                        </Border.StrokeShape>
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8"
+                              VerticalOptions="End">
+
+                            <!-- 2nd Place -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="6"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="End">
+                                <Grid HorizontalOptions="Center">
+                                    <Border x:Name="Avatar2Border"
+                                            BackgroundColor="#334155"
+                                            StrokeThickness="2" Stroke="#64748B"
+                                            WidthRequest="60" HeightRequest="60">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20"/>
+                                        </Border.StrokeShape>
+                                        <Grid>
+                                            <Label x:Name="Avatar2Emoji" Text="👤"
+                                                   FontSize="30"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                            <Image x:Name="Avatar2Image"
+                                                   Aspect="AspectFill"
+                                                   IsVisible="False"
+                                                   HorizontalOptions="Fill"
+                                                   VerticalOptions="Fill"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border BackgroundColor="#94A3B8"
+                                            StrokeThickness="2" Stroke="#0F172A"
+                                            WidthRequest="22" HeightRequest="22"
+                                            HorizontalOptions="End" VerticalOptions="End"
+                                            Margin="0,0,-2,-2">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="11"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="2" FontSize="11" FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Border>
+                                </Grid>
+                                <Label x:Name="Name2Label" Text="—"
+                                       FontSize="12" FontAttributes="Bold"
+                                       TextColor="#F8FAFC"
+                                       HorizontalOptions="Center"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"/>
+                                <Label x:Name="Score2Label" Text="0 pts"
+                                       FontSize="11" TextColor="#94A3B8"
+                                       HorizontalOptions="Center"/>
+                                <!-- Silver podium -->
+                                <Border BackgroundColor="#334155"
+                                        StrokeThickness="0"
+                                        HeightRequest="60"
+                                        HorizontalOptions="Fill">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10,10,4,4"/>
+                                    </Border.StrokeShape>
+                                    <Label Text="🥈" FontSize="22"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- 1st Place -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="6"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="End">
+                                <Label Text="👑" FontSize="22"
+                                       HorizontalOptions="Center"/>
+                                <Grid HorizontalOptions="Center">
+                                    <Border x:Name="Avatar1Border"
+                                            BackgroundColor="#334155"
+                                            StrokeThickness="3" Stroke="#F59E0B"
+                                            WidthRequest="72" HeightRequest="72">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="22"/>
+                                        </Border.StrokeShape>
+                                        <Grid>
+                                            <Label x:Name="Avatar1Emoji" Text="👤"
+                                                   FontSize="36"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                            <Image x:Name="Avatar1Image"
+                                                   Aspect="AspectFill"
+                                                   IsVisible="False"
+                                                   HorizontalOptions="Fill"
+                                                   VerticalOptions="Fill"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border BackgroundColor="#F59E0B"
+                                            StrokeThickness="2" Stroke="#0F172A"
+                                            WidthRequest="22" HeightRequest="22"
+                                            HorizontalOptions="End" VerticalOptions="End"
+                                            Margin="0,0,-2,-2">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="11"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="1" FontSize="11" FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Border>
+                                </Grid>
+                                <Label x:Name="Name1Label" Text="—"
+                                       FontSize="13" FontAttributes="Bold"
+                                       TextColor="#F8FAFC"
+                                       HorizontalOptions="Center"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"/>
+                                <Label x:Name="Score1Label" Text="0 pts"
+                                       FontSize="12" TextColor="#F59E0B"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"/>
+                                <!-- Gold podium -->
+                                <Border BackgroundColor="#F59E0B20"
+                                        StrokeThickness="1" Stroke="#F59E0B40"
+                                        HeightRequest="80"
+                                        HorizontalOptions="Fill">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10,10,4,4"/>
+                                    </Border.StrokeShape>
+                                    <Label Text="🥇" FontSize="26"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- 3rd Place -->
+                            <VerticalStackLayout Grid.Column="2" Spacing="6"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="End">
+                                <Grid HorizontalOptions="Center">
+                                    <Border x:Name="Avatar3Border"
+                                            BackgroundColor="#334155"
+                                            StrokeThickness="2" Stroke="#CD7F32"
+                                            WidthRequest="60" HeightRequest="60">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20"/>
+                                        </Border.StrokeShape>
+                                        <Grid>
+                                            <Label x:Name="Avatar3Emoji" Text="👤"
+                                                   FontSize="30"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                            <Image x:Name="Avatar3Image"
+                                                   Aspect="AspectFill"
+                                                   IsVisible="False"
+                                                   HorizontalOptions="Fill"
+                                                   VerticalOptions="Fill"/>
+                                        </Grid>
+                                    </Border>
+                                    <Border BackgroundColor="#CD7F32"
+                                            StrokeThickness="2" Stroke="#0F172A"
+                                            WidthRequest="22" HeightRequest="22"
+                                            HorizontalOptions="End" VerticalOptions="End"
+                                            Margin="0,0,-2,-2">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="11"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="3" FontSize="11" FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Border>
+                                </Grid>
+                                <Label x:Name="Name3Label" Text="—"
+                                       FontSize="12" FontAttributes="Bold"
+                                       TextColor="#F8FAFC"
+                                       HorizontalOptions="Center"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"/>
+                                <Label x:Name="Score3Label" Text="0 pts"
+                                       FontSize="11" TextColor="#CD7F32"
+                                       HorizontalOptions="Center"/>
+                                <!-- Bronze podium -->
+                                <Border BackgroundColor="#292524"
+                                        StrokeThickness="0"
+                                        HeightRequest="44"
+                                        HorizontalOptions="Fill">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10,10,4,4"/>
+                                    </Border.StrokeShape>
+                                    <Label Text="🥉" FontSize="20"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                        </Grid>
+                    </Border>
+
+                    <!-- ── Ranks 4–10 ── -->
+                    <Label Text="RANKINGS"
+                           FontSize="11" FontAttributes="Bold"
+                           TextColor="#475569" CharacterSpacing="2"
+                           Margin="24,20,24,10"/>
+
+                    <VerticalStackLayout x:Name="RankList"
+                                         Padding="24,0" Spacing="8"/>
+
+                    <!-- ── Current User Rank ── -->
+                    <Border x:Name="MyRankCard"
+                            Margin="24,16,24,0"
+                            BackgroundColor="#1E40AF20"
+                            StrokeThickness="1" Stroke="#3B82F6"
+                            Padding="0" IsVisible="False">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16"/>
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto" Padding="16,12"
+                              ColumnSpacing="12">
+                            <Label Grid.Column="0"
+                                   x:Name="MyRankNumber"
+                                   Text="#—"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#3B82F6"
+                                   VerticalOptions="Center"
+                                   WidthRequest="36"/>
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#1E293B"
+                                    StrokeThickness="2" Stroke="#3B82F6"
+                                    WidthRequest="44" HeightRequest="44">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14"/>
+                                </Border.StrokeShape>
+                                <Grid>
+                                    <Label x:Name="MyAvatarEmoji" Text="👤"
+                                           FontSize="22"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                    <Image x:Name="MyAvatarImage"
+                                           Aspect="AspectFill"
+                                           IsVisible="False"
+                                           HorizontalOptions="Fill"
+                                           VerticalOptions="Fill"/>
+                                </Grid>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
+                                <Label x:Name="MyRankName"
+                                       Text="You"
+                                       FontSize="14" FontAttributes="Bold"
+                                       TextColor="#F8FAFC"/>
+                                <Label x:Name="MyRankScore"
+                                       Text="0 pts"
+                                       FontSize="12" TextColor="#3B82F6"/>
+                            </VerticalStackLayout>
+                            <Border Grid.Column="3"
+                                    BackgroundColor="#3B82F620"
+                                    StrokeThickness="0"
+                                    Padding="10,5">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8"/>
+                                </Border.StrokeShape>
+                                <Label Text="You" FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="#3B82F6"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </Grid>
+</ContentPage>

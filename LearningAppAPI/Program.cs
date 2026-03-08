@@ -150,6 +150,8 @@ builder.Services.AddRateLimiter(options =>
 
 // ── Services ──────────────────────────────────────────────────────────────────
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
+
 
 builder.Services.AddLogging(logging =>
 {
@@ -159,6 +161,7 @@ builder.Services.AddLogging(logging =>
 
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
+
 
 // ── Build ─────────────────────────────────────────────────────────────────────
 var app = builder.Build();

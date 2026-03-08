@@ -56,10 +56,17 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="24"/>
                                 </Border.StrokeShape>
-                                <Label x:Name="AvatarLabel"
-                                       Text="👤" FontSize="40"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"/>
+                                <Grid>
+                                    <Label x:Name="AvatarLabel"
+                                           Text="👤" FontSize="40"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                    <Image x:Name="AvatarImage"
+                                           Aspect="AspectFill"
+                                           IsVisible="False"
+                                           HorizontalOptions="Fill"
+                                           VerticalOptions="Fill"/>
+                                </Grid>
                             </Border>
                             <Border BackgroundColor="#22C55E"
                                     StrokeThickness="2" Stroke="#0F172A"
@@ -347,6 +354,84 @@
 
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
+                        </Border>
+
+                        <!-- ── ADDED: Leaderboard ── -->
+                        <Border BackgroundColor="#1E293B"
+                                StrokeThickness="1" Stroke="#334155"
+                                Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16"/>
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnLeaderboardTapped"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="18,14">
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#F59E0B20"
+                                        StrokeThickness="0"
+                                        WidthRequest="38" HeightRequest="38"
+                                        Margin="0,0,14,0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="11"/>
+                                    </Border.StrokeShape>
+                                    <Image Source="leaderboard.png"
+                                           HeightRequest="20" WidthRequest="20"
+                                           Aspect="AspectFit"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="Leaderboard"
+                                           FontSize="15" FontAttributes="Bold"
+                                           TextColor="#F8FAFC"/>
+                                    <Label Text="See how you rank among peers"
+                                           FontSize="12" TextColor="#64748B"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2"
+                                       Text="›" FontSize="22"
+                                       TextColor="#475569"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- ── ADDED: Meetings ── -->
+                        <Border BackgroundColor="#1E293B"
+                                StrokeThickness="1" Stroke="#334155"
+                                Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16"/>
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMeetingsTapped"/>
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="18,14">
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#22C55E20"
+                                        StrokeThickness="0"
+                                        WidthRequest="38" HeightRequest="38"
+                                        Margin="0,0,14,0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="11"/>
+                                    </Border.StrokeShape>
+                                    <Image Source="meetings.png"
+                                           HeightRequest="20" WidthRequest="20"
+                                           Aspect="AspectFit"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="Meetings"
+                                           FontSize="15" FontAttributes="Bold"
+                                           TextColor="#F8FAFC"/>
+                                    <Label Text="Schedule and join sessions"
+                                           FontSize="12" TextColor="#64748B"/>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2"
+                                       Text="›" FontSize="22"
+                                       TextColor="#475569"
+                                       VerticalOptions="Center"/>
+                            </Grid>
                         </Border>
 
                     </VerticalStackLayout>
