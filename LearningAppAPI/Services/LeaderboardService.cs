@@ -22,25 +22,41 @@ namespace LearningApp.Api.Services
         {
             try
             {
-                // Pull all active users with their course progress
+                // Pull all active users
                 var users = await _context.Users
                     .Where(u => u.IsActive)
                     .ToListAsync();
 
                 var userIds = users.Select(u => u.Id).ToList();
 
-                // Pull progress for all users in one query
-                var allProgress = await _context.CourseProgresses
+                // Pull assessment progress for all users
+                var allProgress = await _context.UserProgress
                     .Where(p => userIds.Contains(p.UserId))
+                    .ToListAsync();
+
+                // Pull video progress for all users
+                var allVideos = await _context.VideoProgress
+                    .Where(v => userIds.Contains(v.UserId))
                     .ToListAsync();
 
                 var entries = users.Select(user =>
                 {
                     var progress = allProgress.Where(p => p.UserId == user.Id).ToList();
+                    var videos = allVideos.Where(v => v.UserId == user.Id).ToList();
 
-                    int coursesCompleted = progress.Count(p => p.Percentage >= 100);
-                    int hoursWatched = (int)Math.Round(progress.Sum(p => p.WatchedVideos) * 0.5);
-                    int assessmentsDone = progress.Sum(p => p.CompletedAssessments);
+                    // Completed assessments = IsCompleted rows
+                    int assessmentsDone = progress.Count(p => p.IsCompleted);
+
+                    // Distinct completed categories = courses completed
+                    int coursesCompleted = progress
+                        .Where(p => p.IsCompleted && !string.IsNullOrEmpty(p.Category))
+                        .Select(p => p.Category)
+                        .Distinct()
+                        .Count();
+
+                    // Videos watched
+                    int videosWatched = videos.Count(v => v.IsWatched);
+                    int hoursWatched = (int)Math.Round(videosWatched * 0.5);
 
                     // Combined score: courses × 100 + hours × 10 + assessments × 5
                     int score = (coursesCompleted * 100)
