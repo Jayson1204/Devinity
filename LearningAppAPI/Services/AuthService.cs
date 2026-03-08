@@ -17,6 +17,7 @@ namespace LearningApp.Api.Services
         Task<LoginResponse> RefreshTokenAsync(string refreshToken);
         Task<bool> RevokeTokenAsync(string refreshToken);
         Task<UserData> GetUserByIdAsync(string userId);
+        Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request); // ← added
     }
 
     public class AuthService : IAuthService
@@ -185,6 +186,60 @@ namespace LearningApp.Api.Services
                 return null;
             }
         }
+
+        // ── Added: Update Profile ─────────────────────────────────────
+        public async Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user == null)
+                    return new UpdateProfileResponse { Success = false, Message = "User not found" };
+
+                // Update full name
+                user.FullName = request.FullName;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                // Change password only if both fields provided
+                bool changingPassword = !string.IsNullOrEmpty(request.NewPassword)
+                                     && !string.IsNullOrEmpty(request.CurrentPassword);
+
+                if (changingPassword)
+                {
+                    if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash))
+                        return new UpdateProfileResponse
+                        {
+                            Success = false,
+                            Message = "Current password is incorrect"
+                        };
+
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+                }
+
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Profile updated for user: {UserId}", userId);
+
+                return new UpdateProfileResponse
+                {
+                    Success = true,
+                    Message = changingPassword
+                        ? "Profile and password updated successfully"
+                        : "Profile updated successfully",
+                    FullName = user.FullName
+                };
+            }
+            catch
+            {
+                return new UpdateProfileResponse
+                {
+                    Success = false,
+                    Message = "Failed to update profile. Please try again."
+                };
+            }
+        }
+        // ─────────────────────────────────────────────────────────────
 
         private string GenerateJwtToken(User user)
         {

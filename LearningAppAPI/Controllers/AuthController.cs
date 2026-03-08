@@ -133,7 +133,7 @@ namespace LearningApp.Api.Controllers
             return Ok(user);
         }
 
-        // ── ADDED: Update profile (name + optional password change) ──
+        // ── Added: Update profile (name + optional password change) ──
         // 60 req/min — inherits controller-level "api" policy
         [HttpPut("profile")]
         [Authorize]
