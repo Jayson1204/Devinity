@@ -42,7 +42,10 @@ namespace LearningApp.Api.Models
         [Column("is_active")]
         public bool IsActive { get; set; } = true;
 
-        // Navigation property
+        [Column("avatar_url")]
+        [MaxLength(500)]
+        public string? AvatarUrl { get; set; }
+
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 
@@ -80,9 +83,6 @@ namespace LearningApp.Api.Models
         public bool IsRevoked => RevokedAt != null;
         public bool IsActive => !IsRevoked && !IsExpired;
 
-        // Navigation property
         public virtual User User { get; set; }
     }
-
-  
 }

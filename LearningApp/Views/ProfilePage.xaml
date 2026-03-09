@@ -375,7 +375,7 @@
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="11"/>
                                     </Border.StrokeShape>
-                                    <Image Source="leaderboard.png"
+                                    <Image Source="leader.png"
                                            HeightRequest="20" WidthRequest="20"
                                            Aspect="AspectFit"
                                            HorizontalOptions="Center"
@@ -414,7 +414,7 @@
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="11"/>
                                     </Border.StrokeShape>
-                                    <Image Source="meetings.png"
+                                    <Image Source="meeting.png"
                                            HeightRequest="20" WidthRequest="20"
                                            Aspect="AspectFit"
                                            HorizontalOptions="Center"

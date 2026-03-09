@@ -17,7 +17,8 @@ namespace LearningApp.Api.Services
         Task<LoginResponse> RefreshTokenAsync(string refreshToken);
         Task<bool> RevokeTokenAsync(string refreshToken);
         Task<UserData> GetUserByIdAsync(string userId);
-        Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request); // ← added
+        Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request);
+        Task<UploadAvatarResponse> UploadAvatarAsync(string userId, Stream imageStream, string fileName);
     }
 
     public class AuthService : IAuthService
@@ -25,15 +26,18 @@ namespace LearningApp.Api.Services
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
+        private readonly IAvatarService _avatarService;
 
         public AuthService(
             ApplicationDbContext context,
             IConfiguration configuration,
-            ILogger<AuthService> logger)
+            ILogger<AuthService> logger,
+            IAvatarService avatarService)
         {
             _context = context;
             _configuration = configuration;
             _logger = logger;
+            _avatarService = avatarService;
         }
 
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
@@ -43,14 +47,12 @@ namespace LearningApp.Api.Services
                 if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                     return new RegisterResponse { Success = false, Message = "Email already registered" };
 
-                var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
                 var user = new User
                 {
                     Id = Guid.NewGuid().ToString(),
                     Email = request.Email,
                     FullName = request.FullName,
-                    PasswordHash = passwordHash,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
@@ -87,8 +89,6 @@ namespace LearningApp.Api.Services
                 var token = GenerateJwtToken(user);
                 var refreshToken = await GenerateRefreshToken(user.Id);
 
-                _logger.LogInformation("User logged in: {Email}", user.Email);
-
                 return new LoginResponse
                 {
                     Success = true,
@@ -99,7 +99,8 @@ namespace LearningApp.Api.Services
                     {
                         Id = user.Id,
                         Email = user.Email,
-                        FullName = user.FullName
+                        FullName = user.FullName,
+                        AvatarUrl = user.AvatarUrl
                     }
                 };
             }
@@ -122,7 +123,7 @@ namespace LearningApp.Api.Services
 
                 token.RevokedAt = DateTime.UtcNow;
 
-                var newJwtToken = GenerateJwtToken(token.User);
+                var newJwt = GenerateJwtToken(token.User);
                 var newRefreshToken = await GenerateRefreshToken(token.User.Id);
                 token.ReplacedByToken = newRefreshToken.Token;
 
@@ -132,13 +133,14 @@ namespace LearningApp.Api.Services
                 {
                     Success = true,
                     Message = "Token refreshed",
-                    Token = newJwtToken,
+                    Token = newJwt,
                     RefreshToken = newRefreshToken.Token,
                     User = new UserData
                     {
                         Id = token.User.Id,
                         Email = token.User.Email,
-                        FullName = token.User.FullName
+                        FullName = token.User.FullName,
+                        AvatarUrl = token.User.AvatarUrl
                     }
                 };
             }
@@ -161,10 +163,7 @@ namespace LearningApp.Api.Services
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
 
         public async Task<UserData> GetUserByIdAsync(string userId)
@@ -178,30 +177,24 @@ namespace LearningApp.Api.Services
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    FullName = user.FullName
+                    FullName = user.FullName,
+                    AvatarUrl = user.AvatarUrl
                 };
             }
-            catch
-            {
-                return null;
-            }
+            catch { return null; }
         }
 
-        // ── Added: Update Profile ─────────────────────────────────────
         public async Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request)
         {
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
                 if (user == null)
                     return new UpdateProfileResponse { Success = false, Message = "User not found" };
 
-                // Update full name
                 user.FullName = request.FullName;
                 user.UpdatedAt = DateTime.UtcNow;
 
-                // Change password only if both fields provided
                 bool changingPassword = !string.IsNullOrEmpty(request.NewPassword)
                                      && !string.IsNullOrEmpty(request.CurrentPassword);
 
@@ -218,8 +211,6 @@ namespace LearningApp.Api.Services
                 }
 
                 await _context.SaveChangesAsync();
-
-                _logger.LogInformation("Profile updated for user: {UserId}", userId);
 
                 return new UpdateProfileResponse
                 {
@@ -239,18 +230,53 @@ namespace LearningApp.Api.Services
                 };
             }
         }
-        // ─────────────────────────────────────────────────────────────
+
+        public async Task<UploadAvatarResponse> UploadAvatarAsync(
+            string userId, Stream imageStream, string fileName)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (user == null)
+                    return new UploadAvatarResponse { Success = false, Message = "User not found" };
+
+                var url = await _avatarService.SaveAvatarAsync(imageStream, fileName, userId);
+                if (url == null)
+                    return new UploadAvatarResponse
+                    {
+                        Success = false,
+                        Message = "Failed to save image. Please try again."
+                    };
+
+                user.AvatarUrl = url;
+                user.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                return new UploadAvatarResponse
+                {
+                    Success = true,
+                    Message = "Avatar uploaded successfully",
+                    AvatarUrl = url
+                };
+            }
+            catch
+            {
+                return new UploadAvatarResponse
+                {
+                    Success = false,
+                    Message = "Failed to upload avatar. Please try again."
+                };
+            }
+        }
 
         private string GenerateJwtToken(User user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
-            var issuer = jwtSettings["Issuer"];
-            var audience = jwtSettings["Audience"];
             var expiryMinutes = int.Parse(jwtSettings["ExpiryMinutes"] ?? "60");
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
@@ -261,8 +287,8 @@ namespace LearningApp.Api.Services
             };
 
             var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
                 signingCredentials: credentials

@@ -4,6 +4,7 @@
     {
         public string UserId { get; set; }
         public string FullName { get; set; }
+        public string? AvatarUrl { get; set; }
         public int Score { get; set; }
         public int CoursesCompleted { get; set; }
         public int HoursWatched { get; set; }

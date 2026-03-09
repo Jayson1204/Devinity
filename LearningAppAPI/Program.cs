@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.FileProviders;
 using LearningApp.Api.Data;
 using LearningApp.Api.Services;
 
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// ── Swagger ──────────────────────────────────────────────────────────────────
+// ── Swagger ───────────────────────────────────────────────────────────────────
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -38,7 +39,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id   = "Bearer"
                 }
             },
             Array.Empty<string>()
@@ -46,7 +47,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ── Database ─────────────────────────────────────────────────────────────────
+// ── Database ──────────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
@@ -78,9 +79,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
-// AllowAnyOrigin is required so the MAUI app (any platform/device) can reach
-// the API. Lottie JSON files are fetched by the app directly from lottiefiles
-// CDN, so no special CORS change is needed for those.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -92,15 +90,10 @@ builder.Services.AddCors(options =>
 });
 
 // ── Rate Limiting ─────────────────────────────────────────────────────────────
-// Three policies:
-//   "auth"    – strict: 5 requests / 1 min per IP  (login & register endpoints)
-//   "api"     – normal: 60 requests / 1 min per IP (general API calls)
-//   "static"  – relaxed: 200 requests / 1 min per IP (health / info / swagger)
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    // Auth endpoints — tight limit to prevent brute-force
     options.AddFixedWindowLimiter("auth", o =>
     {
         o.Window = TimeSpan.FromMinutes(1);
@@ -109,7 +102,6 @@ builder.Services.AddRateLimiter(options =>
         o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 
-    // General API calls
     options.AddFixedWindowLimiter("api", o =>
     {
         o.Window = TimeSpan.FromMinutes(1);
@@ -118,7 +110,6 @@ builder.Services.AddRateLimiter(options =>
         o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 
-    // Health / info / swagger — very relaxed
     options.AddFixedWindowLimiter("static", o =>
     {
         o.Window = TimeSpan.FromMinutes(1);
@@ -127,7 +118,6 @@ builder.Services.AddRateLimiter(options =>
         o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 
-    // Global fallback — catches anything not covered by a policy above
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
         RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
@@ -138,7 +128,6 @@ builder.Services.AddRateLimiter(options =>
                 QueueLimit = 0
             }));
 
-    // Custom 429 response body
     options.OnRejected = async (context, token) =>
     {
         context.HttpContext.Response.ContentType = "application/json";
@@ -151,7 +140,7 @@ builder.Services.AddRateLimiter(options =>
 // ── Services ──────────────────────────────────────────────────────────────────
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
-
+builder.Services.AddScoped<IAvatarService, AvatarService>();
 
 builder.Services.AddLogging(logging =>
 {
@@ -162,9 +151,11 @@ builder.Services.AddLogging(logging =>
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
 
-
 // ── Build ─────────────────────────────────────────────────────────────────────
 var app = builder.Build();
+
+// Ensure upload directory exists on startup
+Directory.CreateDirectory("/app/uploads/avatars");
 
 // ── Middleware pipeline ───────────────────────────────────────────────────────
 app.UseSwagger();
@@ -176,9 +167,14 @@ app.UseSwaggerUI(c =>
 
 app.UseCors("AllowAll");
 
-// Rate limiter must come before auth so unauthenticated brute-force is blocked
-app.UseRateLimiter();
+// Serve avatar images from Railway volume as static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider("/app/uploads"),
+    RequestPath = "/uploads"
+});
 
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 

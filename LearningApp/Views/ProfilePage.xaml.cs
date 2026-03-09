@@ -1,5 +1,5 @@
-﻿using LearningApp.Services;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
+using LearningApp.Services;
 using LearningApp.Constants;
 
 namespace LearningApp.Views
@@ -31,7 +31,6 @@ namespace LearningApp.Views
             EmailLabel.Text = Preferences.Get("UserEmail", "");
 
             LoadAvatar();
-
             await LoadStats();
 
             SkeletonScroll.IsVisible = false;
@@ -40,10 +39,10 @@ namespace LearningApp.Views
 
         private void LoadAvatar()
         {
-            var savedAvatar = Preferences.Get("UserAvatarPath", "");
-            if (!string.IsNullOrEmpty(savedAvatar) && File.Exists(savedAvatar))
+            var avatarUrl = Preferences.Get("UserAvatarUrl", "");
+            if (!string.IsNullOrEmpty(avatarUrl))
             {
-                AvatarImage.Source = ImageSource.FromFile(savedAvatar);
+                AvatarImage.Source = ImageSource.FromUri(new Uri(avatarUrl));
                 AvatarImage.IsVisible = true;
                 AvatarLabel.IsVisible = false;
             }
@@ -82,8 +81,6 @@ namespace LearningApp.Views
             catch { }
         }
 
-        // ── Settings Accordion ────────────────────────────────────────
-
         private void OnSettingsToggled(object sender, EventArgs e)
         {
             _settingsExpanded = !_settingsExpanded;
@@ -92,41 +89,24 @@ namespace LearningApp.Views
         }
 
         private async void OnEditProfileTapped(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new EditProfilePage());
-        }
+            => await Navigation.PushAsync(new EditProfilePage());
 
         private async void OnPrivacyTapped(object sender, EventArgs e)
-        {
-            await DisplayAlert("Privacy & Security", "Coming soon.", "OK");
-        }
+            => await DisplayAlert("Privacy & Security", "Coming soon.", "OK");
 
         private async void OnHelpTapped(object sender, EventArgs e)
-        {
-            await DisplayAlert("Help & Support", "Contact us at support@devinity.com", "OK");
-        }
-
-        // ── ADDED: Leaderboard ────────────────────────────────────────
+            => await DisplayAlert("Help & Support", "Contact us at support@devinity.com", "OK");
 
         private async void OnLeaderboardTapped(object sender, EventArgs e)
-        {
-            
-             await Navigation.PushAsync(new LeaderboardPage());
-        }
-
-        // ── ADDED: Meetings ──────────────────────────────────────────
+            => await Navigation.PushAsync(new LeaderboardPage());
 
         private async void OnMeetingsTapped(object sender, EventArgs e)
-        {
-            await DisplayAlert("Meetings", "Coming soon.", "OK");
-            // Replace with: await Navigation.PushAsync(new MeetingsPage());
-        }
-
-        // ── Logout ────────────────────────────────────────────────────
+            => await DisplayAlert("Meetings", "Coming soon.", "OK");
 
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
-            bool confirm = await DisplayAlert("Logout", "Are you sure you want to logout?", "Logout", "Cancel");
+            bool confirm = await DisplayAlert(
+                "Logout", "Are you sure you want to logout?", "Logout", "Cancel");
             if (!confirm) return;
 
             try
@@ -139,11 +119,9 @@ namespace LearningApp.Views
                         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authToken);
 
                 if (!string.IsNullOrEmpty(refreshToken))
-                {
                     await _httpClient.PostAsJsonAsync(
                         $"{AppConfig.BaseUrl}/api/auth/logout",
                         new { RefreshToken = refreshToken });
-                }
             }
             catch { }
             finally
@@ -151,7 +129,7 @@ namespace LearningApp.Views
                 Preferences.Remove("UserId");
                 Preferences.Remove("UserEmail");
                 Preferences.Remove("UserFullName");
-                Preferences.Remove("UserAvatarPath");
+                Preferences.Remove("UserAvatarUrl");
 
                 try
                 {
@@ -163,8 +141,6 @@ namespace LearningApp.Views
                 await Shell.Current.GoToAsync("///LoginPage");
             }
         }
-
-        // ── Models ────────────────────────────────────────────────────
 
         public class CourseProgressItem
         {

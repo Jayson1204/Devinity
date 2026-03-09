@@ -43,23 +43,23 @@ public partial class LeaderboardPage : ContentPage
 
             var entries = result.Entries;
             var currentUserId = Preferences.Get("UserId", "");
-            var myAvatarPath = Preferences.Get("UserAvatarPath", "");
+            var myAvatarUrl = Preferences.Get("UserAvatarUrl", "");
 
-            // ── Podium top 3 ──────────────────────────────────────────
-            SetPodium(1, entries.ElementAtOrDefault(0), myAvatarPath, currentUserId);
-            SetPodium(2, entries.ElementAtOrDefault(1), myAvatarPath, currentUserId);
-            SetPodium(3, entries.ElementAtOrDefault(2), myAvatarPath, currentUserId);
+            // Podium top 3
+            SetPodium(1, entries.ElementAtOrDefault(0), currentUserId, myAvatarUrl);
+            SetPodium(2, entries.ElementAtOrDefault(1), currentUserId, myAvatarUrl);
+            SetPodium(3, entries.ElementAtOrDefault(2), currentUserId, myAvatarUrl);
 
-            // ── Ranks 4–10 ────────────────────────────────────────────
+            // Ranks 4-10
             RankList.Children.Clear();
             for (int i = 3; i < Math.Min(entries.Count, 10); i++)
             {
                 var entry = entries[i];
                 bool isMe = entry.UserId == currentUserId;
-                RankList.Children.Add(BuildRankRow(i + 1, entry, isMe, myAvatarPath));
+                RankList.Children.Add(BuildRankRow(i + 1, entry, isMe, myAvatarUrl));
             }
 
-            // ── My rank card (if outside top 10) ─────────────────────
+            // My rank card if outside top 10
             var myEntry = entries.FirstOrDefault(e => e.UserId == currentUserId);
             var myIndex = myEntry != null ? entries.IndexOf(myEntry) : -1;
 
@@ -68,17 +68,12 @@ public partial class LeaderboardPage : ContentPage
                 MyRankNumber.Text = $"#{myIndex + 1}";
                 MyRankName.Text = myEntry.FullName;
                 MyRankScore.Text = $"{myEntry.Score} pts";
-
-                // Show "You" card only if outside top 10
                 MyRankCard.IsVisible = myIndex >= 10;
 
-                // Load avatar for "You" card
-                if (!string.IsNullOrEmpty(myAvatarPath) && File.Exists(myAvatarPath))
-                {
-                    MyAvatarImage.Source = ImageSource.FromFile(myAvatarPath);
-                    MyAvatarImage.IsVisible = true;
-                    MyAvatarEmoji.IsVisible = false;
-                }
+                var myUrl = myEntry.UserId == currentUserId
+                    ? myAvatarUrl
+                    : myEntry.AvatarUrl ?? "";
+                SetAvatarFromUrl(MyAvatarImage, MyAvatarEmoji, myUrl);
             }
         }
         catch { }
@@ -89,50 +84,47 @@ public partial class LeaderboardPage : ContentPage
         }
     }
 
-    // ── Podium helper ─────────────────────────────────────────────────
-
     private void SetPodium(int place, LeaderboardEntry? entry,
-                           string myAvatarPath, string currentUserId)
+                            string currentUserId, string myAvatarUrl)
     {
         if (entry == null) return;
 
-        bool isMe = entry.UserId == currentUserId;
-        string avatarPath = isMe ? myAvatarPath : "";
+        var avatarUrl = entry.UserId == currentUserId
+            ? myAvatarUrl
+            : entry.AvatarUrl ?? "";
 
         switch (place)
         {
             case 1:
                 Name1Label.Text = FirstName(entry.FullName);
                 Score1Label.Text = $"{entry.Score} pts";
-                SetAvatar(Avatar1Image, Avatar1Emoji, avatarPath);
+                SetAvatarFromUrl(Avatar1Image, Avatar1Emoji, avatarUrl);
                 break;
             case 2:
                 Name2Label.Text = FirstName(entry.FullName);
                 Score2Label.Text = $"{entry.Score} pts";
-                SetAvatar(Avatar2Image, Avatar2Emoji, avatarPath);
+                SetAvatarFromUrl(Avatar2Image, Avatar2Emoji, avatarUrl);
                 break;
             case 3:
                 Name3Label.Text = FirstName(entry.FullName);
                 Score3Label.Text = $"{entry.Score} pts";
-                SetAvatar(Avatar3Image, Avatar3Emoji, avatarPath);
+                SetAvatarFromUrl(Avatar3Image, Avatar3Emoji, avatarUrl);
                 break;
         }
     }
 
-    private static void SetAvatar(Image img, Label emoji, string path)
+    private static void SetAvatarFromUrl(Image img, Label emoji, string? url)
     {
-        if (!string.IsNullOrEmpty(path) && File.Exists(path))
+        if (!string.IsNullOrEmpty(url))
         {
-            img.Source = ImageSource.FromFile(path);
+            img.Source = ImageSource.FromUri(new Uri(url));
             img.IsVisible = true;
             emoji.IsVisible = false;
         }
     }
 
-    // ── Build rank row (4–10) ─────────────────────────────────────────
-
     private View BuildRankRow(int rank, LeaderboardEntry entry,
-                               bool isMe, string myAvatarPath)
+                               bool isMe, string myAvatarUrl)
     {
         string medalColor = rank switch
         {
@@ -148,13 +140,9 @@ public partial class LeaderboardPage : ContentPage
 
         var rowBorder = new Border
         {
-            BackgroundColor = isMe
-                ? Color.FromArgb("#1E40AF20")
-                : Color.FromArgb("#1E293B"),
+            BackgroundColor = isMe ? Color.FromArgb("#1E40AF20") : Color.FromArgb("#1E293B"),
             StrokeThickness = 1,
-            Stroke = isMe
-                ? Color.FromArgb("#3B82F6")
-                : Color.FromArgb("#334155"),
+            Stroke = isMe ? Color.FromArgb("#3B82F6") : Color.FromArgb("#334155"),
             Padding = new Thickness(0)
         };
         rowBorder.StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle
@@ -162,7 +150,6 @@ public partial class LeaderboardPage : ContentPage
             CornerRadius = new CornerRadius(16)
         };
 
-        // Rank number
         var rankLabel = new Label
         {
             Text = $"#{rank}",
@@ -173,7 +160,6 @@ public partial class LeaderboardPage : ContentPage
             WidthRequest = 38
         };
 
-        // Avatar
         var avatarEmoji = new Label
         {
             Text = "👤",
@@ -189,10 +175,10 @@ public partial class LeaderboardPage : ContentPage
             VerticalOptions = LayoutOptions.Fill
         };
 
-        // Load avatar for current user row
-        if (isMe && !string.IsNullOrEmpty(myAvatarPath) && File.Exists(myAvatarPath))
+        var avatarUrl = isMe ? myAvatarUrl : entry.AvatarUrl ?? "";
+        if (!string.IsNullOrEmpty(avatarUrl))
         {
-            avatarImage.Source = ImageSource.FromFile(myAvatarPath);
+            avatarImage.Source = ImageSource.FromUri(new Uri(avatarUrl));
             avatarImage.IsVisible = true;
             avatarEmoji.IsVisible = false;
         }
@@ -215,7 +201,6 @@ public partial class LeaderboardPage : ContentPage
             CornerRadius = new CornerRadius(14)
         };
 
-        // Name + score
         var nameLabel = new Label
         {
             Text = entry.FullName,
@@ -231,7 +216,12 @@ public partial class LeaderboardPage : ContentPage
             FontSize = 11,
             TextColor = Color.FromArgb("#64748B")
         };
-        var nameStack = new VerticalStackLayout { Spacing = 2, VerticalOptions = LayoutOptions.Center };
+
+        var nameStack = new VerticalStackLayout
+        {
+            Spacing = 2,
+            VerticalOptions = LayoutOptions.Center
+        };
         nameStack.Children.Add(nameLabel);
         nameStack.Children.Add(scoreLabel);
 
@@ -265,12 +255,11 @@ public partial class LeaderboardPage : ContentPage
     private async void OnBackTapped(object sender, EventArgs e)
         => await Navigation.PopAsync();
 
-    // ── Models ────────────────────────────────────────────────────────
-
     public class LeaderboardEntry
     {
         public string UserId { get; set; }
         public string FullName { get; set; }
+        public string? AvatarUrl { get; set; }
         public int Score { get; set; }
         public int CoursesCompleted { get; set; }
         public int HoursWatched { get; set; }
