@@ -110,12 +110,15 @@ namespace LearningApp.ViewModels
                     Preferences.Set("UserId", response.User.Id ?? "");
                     Preferences.Set("UserEmail", response.User.Email ?? "");
                     Preferences.Set("UserFullName", response.User.FullName ?? "");
+                    Preferences.Set("UserAvatarUrl", response.User.AvatarUrl ?? ""); // ← added
                 }
+
+                // Start SignalR chat connection
+                //await ChatClientService.Instance.StartAsync(); // ← added
 
                 // Navigate to main page
                 await Shell.Current.GoToAsync("///MainPage");
 
-                // Start quote timer now that user is logged in
                 // Small delay so MainPage finishes rendering before popup appears
                 await Task.Delay(2000);
                 if (Application.Current is App app)
