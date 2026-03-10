@@ -9,7 +9,7 @@ A cross-platform mobile learning platform built with **.NET MAUI** (frontend) an
 | Layer | Technology |
 |---|---|
 | Mobile App | .NET MAUI (C#, XAML) |
-| Backend API | ASP.NET Core 8 |
+| Backend API | ASP.NET Core 9 |
 | Database | MySQL (Railway) |
 | ORM | Entity Framework Core |
 | File Storage | Railway Volume (`/app/uploads`) |
@@ -96,8 +96,8 @@ A cross-platform mobile learning platform built with **.NET MAUI** (frontend) an
 ## Setup & Deployment
 
 ### Prerequisites
-- .NET 8 SDK
-- Visual Studio 2022 with MAUI workload
+- .NET 9 SDK
+- Visual Studio 2026 with MAUI workload
 - MySQL database (Railway or local)
 - Railway account for API hosting
 
@@ -171,3 +171,4 @@ privacy.png, ic_help.png, leaderboard.png, meetings.png
 ## License
 
 Private project — all rights reserved.
+
