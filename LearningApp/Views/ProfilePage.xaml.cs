@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using LearningApp.Services;
 using LearningApp.Constants;
+using LearningApp.Views.Dialogs;
 
 namespace LearningApp.Views
 {
@@ -8,6 +9,7 @@ namespace LearningApp.Views
     {
         private readonly HttpClient _httpClient;
         private bool _settingsExpanded = false;
+        private bool _isTogglingTheme = false;
 
         public ProfilePage()
         {
@@ -20,6 +22,7 @@ namespace LearningApp.Views
         {
             base.OnAppearing();
             LoadProfile();
+            ThemeSwitch.IsToggled = Application.Current.UserAppTheme == AppTheme.Dark;
         }
 
         private async void LoadProfile()
@@ -37,6 +40,8 @@ namespace LearningApp.Views
             ContentScroll.IsVisible = true;
         }
 
+        // ── Avatar ─────────────────────────────────────────────────────────────
+
         private void LoadAvatar()
         {
             var avatarUrl = Preferences.Get("UserAvatarUrl", "");
@@ -52,6 +57,169 @@ namespace LearningApp.Views
                 AvatarLabel.IsVisible = true;
             }
         }
+
+        private async void OnAvatarTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                var action = await DisplayActionSheet(
+                    "Profile Photo", "Cancel", "Remove Photo",
+                    "Choose from Gallery");
+
+                if (action == "Choose from Gallery")
+                    await PickAndUploadAvatar();
+                else if (action == "Remove Photo")
+                    await RemoveAvatar();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Avatar tap error: {ex.Message}");
+            }
+        }
+
+        // ── REPLACE PickAndUploadAvatar in ProfilePage.xaml.cs ───────────────────────
+        // Also add at top: using LearningApp.Views.Dialogs;
+
+        private async Task PickAndUploadAvatar()
+        {
+            try
+            {
+#if ANDROID
+                // Check current permission status first
+                var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+                // Android 13+ — check media permission too
+                if (status != PermissionStatus.Granted)
+                    status = await Permissions.CheckStatusAsync<Permissions.Media>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    // Show our custom dialog
+                    var dialog = new StoragePermissionDialog();
+                    await Navigation.PushModalAsync(dialog, false);
+                    var granted = await dialog.Result;
+
+                    if (!granted)
+                    {
+                        // If permanently denied, guide to Settings
+                        var deniedStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+                        if (deniedStatus == PermissionStatus.Denied)
+                        {
+                            bool openSettings = await DisplayAlert(
+                                "Permission Required",
+                                "Photo access was denied. Enable it in Settings to set a profile photo.",
+                                "Open Settings", "Cancel");
+
+                            if (openSettings)
+                                AppInfo.ShowSettingsUI();
+                        }
+                        return;
+                    }
+                }
+#endif
+
+                var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
+                {
+                    Title = "Pick a profile photo"
+                });
+
+                if (result == null) return;
+
+                // Show uploading state
+                AvatarLabel.Text = "⏳";
+                AvatarLabel.IsVisible = true;
+                AvatarImage.IsVisible = false;
+
+                var userId = Preferences.Get("UserId", "");
+                if (string.IsNullOrEmpty(userId))
+                {
+                    await DisplayAlert("Error", "User not found. Please log in again.", "OK");
+                    return;
+                }
+
+                using var stream = await result.OpenReadAsync();
+                using var content = new MultipartFormDataContent();
+                using var fileContent = new StreamContent(stream);
+
+                fileContent.Headers.ContentType =
+                    new System.Net.Http.Headers.MediaTypeHeaderValue(result.ContentType ?? "image/jpeg");
+
+                content.Add(fileContent, "file", result.FileName);
+
+                var authToken = await SecureStorage.GetAsync("auth_token");
+                if (!string.IsNullOrEmpty(authToken))
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authToken);
+
+                var response = await _httpClient.PostAsync(
+                    $"{AppConfig.BaseUrl}/api/auth/avatar", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    await DisplayAlert("Upload Failed", "Could not upload photo. Try again.", "OK");
+                    LoadAvatar();
+                    return;
+                }
+
+                var uploadResult = await response.Content
+                    .ReadFromJsonAsync<AvatarUploadResponse>();
+
+                if (uploadResult?.AvatarUrl == null)
+                {
+                    await DisplayAlert("Error", "Invalid response from server.", "OK");
+                    LoadAvatar();
+                    return;
+                }
+
+                Preferences.Set("UserAvatarUrl", uploadResult.AvatarUrl);
+
+                var bustUrl = $"{uploadResult.AvatarUrl}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                AvatarImage.Source = ImageSource.FromUri(new Uri(bustUrl));
+                AvatarImage.IsVisible = true;
+                AvatarLabel.IsVisible = false;
+
+                await AvatarImage.ScaleTo(1.08, 120, Easing.CubicOut);
+                await AvatarImage.ScaleTo(1.0, 120, Easing.CubicIn);
+            }
+            catch (PermissionException)
+            {
+                await DisplayAlert("Permission Required",
+                    "Please allow photo access in your device settings.", "OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Pick/upload photo error: {ex.Message}");
+                await DisplayAlert("Error", "Something went wrong. Please try again.", "OK");
+            }
+            finally
+            {
+                AvatarLabel.Text = "👤";
+            }
+        }
+
+        private async Task RemoveAvatar()
+        {
+            try
+            {
+                var authToken = await SecureStorage.GetAsync("auth_token");
+                if (!string.IsNullOrEmpty(authToken))
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authToken);
+
+                // Tell the server to delete the file
+                await _httpClient.DeleteAsync($"{AppConfig.BaseUrl}/api/auth/avatar");
+            }
+            catch { /* best effort — clear locally even if server call fails */ }
+            finally
+            {
+                Preferences.Remove("UserAvatarUrl");
+                AvatarImage.IsVisible = false;
+                AvatarLabel.Text = "👤";
+                AvatarLabel.IsVisible = true;
+            }
+        }
+
+        // ── Stats ──────────────────────────────────────────────────────────────
 
         private async Task LoadStats()
         {
@@ -81,6 +249,8 @@ namespace LearningApp.Views
             catch { }
         }
 
+        // ── Settings ───────────────────────────────────────────────────────────
+
         private void OnSettingsToggled(object sender, EventArgs e)
         {
             _settingsExpanded = !_settingsExpanded;
@@ -101,7 +271,19 @@ namespace LearningApp.Views
             => await Navigation.PushAsync(new LeaderboardPage());
 
         private async void OnMeetingsTapped(object sender, EventArgs e)
-            => await DisplayAlert("Meetings", "Coming soon.", "OK");
+            => await DisplayAlert("Meetings", "GMEET LINK COMING SOON", "OK");
+
+        // ── Theme toggle ───────────────────────────────────────────────────────
+
+        private void OnThemeToggled(object sender, ToggledEventArgs e)
+        {
+            if (_isTogglingTheme) return;
+            _isTogglingTheme = true;
+            Application.Current.UserAppTheme = e.Value ? AppTheme.Dark : AppTheme.Light;
+            _isTogglingTheme = false;
+        }
+
+        // ── Logout ─────────────────────────────────────────────────────────────
 
         private async void OnLogoutClicked(object sender, EventArgs e)
         {
@@ -126,6 +308,9 @@ namespace LearningApp.Views
             catch { }
             finally
             {
+                if (Application.Current is App app)
+                    app.StopQuoteTimer();
+
                 Preferences.Remove("UserId");
                 Preferences.Remove("UserEmail");
                 Preferences.Remove("UserFullName");
@@ -140,6 +325,13 @@ namespace LearningApp.Views
 
                 await Shell.Current.GoToAsync("///LoginPage");
             }
+        }
+
+        // ── DTOs ───────────────────────────────────────────────────────────────
+
+        private class AvatarUploadResponse
+        {
+            public string? AvatarUrl { get; set; }
         }
 
         public class CourseProgressItem

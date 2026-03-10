@@ -14,30 +14,62 @@ namespace LearningApp.Views
         public int TotalAssessments { get; set; }
         public int CompletedAssessments { get; set; }
         public double Percentage { get; set; }
+
+        // True when the category has a real PNG asset
+        public bool HasImage => Category switch
+        {
+            "PHP" => true,
+            "Python" => true,
+            "JavaScript" => true,
+            "Java" => true,
+            "C#" => true,
+            "C++" => true,
+            "C" => true,
+            "MySQL" => true,
+            _ => false
+        };
+
+        // PNG filename — only used when HasImage is true
+        public string ImageFile => Category switch
+        {
+            "PHP" => "php.png",
+            "Python" => "python.png",
+            "JavaScript" => "javascript.png",
+            "Java" => "java.png",
+            "C#" => "csharp.png",
+            "C++" => "cplusplus.png",
+            "C" => "cprog.png",
+            "MySQL" => "go.png",
+            _ => ""
+        };
+
+        // Emoji fallback — only shown when HasImage is false
         public string Emoji => Category switch
         {
-            "PHP" => "🐘",
-            "Python" => "🐍",
             "JavaScript" => "⚡",
             "Java" => "☕",
-            "C#" => "C#",
+            "C#" => "🔷",
             "C++" => "⚙️",
             "C" => "🔧",
             "MySQL" => "🗄️",
             _ => "📘"
         };
+
+        public bool ShowEmoji => !HasImage;
+
         public string BgColor => Category switch
         {
-            "PHP" => "#7B68EE",
-            "Python" => "#3776AB",
-            "JavaScript" => "#F7DF1E",
-            "Java" => "#ED8B00",
-            "C#" => "#020202",
-            "C++" => "#004482",
-            "C" => "#555555",
-            "MySQL" => "#4479A1",
+            "PHP" => "#1e1b4b",
+            "Python" => "#334155",
+            "JavaScript" => "#3f3f3f",
+            "Java" => "#ffffff",
+            "C#" => "#2e1065",
+            "C++" => "#172554",
+            "C" => "#00599c",
+            "MySQL" => "#082f49",
             _ => "#6C5CE7"
         };
+
         public string ProgressDetail =>
             $"{WatchedVideos}/{TotalVideos} videos · {CompletedAssessments}/{TotalAssessments} assessments";
         public string PercentageText => $"{Percentage:F0} %";
@@ -116,14 +148,11 @@ namespace LearningApp.Views
 
                 if (overview == null) { _allCourses = new(); RenderCourses(); return; }
 
-                // Only count courses the user has actually started
                 _allCourses = overview.CourseProgress?
                     .Where(c => c.WatchedVideos > 0 || c.CompletedAssessments > 0)
                     .ToList() ?? new();
 
                 EnrolledLabel.Text = $"{_allCourses.Count} courses";
-
-                // Hours based on watched videos, not total available
                 TotalHoursLabel.Text = $"{Math.Round(_allCourses.Sum(c => c.WatchedVideos) * 0.5, 0)}h";
 
                 RenderCourses();
@@ -152,13 +181,9 @@ namespace LearningApp.Views
         private async void OnCourseTapped(CourseProgressItem course)
         {
             if (course.Percentage >= 100)
-            {
                 await Navigation.PushAsync(new CertificatePage(course.Category));
-            }
             else
-            {
                 await Navigation.PushAsync(new CourseDetailPage(course.Category));
-            }
         }
 
         private void OnInProgressTapped(object sender, EventArgs e)

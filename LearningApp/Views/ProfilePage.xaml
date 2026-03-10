@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:LearningApp.Controls"
              x:Class="LearningApp.Views.ProfilePage"
-             BackgroundColor="#0F172A"
+             BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
 
@@ -12,8 +12,10 @@
 
             <!-- Skeleton -->
             <ScrollView x:Name="SkeletonScroll" IsVisible="True">
-                <VerticalStackLayout Spacing="0" BackgroundColor="#0F172A">
-                    <VerticalStackLayout BackgroundColor="#0F172A" Padding="24,60,24,24" Spacing="14">
+                <VerticalStackLayout Spacing="0"
+                                     BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}">
+                    <VerticalStackLayout BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
+                                         Padding="24,60,24,24" Spacing="14">
                         <controls:SkeletonView WidthRequest="80" HeightRequest="80"
                                                CornerRadius="40" HorizontalOptions="Start"/>
                         <controls:SkeletonView HeightRequest="22" WidthRequest="160"
@@ -35,27 +37,36 @@
 
             <!-- Real Content -->
             <ScrollView x:Name="ContentScroll" IsVisible="False">
-                <VerticalStackLayout Spacing="0" BackgroundColor="#0F172A">
+                <VerticalStackLayout Spacing="0"
+                                     BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}">
 
                     <!-- ── Top Bar ── -->
                     <Grid ColumnDefinitions="*,Auto" Padding="24,60,24,0">
                         <Label Grid.Column="0"
                                Text="Profile"
                                FontSize="26" FontAttributes="Bold"
-                               TextColor="#F8FAFC"
+                               TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
                                VerticalOptions="Center"/>
                     </Grid>
 
                     <!-- ── Profile Header ── -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16"
                           Padding="24,24,24,0">
+
+                        <!-- ── Avatar (tappable) ── CHANGED: added tap + camera badge -->
                         <Grid Grid.Column="0">
-                            <Border BackgroundColor="#1E293B"
-                                    StrokeThickness="2" Stroke="#334155"
+
+                            <Border BackgroundColor="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"
+                                    StrokeThickness="2"
+                                    Stroke="{AppThemeBinding Light=#CBD5E1, Dark=#334155}"
                                     WidthRequest="80" HeightRequest="80">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="24"/>
                                 </Border.StrokeShape>
+                                <!-- ADDED: tap to change photo -->
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAvatarTapped"/>
+                                </Border.GestureRecognizers>
                                 <Grid>
                                     <Label x:Name="AvatarLabel"
                                            Text="👤" FontSize="40"
@@ -68,8 +79,11 @@
                                            VerticalOptions="Fill"/>
                                 </Grid>
                             </Border>
+
+                            <!-- Online dot (unchanged) -->
                             <Border BackgroundColor="#22C55E"
-                                    StrokeThickness="2" Stroke="#0F172A"
+                                    StrokeThickness="2"
+                                    Stroke="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                     WidthRequest="16" HeightRequest="16"
                                     HorizontalOptions="End" VerticalOptions="End"
                                     Margin="0,0,2,2">
@@ -77,15 +91,35 @@
                                     <RoundRectangle CornerRadius="8"/>
                                 </Border.StrokeShape>
                             </Border>
+
+                            <!-- ADDED: camera badge top-right -->
+                            <Border BackgroundColor="#3B82F6"
+                                    StrokeThickness="1.5"
+                                    Stroke="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
+                                    WidthRequest="24" HeightRequest="24"
+                                    HorizontalOptions="End" VerticalOptions="Start">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAvatarTapped"/>
+                                </Border.GestureRecognizers>
+                                <Label Text="📷" FontSize="11"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+
                         </Grid>
+                        <!-- ── End Avatar ── -->
 
                         <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
                             <Label x:Name="FullNameLabel"
                                    Text="Loading..."
                                    FontSize="20" FontAttributes="Bold"
-                                   TextColor="#F8FAFC"/>
+                                   TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                             <Label x:Name="EmailLabel"
-                                   Text="" FontSize="13" TextColor="#64748B"/>
+                                   Text="" FontSize="13"
+                                   TextColor="#64748B"/>
                             <Border BackgroundColor="#1E40AF20"
                                     StrokeThickness="1" Stroke="#3B82F6"
                                     Padding="10,4" HorizontalOptions="Start"
@@ -103,8 +137,11 @@
                     <!-- ── Stats Row ── -->
                     <Grid ColumnDefinitions="*,*,*"
                           Padding="24,20,24,0" ColumnSpacing="12">
-                        <Border Grid.Column="0" BackgroundColor="#1E293B"
-                                StrokeThickness="1" Stroke="#334155" Padding="0,18">
+                        <Border Grid.Column="0"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                                Padding="0,18">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
@@ -112,13 +149,17 @@
                                 <Label Text="🏅" FontSize="26" HorizontalOptions="Center"/>
                                 <Label x:Name="CoursesCompletedLabel" Text="0"
                                        FontSize="24" FontAttributes="Bold"
-                                       TextColor="#F8FAFC" HorizontalOptions="Center"/>
+                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                       HorizontalOptions="Center"/>
                                 <Label Text="Courses" FontSize="10" TextColor="#64748B"
                                        FontAttributes="Bold" HorizontalOptions="Center"/>
                             </VerticalStackLayout>
                         </Border>
-                        <Border Grid.Column="1" BackgroundColor="#1E293B"
-                                StrokeThickness="1" Stroke="#334155" Padding="0,18">
+                        <Border Grid.Column="1"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                                Padding="0,18">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
@@ -126,13 +167,17 @@
                                 <Label Text="⏱️" FontSize="26" HorizontalOptions="Center"/>
                                 <Label x:Name="TotalHoursLabel" Text="0"
                                        FontSize="24" FontAttributes="Bold"
-                                       TextColor="#F8FAFC" HorizontalOptions="Center"/>
+                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                       HorizontalOptions="Center"/>
                                 <Label Text="Hours" FontSize="10" TextColor="#64748B"
                                        FontAttributes="Bold" HorizontalOptions="Center"/>
                             </VerticalStackLayout>
                         </Border>
-                        <Border Grid.Column="2" BackgroundColor="#1E293B"
-                                StrokeThickness="1" Stroke="#334155" Padding="0,18">
+                        <Border Grid.Column="2"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                                Padding="0,18">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
@@ -140,7 +185,8 @@
                                 <Label Text="📜" FontSize="26" HorizontalOptions="Center"/>
                                 <Label x:Name="CertificatesLabel" Text="0"
                                        FontSize="24" FontAttributes="Bold"
-                                       TextColor="#F8FAFC" HorizontalOptions="Center"/>
+                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                       HorizontalOptions="Center"/>
                                 <Label Text="Certs" FontSize="10" TextColor="#64748B"
                                        FontAttributes="Bold" HorizontalOptions="Center"/>
                             </VerticalStackLayout>
@@ -157,8 +203,9 @@
                     <VerticalStackLayout Padding="24,0" Spacing="10">
 
                         <!-- ── Settings (Collapsible) ── -->
-                        <Border BackgroundColor="#1E293B"
-                                StrokeThickness="1" Stroke="#334155"
+                        <Border BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
                                 Padding="0">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="16"/>
@@ -184,7 +231,7 @@
                                     <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                         <Label Text="Settings"
                                                FontSize="15" FontAttributes="Bold"
-                                               TextColor="#F8FAFC"/>
+                                               TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                         <Label Text="Manage your preferences"
                                                FontSize="12" TextColor="#64748B"/>
                                     </VerticalStackLayout>
@@ -204,10 +251,12 @@
                                                      Padding="12,0,12,12"
                                                      Spacing="4">
 
-                                    <BoxView HeightRequest="1" Color="#334155" Margin="6,0,6,8"/>
+                                    <BoxView HeightRequest="1"
+                                             Color="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                                             Margin="6,0,6,8"/>
 
                                     <!-- Edit Profile -->
-                                    <Border BackgroundColor="#0F172A"
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                             StrokeThickness="0" Padding="14,12">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12"/>
@@ -233,7 +282,7 @@
                                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
                                                 <Label Text="Edit Profile"
                                                        FontSize="14" FontAttributes="Bold"
-                                                       TextColor="#F8FAFC"/>
+                                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                                 <Label Text="Update your personal info"
                                                        FontSize="11" TextColor="#64748B"/>
                                             </VerticalStackLayout>
@@ -243,8 +292,8 @@
                                         </Grid>
                                     </Border>
 
-                                    <!-- Notifications -->
-                                    <Border BackgroundColor="#0F172A"
+                                    <!-- Dark Mode Toggle -->
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                             StrokeThickness="0" Padding="14,12">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12"/>
@@ -258,28 +307,29 @@
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10"/>
                                                 </Border.StrokeShape>
-                                                <Image Source="notification.png"
-                                                       HeightRequest="17" WidthRequest="17"
-                                                       Aspect="AspectFit"
+                                                <Label Text="{AppThemeBinding Light=🌙, Dark=☀️}"
+                                                       FontSize="17"
                                                        HorizontalOptions="Center"
                                                        VerticalOptions="Center"/>
                                             </Border>
                                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
-                                                <Label Text="Notifications"
+                                                <Label Text="Light Mode"
                                                        FontSize="14" FontAttributes="Bold"
-                                                       TextColor="#F8FAFC"/>
-                                                <Label Text="Manage alerts and reminders"
+                                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
+                                                <Label Text="{AppThemeBinding Light='Switch to dark theme', Dark='Switch to light theme'}"
                                                        FontSize="11" TextColor="#64748B"/>
                                             </VerticalStackLayout>
                                             <Switch Grid.Column="2"
-                                                    IsToggled="True"
+                                                    x:Name="ThemeSwitch"
+                                                    IsToggled="False"
                                                     OnColor="#3B82F6"
-                                                    VerticalOptions="Center"/>
+                                                    VerticalOptions="Center"
+                                                    Toggled="OnThemeToggled"/>
                                         </Grid>
                                     </Border>
 
                                     <!-- Privacy & Security -->
-                                    <Border BackgroundColor="#0F172A"
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                             StrokeThickness="0" Padding="14,12">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12"/>
@@ -305,7 +355,7 @@
                                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
                                                 <Label Text="Privacy &amp; Security"
                                                        FontSize="14" FontAttributes="Bold"
-                                                       TextColor="#F8FAFC"/>
+                                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                                 <Label Text="Control your data and privacy"
                                                        FontSize="11" TextColor="#64748B"/>
                                             </VerticalStackLayout>
@@ -316,7 +366,7 @@
                                     </Border>
 
                                     <!-- Help & Support -->
-                                    <Border BackgroundColor="#0F172A"
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                             StrokeThickness="0" Padding="14,12">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12"/>
@@ -342,7 +392,7 @@
                                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
                                                 <Label Text="Help &amp; Support"
                                                        FontSize="14" FontAttributes="Bold"
-                                                       TextColor="#F8FAFC"/>
+                                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                                 <Label Text="FAQs and contact support"
                                                        FontSize="11" TextColor="#64748B"/>
                                             </VerticalStackLayout>
@@ -356,9 +406,10 @@
                             </VerticalStackLayout>
                         </Border>
 
-                        <!-- ── ADDED: Leaderboard ── -->
-                        <Border BackgroundColor="#1E293B"
-                                StrokeThickness="1" Stroke="#334155"
+                        <!-- ── Leaderboard ── -->
+                        <Border BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
                                 Padding="0">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="16"/>
@@ -384,7 +435,7 @@
                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                     <Label Text="Leaderboard"
                                            FontSize="15" FontAttributes="Bold"
-                                           TextColor="#F8FAFC"/>
+                                           TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                     <Label Text="See how you rank among peers"
                                            FontSize="12" TextColor="#64748B"/>
                                 </VerticalStackLayout>
@@ -395,9 +446,10 @@
                             </Grid>
                         </Border>
 
-                        <!-- ── ADDED: Meetings ── -->
-                        <Border BackgroundColor="#1E293B"
-                                StrokeThickness="1" Stroke="#334155"
+                        <!-- ── Meetings ── -->
+                        <Border BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
                                 Padding="0">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="16"/>
@@ -423,7 +475,7 @@
                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                     <Label Text="Meetings"
                                            FontSize="15" FontAttributes="Bold"
-                                           TextColor="#F8FAFC"/>
+                                           TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                     <Label Text="Schedule and join sessions"
                                            FontSize="12" TextColor="#64748B"/>
                                 </VerticalStackLayout>
@@ -440,14 +492,15 @@
 
                     <!-- ── Logout Button ── -->
                     <Border Margin="24,0"
-                            BackgroundColor="#1E293B"
-                            StrokeThickness="1" Stroke="#334155"
+                            BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
                             Padding="0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="16"/>
                         </Border.StrokeShape>
                         <Button Text="Sign Out"
-                                TextColor="#F8FAFC"
+                                TextColor="#EF4444"
                                 BackgroundColor="Transparent"
                                 FontSize="15" FontAttributes="Bold"
                                 HeightRequest="54"

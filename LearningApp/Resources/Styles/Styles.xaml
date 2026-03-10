@@ -439,6 +439,44 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
-    
+    <!-- Themed page background -->
+    <Style x:Key="ThemedPage" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#FFFFFF, Dark=#0F172A}"/>
+    </Style>
+
+    <!-- Themed labels -->
+    <Style x:Key="ThemedLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=#111827, Dark=#F9FAFB}"/>
+    </Style>
+
+    <Style x:Key="ThemedSubLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=#6B7280, Dark=#94A3B8}"/>
+    </Style>
+
+    <!-- Themed card/frame -->
+    <Style x:Key="ThemedFrame" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"/>
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light=#E5E7EB, Dark=#334155}"/>
+    </Style>
+
+    <!-- Themed border -->
+    <Style x:Key="ThemedBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"/>
+        <Setter Property="Stroke" Value="{AppThemeBinding Light=#E5E7EB, Dark=#334155}"/>
+    </Style>
+
+    <!-- Themed input -->
+    <Style x:Key="ThemedEntry" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#F9FAFB, Dark=#1E293B}"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=#111827, Dark=#F9FAFB}"/>
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light=#9CA3AF, Dark=#64748B}"/>
+    </Style>
+
+    <!-- Themed surface (for cards, containers) -->
+    <Style x:Key="ThemedSurface" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=#F3F4F6, Dark=#1E293B}"/>
+    </Style>
+
+
 
 </ResourceDictionary>

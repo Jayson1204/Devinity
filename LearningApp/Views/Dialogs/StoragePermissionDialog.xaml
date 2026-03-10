@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LearningApp.Views.Dialogs.StoragePermissionDialog"
+             BackgroundColor="Transparent"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <!-- Dimmed backdrop — tap to dismiss -->
+    <Grid>
+        <BoxView Color="#000000"
+                 Opacity="0.55"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackdropTapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Slide-up card -->
+        <Border x:Name="DialogCard"
+                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                StrokeThickness="1"
+                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
+                VerticalOptions="End"
+                HorizontalOptions="Fill"
+                Padding="0,0,0,0"
+                TranslationY="500">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="28,28,0,0"/>
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Drag handle -->
+                <BoxView WidthRequest="40" HeightRequest="4"
+                         Color="{AppThemeBinding Light=#CBD5E1, Dark=#475569}"
+                         CornerRadius="2"
+                         HorizontalOptions="Center"
+                         Margin="0,14,0,0"/>
+
+                <!-- Icon -->
+                <Border BackgroundColor="#3B82F615"
+                        StrokeThickness="0"
+                        WidthRequest="80" HeightRequest="80"
+                        HorizontalOptions="Center"
+                        Margin="0,28,0,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24"/>
+                    </Border.StrokeShape>
+                    <Label Text="🖼️"
+                           FontSize="38"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <!-- Title -->
+                <Label Text="Allow Photo Access"
+                       FontSize="22" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Margin="32,20,32,0"/>
+
+                <!-- Subtitle -->
+                <Label Text="To set your profile photo, Devinity needs access to your photo library."
+                       FontSize="14"
+                       TextColor="#64748B"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"
+                       Margin="36,10,36,0"/>
+
+                <!-- Permission bullets -->
+                <VerticalStackLayout Spacing="12" Margin="32,24,32,0">
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                BackgroundColor="#22C55E15"
+                                StrokeThickness="0"
+                                WidthRequest="36" HeightRequest="36">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"/>
+                            </Border.StrokeShape>
+                            <Label Text="✅" FontSize="16"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Pick from gallery"
+                                   FontSize="14" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
+                            <Label Text="Choose any photo as your avatar"
+                                   FontSize="12" TextColor="#64748B"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                BackgroundColor="#3B82F615"
+                                StrokeThickness="0"
+                                WidthRequest="36" HeightRequest="36">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"/>
+                            </Border.StrokeShape>
+                            <Label Text="🔒" FontSize="16"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Your photos stay private"
+                                   FontSize="14" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
+                            <Label Text="We only access what you select"
+                                   FontSize="12" TextColor="#64748B"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                BackgroundColor="#F59E0B15"
+                                StrokeThickness="0"
+                                WidthRequest="36" HeightRequest="36">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"/>
+                            </Border.StrokeShape>
+                            <Label Text="🚫" FontSize="16"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="No automatic uploads"
+                                   FontSize="14" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
+                            <Label Text="Nothing is shared without your action"
+                                   FontSize="12" TextColor="#64748B"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+                <!-- Buttons -->
+                <VerticalStackLayout Spacing="10" Margin="24,28,24,0">
+
+                    <!-- Allow button -->
+                    <Border BackgroundColor="#3B82F6"
+                            StrokeThickness="0"
+                            HeightRequest="54">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16"/>
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAllowTapped"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Allow Access"
+                               FontSize="16" FontAttributes="Bold"
+                               TextColor="#FFFFFF"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+
+                    <!-- Not now button -->
+                    <Border BackgroundColor="Transparent"
+                            StrokeThickness="0"
+                            HeightRequest="48">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnDenyTapped"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="Not Now"
+                               FontSize="15"
+                               TextColor="#64748B"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+
+                </VerticalStackLayout>
+
+                <!-- Safe area spacer -->
+                <BoxView HeightRequest="24" Color="Transparent"/>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

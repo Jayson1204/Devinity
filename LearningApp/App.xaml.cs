@@ -8,6 +8,7 @@ namespace LearningApp
         public App()
         {
             InitializeComponent();
+            UserAppTheme = AppTheme.Dark;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
@@ -51,9 +52,9 @@ namespace LearningApp
                     var popupPage = new QuotePopupPage(quote);
                     await Shell.Current.Navigation.PushModalAsync(popupPage, false);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    System.Diagnostics.Debug.WriteLine($">>> Popup error: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine(">>> Popup error:");
                 }
             });
         }

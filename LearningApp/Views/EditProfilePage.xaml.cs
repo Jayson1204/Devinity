@@ -63,23 +63,20 @@ public partial class EditProfilePage : ContentPage
 
     private void OnToggleCurrentPassword(object sender, EventArgs e)
     {
-        _showCurrentPw = !_showCurrentPw;
-        CurrentPasswordEntry.IsPassword = !_showCurrentPw;
-        ShowCurrentPassword.Text = _showCurrentPw ? "🙈" : "👁";
+        CurrentPasswordEntry.IsPassword = !CurrentPasswordEntry.IsPassword;
+        CurrentPasswordEyeIcon.Source = CurrentPasswordEntry.IsPassword ? "eye_open.png" : "eye_closed.png";
     }
 
     private void OnToggleNewPassword(object sender, EventArgs e)
     {
-        _showNewPw = !_showNewPw;
-        NewPasswordEntry.IsPassword = !_showNewPw;
-        ShowNewPassword.Text = _showNewPw ? "🙈" : "👁";
+        NewPasswordEntry.IsPassword = !NewPasswordEntry.IsPassword;
+        NewPasswordEyeIcon.Source = NewPasswordEntry.IsPassword ? "eye_open.png" : "eye_closed.png";
     }
 
     private void OnToggleConfirmPassword(object sender, EventArgs e)
     {
-        _showConfirmPw = !_showConfirmPw;
-        ConfirmPasswordEntry.IsPassword = !_showConfirmPw;
-        ShowConfirmPassword.Text = _showConfirmPw ? "🙈" : "👁";
+        ConfirmPasswordEntry.IsPassword = !ConfirmPasswordEntry.IsPassword;
+        ConfirmPasswordEyeIcon.Source = ConfirmPasswordEntry.IsPassword ? "eye_open.png" : "eye_closed.png";
     }
 
     private async void OnSaveTapped(object sender, EventArgs e)

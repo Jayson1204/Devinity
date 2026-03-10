@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LearningApp.Views.EditProfilePage"
-             BackgroundColor="#0F172A"
+             BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
 
@@ -11,14 +11,17 @@
         <!-- ── Top Bar ── -->
         <Grid Grid.Row="0" Padding="20,52,20,16"
               ColumnDefinitions="Auto,*,Auto"
-              BackgroundColor="#0F172A">
-            <Border Grid.Column="0" BackgroundColor="#1E293B"
-                    StrokeThickness="1" Stroke="#334155"
+              BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}">
+            <Border Grid.Column="0"
+                    BackgroundColor="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"
+                    StrokeThickness="1"
+                    Stroke="{AppThemeBinding Light=#CBD5E1, Dark=#334155}"
                     WidthRequest="40" HeightRequest="40">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12"/>
                 </Border.StrokeShape>
-                <Label Text="←" FontSize="18" TextColor="#F8FAFC"
+                <Label Text="←" FontSize="18"
+                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
                        HorizontalOptions="Center" VerticalOptions="Center">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnBackTapped"/>
@@ -27,9 +30,8 @@
             </Border>
             <Label Grid.Column="1" Text="Edit Profile"
                    FontSize="16" FontAttributes="Bold"
-                   TextColor="#F8FAFC"
+                   TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
                    HorizontalOptions="Center" VerticalOptions="Center"/>
-            <!-- Placeholder to balance layout -->
             <BoxView Grid.Column="2" WidthRequest="40" Color="Transparent"/>
         </Grid>
 
@@ -41,21 +43,18 @@
                 <VerticalStackLayout HorizontalOptions="Center"
                                      Spacing="12" Margin="0,16,0,32">
                     <Grid HorizontalOptions="Center">
-                        <!-- Avatar circle -->
                         <Border x:Name="AvatarBorder"
-                                BackgroundColor="#1E293B"
+                                BackgroundColor="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"
                                 StrokeThickness="3" Stroke="#3B82F6"
                                 WidthRequest="100" HeightRequest="100">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="50"/>
                             </Border.StrokeShape>
                             <Grid>
-                                <!-- Emoji fallback -->
                                 <Label x:Name="AvatarEmoji"
                                        Text="👤" FontSize="52"
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center"/>
-                                <!-- Selected image -->
                                 <Image x:Name="AvatarImage"
                                        Aspect="AspectFill"
                                        IsVisible="False"
@@ -63,10 +62,9 @@
                                        VerticalOptions="Fill"/>
                             </Grid>
                         </Border>
-
-                        <!-- Camera badge -->
                         <Border BackgroundColor="#3B82F6"
-                                StrokeThickness="2" Stroke="#0F172A"
+                                StrokeThickness="2"
+                                Stroke="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                 WidthRequest="32" HeightRequest="32"
                                 HorizontalOptions="End" VerticalOptions="End"
                                 Margin="0,0,2,2">
@@ -81,15 +79,15 @@
                                    VerticalOptions="Center"/>
                         </Border>
                     </Grid>
-
                     <Label Text="Tap camera to change photo"
                            FontSize="12" TextColor="#64748B"
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- ── Form Card ── -->
-                <Border BackgroundColor="#1E293B"
-                        StrokeThickness="1" Stroke="#334155"
+                <Border BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
                         Padding="24,28">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="24"/>
@@ -103,19 +101,15 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="0"/>
-                                </Border.StrokeShape>
-                                <Entry x:Name="FullNameEntry"
-                                       Placeholder="Enter your full name"
-                                       TextColor="#F8FAFC"
-                                       PlaceholderColor="#334155"
-                                       FontSize="16"
-                                       BackgroundColor="Transparent"
-                                       Margin="0,-6,0,-6"/>
-                            </Border>
-                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
+                            <Entry x:Name="FullNameEntry"
+                                   Placeholder="Enter your full name"
+                                   TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                   PlaceholderColor="{AppThemeBinding Light=#94A3B8, Dark=#334155}"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"
+                                   Margin="0,-6,0,-6"/>
+                            <BoxView HeightRequest="1"
+                                     BackgroundColor="{AppThemeBinding Light=#CBD5E1, Dark=#475569}"/>
                             <Label x:Name="FullNameError"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0" IsVisible="False"/>
@@ -127,32 +121,31 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="0"/>
-                                </Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                    <Entry x:Name="CurrentPasswordEntry"
-                                           Grid.Column="0"
-                                           Placeholder="Enter current password"
-                                           IsPassword="{Binding Source={x:Reference ShowCurrentPassword}, Path=IsToggled, Converter={StaticResource InverseBoolConverter}}"
-                                           TextColor="#F8FAFC"
-                                           PlaceholderColor="#334155"
-                                           FontSize="16"
-                                           BackgroundColor="Transparent"
-                                           Margin="0,-6,0,-6"/>
-                                    <Label x:Name="ShowCurrentPassword"
-                                           Grid.Column="1"
-                                           Text="👁" FontSize="18"
-                                           TextColor="#64748B"
-                                           VerticalOptions="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnToggleCurrentPassword"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
-                            </Border>
-                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Entry x:Name="CurrentPasswordEntry"
+                                       Grid.Column="0"
+                                       Placeholder="Enter current password"
+                                       IsPassword="True"
+                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                       PlaceholderColor="{AppThemeBinding Light=#94A3B8, Dark=#334155}"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,-6,0,-6"/>
+                                <!-- Replace eye_open.png with your actual icon file -->
+                                <Image x:Name="CurrentPasswordEyeIcon"
+                                       Grid.Column="1"
+                                       Source="eye_open.png"
+                                       WidthRequest="22" HeightRequest="22"
+                                       Aspect="AspectFit"
+                                       VerticalOptions="Center"
+                                       Opacity="0.5">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnToggleCurrentPassword"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                            <BoxView HeightRequest="1"
+                                     BackgroundColor="{AppThemeBinding Light=#CBD5E1, Dark=#475569}"/>
                             <Label x:Name="CurrentPasswordError"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0" IsVisible="False"/>
@@ -164,32 +157,30 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="0"/>
-                                </Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                    <Entry x:Name="NewPasswordEntry"
-                                           Grid.Column="0"
-                                           Placeholder="Leave blank to keep current"
-                                           IsPassword="{Binding Source={x:Reference ShowNewPassword}, Path=IsToggled, Converter={StaticResource InverseBoolConverter}}"
-                                           TextColor="#F8FAFC"
-                                           PlaceholderColor="#334155"
-                                           FontSize="16"
-                                           BackgroundColor="Transparent"
-                                           Margin="0,-6,0,-6"/>
-                                    <Label x:Name="ShowNewPassword"
-                                           Grid.Column="1"
-                                           Text="👁" FontSize="18"
-                                           TextColor="#64748B"
-                                           VerticalOptions="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnToggleNewPassword"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
-                            </Border>
-                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Entry x:Name="NewPasswordEntry"
+                                       Grid.Column="0"
+                                       Placeholder="Leave blank to keep current"
+                                       IsPassword="True"
+                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                       PlaceholderColor="{AppThemeBinding Light=#94A3B8, Dark=#334155}"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,-6,0,-6"/>
+                                <Image x:Name="NewPasswordEyeIcon"
+                                       Grid.Column="1"
+                                       Source="eye_open.png"
+                                       WidthRequest="22" HeightRequest="22"
+                                       Aspect="AspectFit"
+                                       VerticalOptions="Center"
+                                       Opacity="0.5">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnToggleNewPassword"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                            <BoxView HeightRequest="1"
+                                     BackgroundColor="{AppThemeBinding Light=#CBD5E1, Dark=#475569}"/>
                             <Label x:Name="NewPasswordError"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0" IsVisible="False"/>
@@ -201,32 +192,30 @@
                                    TextColor="#475569" FontSize="11"
                                    FontAttributes="Bold" CharacterSpacing="2"
                                    Margin="0,0,0,8"/>
-                            <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="0"/>
-                                </Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                    <Entry x:Name="ConfirmPasswordEntry"
-                                           Grid.Column="0"
-                                           Placeholder="Re-enter new password"
-                                           IsPassword="{Binding Source={x:Reference ShowConfirmPassword}, Path=IsToggled, Converter={StaticResource InverseBoolConverter}}"
-                                           TextColor="#F8FAFC"
-                                           PlaceholderColor="#334155"
-                                           FontSize="16"
-                                           BackgroundColor="Transparent"
-                                           Margin="0,-6,0,-6"/>
-                                    <Label x:Name="ShowConfirmPassword"
-                                           Grid.Column="1"
-                                           Text="👁" FontSize="18"
-                                           TextColor="#64748B"
-                                           VerticalOptions="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnToggleConfirmPassword"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
-                            </Border>
-                            <BoxView HeightRequest="1" BackgroundColor="#475569"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <Entry x:Name="ConfirmPasswordEntry"
+                                       Grid.Column="0"
+                                       Placeholder="Re-enter new password"
+                                       IsPassword="True"
+                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
+                                       PlaceholderColor="{AppThemeBinding Light=#94A3B8, Dark=#334155}"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       Margin="0,-6,0,-6"/>
+                                <Image x:Name="ConfirmPasswordEyeIcon"
+                                       Grid.Column="1"
+                                       Source="eye_open.png"
+                                       WidthRequest="22" HeightRequest="22"
+                                       Aspect="AspectFit"
+                                       VerticalOptions="Center"
+                                       Opacity="0.5">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnToggleConfirmPassword"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                            <BoxView HeightRequest="1"
+                                     BackgroundColor="{AppThemeBinding Light=#CBD5E1, Dark=#475569}"/>
                             <Label x:Name="ConfirmPasswordError"
                                    TextColor="#EF4444" FontSize="12"
                                    Margin="0,6,0,0" IsVisible="False"/>
@@ -266,7 +255,7 @@
 
         <!-- ── Save Button ── -->
         <Grid Grid.Row="2" Padding="24,12,24,36"
-              BackgroundColor="#0F172A">
+              BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}">
             <Border BackgroundColor="#3B82F6" StrokeThickness="0">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="16"/>

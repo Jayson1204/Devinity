@@ -45,12 +45,10 @@ public partial class LeaderboardPage : ContentPage
             var currentUserId = Preferences.Get("UserId", "");
             var myAvatarUrl = Preferences.Get("UserAvatarUrl", "");
 
-            // Podium top 3
             SetPodium(1, entries.ElementAtOrDefault(0), currentUserId, myAvatarUrl);
             SetPodium(2, entries.ElementAtOrDefault(1), currentUserId, myAvatarUrl);
             SetPodium(3, entries.ElementAtOrDefault(2), currentUserId, myAvatarUrl);
 
-            // Ranks 4-10
             RankList.Children.Clear();
             for (int i = 3; i < Math.Min(entries.Count, 10); i++)
             {
@@ -59,7 +57,6 @@ public partial class LeaderboardPage : ContentPage
                 RankList.Children.Add(BuildRankRow(i + 1, entry, isMe, myAvatarUrl));
             }
 
-            // My rank card if outside top 10
             var myEntry = entries.FirstOrDefault(e => e.UserId == currentUserId);
             var myIndex = myEntry != null ? entries.IndexOf(myEntry) : -1;
 
@@ -70,9 +67,7 @@ public partial class LeaderboardPage : ContentPage
                 MyRankScore.Text = $"{myEntry.Score} pts";
                 MyRankCard.IsVisible = myIndex >= 10;
 
-                var myUrl = myEntry.UserId == currentUserId
-                    ? myAvatarUrl
-                    : myEntry.AvatarUrl ?? "";
+                var myUrl = myEntry.UserId == currentUserId ? myAvatarUrl : myEntry.AvatarUrl ?? "";
                 SetAvatarFromUrl(MyAvatarImage, MyAvatarEmoji, myUrl);
             }
         }
@@ -89,9 +84,7 @@ public partial class LeaderboardPage : ContentPage
     {
         if (entry == null) return;
 
-        var avatarUrl = entry.UserId == currentUserId
-            ? myAvatarUrl
-            : entry.AvatarUrl ?? "";
+        var avatarUrl = entry.UserId == currentUserId ? myAvatarUrl : entry.AvatarUrl ?? "";
 
         switch (place)
         {
@@ -126,6 +119,10 @@ public partial class LeaderboardPage : ContentPage
     private View BuildRankRow(int rank, LeaderboardEntry entry,
                                bool isMe, string myAvatarUrl)
     {
+        bool isDark = Application.Current.UserAppTheme == AppTheme.Dark
+                      || (Application.Current.UserAppTheme == AppTheme.Unspecified
+                          && Application.Current.RequestedTheme == AppTheme.Dark);
+
         string medalColor = rank switch
         {
             4 => "#3B82F6",
@@ -138,11 +135,19 @@ public partial class LeaderboardPage : ContentPage
             _ => "#475569"
         };
 
+        var cardBg = isMe ? "#1E40AF20"
+                          : (isDark ? "#1E293B" : "#FFFFFF");
+        var cardStroke = isMe ? "#3B82F6"
+                               : (isDark ? "#334155" : "#E2E8F0");
+        var avatarBg = isDark ? "#0F172A" : "#F1F5F9";
+        var avatarStroke = isMe ? "#3B82F6" : (isDark ? "#334155" : "#CBD5E1");
+        var nameColor = isDark ? "#F8FAFC" : "#0F172A";
+
         var rowBorder = new Border
         {
-            BackgroundColor = isMe ? Color.FromArgb("#1E40AF20") : Color.FromArgb("#1E293B"),
+            BackgroundColor = Color.FromArgb(cardBg),
             StrokeThickness = 1,
-            Stroke = isMe ? Color.FromArgb("#3B82F6") : Color.FromArgb("#334155"),
+            Stroke = Color.FromArgb(cardStroke),
             Padding = new Thickness(0)
         };
         rowBorder.StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle
@@ -189,9 +194,9 @@ public partial class LeaderboardPage : ContentPage
 
         var avatarBorder = new Border
         {
-            BackgroundColor = Color.FromArgb("#0F172A"),
+            BackgroundColor = Color.FromArgb(avatarBg),
             StrokeThickness = 2,
-            Stroke = isMe ? Color.FromArgb("#3B82F6") : Color.FromArgb("#334155"),
+            Stroke = Color.FromArgb(avatarStroke),
             WidthRequest = 44,
             HeightRequest = 44,
             Content = avatarGrid
@@ -206,7 +211,7 @@ public partial class LeaderboardPage : ContentPage
             Text = entry.FullName,
             FontSize = 14,
             FontAttributes = FontAttributes.Bold,
-            TextColor = Color.FromArgb("#F8FAFC"),
+            TextColor = Color.FromArgb(nameColor),
             LineBreakMode = LineBreakMode.TailTruncation,
             MaxLines = 1
         };
@@ -217,11 +222,7 @@ public partial class LeaderboardPage : ContentPage
             TextColor = Color.FromArgb("#64748B")
         };
 
-        var nameStack = new VerticalStackLayout
-        {
-            Spacing = 2,
-            VerticalOptions = LayoutOptions.Center
-        };
+        var nameStack = new VerticalStackLayout { Spacing = 2, VerticalOptions = LayoutOptions.Center };
         nameStack.Children.Add(nameLabel);
         nameStack.Children.Add(scoreLabel);
 

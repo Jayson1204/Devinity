@@ -27,6 +27,16 @@ namespace LearningApp
             builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddSingleton<ThemeService>();
+
+#if ANDROID
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
+            {
+                // This removes the native border/underline on Android
+                handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+                handler.PlatformView.Background = null;
+            });
+#endif
             return builder.Build();
         }
     }

@@ -19,6 +19,7 @@ namespace LearningApp.Api.Services
         Task<UserData> GetUserByIdAsync(string userId);
         Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request);
         Task<UploadAvatarResponse> UploadAvatarAsync(string userId, Stream imageStream, string fileName);
+        Task ClearAvatarAsync(string userId); // ← ADDED
     }
 
     public class AuthService : IAuthService
@@ -267,6 +268,16 @@ namespace LearningApp.Api.Services
                     Message = "Failed to upload avatar. Please try again."
                 };
             }
+        }
+
+        // ── ADDED ─────────────────────────────────────────────────────────────
+        public async Task ClearAvatarAsync(string userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) return;
+            user.AvatarUrl = null;
+            user.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
         }
 
         private string GenerateJwtToken(User user)
