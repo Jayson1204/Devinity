@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
 using LearningApp.Services;
 using LearningApp.Constants;
-using LearningApp.Views.Dialogs;
 
 namespace LearningApp.Views
 {
@@ -58,7 +57,7 @@ namespace LearningApp.Views
             }
         }
 
-        private async void OnAvatarTapped(object sender, EventArgs e)
+        private async void OnAvatarClicked(object sender, EventArgs e)
         {
             try
             {
@@ -77,47 +76,10 @@ namespace LearningApp.Views
             }
         }
 
-        // ── REPLACE PickAndUploadAvatar in ProfilePage.xaml.cs ───────────────────────
-        // Also add at top: using LearningApp.Views.Dialogs;
-
         private async Task PickAndUploadAvatar()
         {
             try
             {
-#if ANDROID
-                // Check current permission status first
-                var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-
-                // Android 13+ — check media permission too
-                if (status != PermissionStatus.Granted)
-                    status = await Permissions.CheckStatusAsync<Permissions.Media>();
-
-                if (status != PermissionStatus.Granted)
-                {
-                    // Show our custom dialog
-                    var dialog = new StoragePermissionDialog();
-                    await Navigation.PushModalAsync(dialog, false);
-                    var granted = await dialog.Result;
-
-                    if (!granted)
-                    {
-                        // If permanently denied, guide to Settings
-                        var deniedStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-                        if (deniedStatus == PermissionStatus.Denied)
-                        {
-                            bool openSettings = await DisplayAlert(
-                                "Permission Required",
-                                "Photo access was denied. Enable it in Settings to set a profile photo.",
-                                "Open Settings", "Cancel");
-
-                            if (openSettings)
-                                AppInfo.ShowSettingsUI();
-                        }
-                        return;
-                    }
-                }
-#endif
-
                 var result = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
                 {
                     Title = "Pick a profile photo"
@@ -136,7 +98,7 @@ namespace LearningApp.Views
                     await DisplayAlert("Error", "User not found. Please log in again.", "OK");
                     return;
                 }
-
+             
                 using var stream = await result.OpenReadAsync();
                 using var content = new MultipartFormDataContent();
                 using var fileContent = new StreamContent(stream);
@@ -146,6 +108,7 @@ namespace LearningApp.Views
 
                 content.Add(fileContent, "file", result.FileName);
 
+                // Attach auth token
                 var authToken = await SecureStorage.GetAsync("auth_token");
                 if (!string.IsNullOrEmpty(authToken))
                     _httpClient.DefaultRequestHeaders.Authorization =
@@ -156,8 +119,10 @@ namespace LearningApp.Views
 
                 if (!response.IsSuccessStatusCode)
                 {
+                    var error = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"Avatar upload failed: {error}");
                     await DisplayAlert("Upload Failed", "Could not upload photo. Try again.", "OK");
-                    LoadAvatar();
+                    LoadAvatar(); 
                     return;
                 }
 
@@ -171,13 +136,15 @@ namespace LearningApp.Views
                     return;
                 }
 
+                // Save new URL and update UI
                 Preferences.Set("UserAvatarUrl", uploadResult.AvatarUrl);
-
+         
                 var bustUrl = $"{uploadResult.AvatarUrl}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
                 AvatarImage.Source = ImageSource.FromUri(new Uri(bustUrl));
                 AvatarImage.IsVisible = true;
                 AvatarLabel.IsVisible = false;
 
+                
                 await AvatarImage.ScaleTo(1.08, 120, Easing.CubicOut);
                 await AvatarImage.ScaleTo(1.0, 120, Easing.CubicIn);
             }
@@ -193,6 +160,7 @@ namespace LearningApp.Views
             }
             finally
             {
+                // Reset label text in case it was set to ⏳
                 AvatarLabel.Text = "👤";
             }
         }
@@ -206,10 +174,10 @@ namespace LearningApp.Views
                     _httpClient.DefaultRequestHeaders.Authorization =
                         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authToken);
 
-                // Tell the server to delete the file
+                
                 await _httpClient.DeleteAsync($"{AppConfig.BaseUrl}/api/auth/avatar");
             }
-            catch { /* best effort — clear locally even if server call fails */ }
+            catch { }
             finally
             {
                 Preferences.Remove("UserAvatarUrl");
@@ -261,9 +229,6 @@ namespace LearningApp.Views
         private async void OnEditProfileTapped(object sender, EventArgs e)
             => await Navigation.PushAsync(new EditProfilePage());
 
-        private async void OnPrivacyTapped(object sender, EventArgs e)
-            => await DisplayAlert("Privacy & Security", "Coming soon.", "OK");
-
         private async void OnHelpTapped(object sender, EventArgs e)
             => await DisplayAlert("Help & Support", "Contact us at support@devinity.com", "OK");
 
@@ -290,6 +255,9 @@ namespace LearningApp.Views
             bool confirm = await DisplayAlert(
                 "Logout", "Are you sure you want to logout?", "Logout", "Cancel");
             if (!confirm) return;
+
+            // Show loading overlay
+            LoadingOverlay.IsVisible = true;
 
             try
             {
@@ -323,6 +291,7 @@ namespace LearningApp.Views
                 }
                 catch { }
 
+                LoadingOverlay.IsVisible = false;
                 await Shell.Current.GoToAsync("///LoginPage");
             }
         }

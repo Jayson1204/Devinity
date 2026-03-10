@@ -34,11 +34,10 @@ public static class CertificateGenerator
     {
         using var p = new SKPaint { IsAntialias = true, Style = SKPaintStyle.Fill };
 
-        // ── Background ────────────────────────────────────────────────
+        // ── Background ──
         p.Color = SKColor.Parse("#EEF1F7");
         cv.DrawRect(0, 0, W, H, p);
 
-        // ── Left navy wedge (top-left to bottom-left) ─────────────────
         p.Color = SKColor.Parse("#1B2B5E");
         var leftWedge = new SKPath();
         leftWedge.MoveTo(0, 0);
@@ -48,7 +47,6 @@ public static class CertificateGenerator
         leftWedge.Close();
         cv.DrawPath(leftWedge, p);
 
-        // ── Right navy wedge ──────────────────────────────────────────
         var rightWedge = new SKPath();
         rightWedge.MoveTo(W, 0);
         rightWedge.LineTo(W - 160, 0);
@@ -57,7 +55,6 @@ public static class CertificateGenerator
         rightWedge.Close();
         cv.DrawPath(rightWedge, p);
 
-        // ── Gold diagonal lines on wedges ─────────────────────────────
         p.Color = SKColor.Parse("#C9A84C");
         p.Style = SKPaintStyle.Stroke;
         p.StrokeWidth = 1f;
@@ -69,12 +66,10 @@ public static class CertificateGenerator
         }
         p.Style = SKPaintStyle.Fill;
 
-        // ── Gold top/bottom bars ──────────────────────────────────────
         p.Color = SKColor.Parse("#C9A84C");
         cv.DrawRect(0, 0, W, 10, p);
         cv.DrawRect(0, H - 10, W, 10, p);
 
-        // ── Corner ornaments ──────────────────────────────────────────
         p.Color = SKColor.Parse("#C9A84C");
         p.Style = SKPaintStyle.Stroke;
         p.StrokeWidth = 2f;
@@ -84,7 +79,6 @@ public static class CertificateGenerator
         cv.DrawLine(W - 10, H - 10, W - 60, H - 10, p);
         p.Style = SKPaintStyle.Fill;
 
-        // ── Badge (top center) ────────────────────────────────────────
         float cx = W / 2f;
         float badgeY = 115f;
 
@@ -99,7 +93,7 @@ public static class CertificateGenerator
 
         DrawText(cv, "🎓", cx, badgeY + 13, 26, SKColors.Black, SKTextAlign.Center);
 
-        // ── CERTIFICATE heading ───────────────────────────────────────
+        // ── CERTIFICATE heading ────
         DrawText(cv, "CERTIFICATE", cx, 215, 46,
             SKColor.Parse("#1B2B5E"), SKTextAlign.Center, bold: true);
 
@@ -113,11 +107,11 @@ public static class CertificateGenerator
         cv.DrawLine(cx - 140, 254, cx + 140, 254, p);
         p.Style = SKPaintStyle.Fill;
 
-        // ── Proudly present to ────────────────────────────────────────
+        // ── Proudly present to ──
         DrawText(cv, "PROUDLY PRESENT TO:", cx, 284, 11,
             SKColor.Parse("#888888"), SKTextAlign.Center);
 
-        // ── Student name ──────────────────────────────────────────────
+        // ── Student name ──
         DrawText(cv, studentName, cx, 328, 36,
             SKColor.Parse("#1B2B5E"), SKTextAlign.Center, bold: true, italic: true);
 
@@ -129,7 +123,7 @@ public static class CertificateGenerator
                     cx + nameW / 2 + 10, 336, p);
         p.Style = SKPaintStyle.Fill;
 
-        // ── Body text ─────────────────────────────────────────────────
+        // ── Body text ───
         DrawText(cv,
             "Has successfully completed all requirements and assessments for the course",
             cx, 368, 11, SKColor.Parse("#666666"), SKTextAlign.Center);
@@ -147,7 +141,7 @@ public static class CertificateGenerator
         cv.DrawLine(cx - 220, 440, cx + 220, 440, p);
         p.Style = SKPaintStyle.Fill;
 
-        // ── Signature lines ───────────────────────────────────────────
+        // ── Signature lines ────
         float sigY = 560f;
         p.Color = SKColor.Parse("#1B2B5E");
         p.Style = SKPaintStyle.Stroke;
@@ -161,13 +155,13 @@ public static class CertificateGenerator
         DrawText(cv, "DIRECTOR", cx + 140, sigY + 18, 9,
             SKColor.Parse("#1B2B5E"), SKTextAlign.Center, bold: true);
 
-        // ── Date + ID ─────────────────────────────────────────────────
+        // ── Date + ID ────
         DrawText(cv, $"Date: {issueDate}", cx - 220, sigY + 36, 9,
             SKColor.Parse("#777777"), SKTextAlign.Left);
         DrawText(cv, $"ID: {certId}", cx + 220, sigY + 36, 9,
             SKColor.Parse("#777777"), SKTextAlign.Right);
 
-        // ── Footer ────────────────────────────────────────────────────
+        // ── Footer ──
         DrawText(cv, "Issued by Devinity Learning Platform",
             cx, H - 18, 9, SKColor.Parse("#AAAAAA"), SKTextAlign.Center);
     }

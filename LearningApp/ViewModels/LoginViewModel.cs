@@ -113,8 +113,6 @@ namespace LearningApp.ViewModels
                     Preferences.Set("UserAvatarUrl", response.User.AvatarUrl ?? ""); // ← added
                 }
 
-                // Start SignalR chat connection
-                //await ChatClientService.Instance.StartAsync(); // ← added
 
                 // Navigate to main page
                 await Shell.Current.GoToAsync("///MainPage");

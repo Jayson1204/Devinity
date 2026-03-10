@@ -52,71 +52,72 @@
                         <!-- Email -->
                         <VerticalStackLayout Spacing="0">
                             <Label Text="EMAIL"
-           TextColor="#475569" FontSize="11"
-           FontAttributes="Bold" CharacterSpacing="2"
-           Margin="0,0,0,4"/>
+                                   TextColor="#FFFFFF" FontSize="11"
+                                   FontAttributes="Bold" CharacterSpacing="2"
+                                   Margin="0,0,0,4"/>
                             <Border StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
                                 <Entry Text="{Binding Email}"
-               Placeholder="username"
-               Keyboard="Email"
-               TextColor="#F8FAFC"
-               PlaceholderColor="#334155"
-               FontSize="16"
-               BackgroundColor="Transparent"
-               HeightRequest="35" 
-               Margin="0,0,0,-8"/>
+                                       Placeholder="username"
+                                       Keyboard="Email"
+                                       TextColor="#F8FAFC"
+                                       PlaceholderColor="#334155"
+                                       FontSize="16"
+                                       BackgroundColor="Transparent"
+                                       HeightRequest="35"
+                                       Margin="0,0,0,-8"/>
                             </Border>
-
                             <BoxView HeightRequest="1"
-             BackgroundColor="#475569"
-             HorizontalOptions="Fill"
-             Margin="0,0,0,0"/>
-
+                                     BackgroundColor="#475569"
+                                     HorizontalOptions="Fill"/>
                             <Label Text="{Binding EmailError}"
-           TextColor="#EF4444" FontSize="12"
-           Margin="0,6,0,0"
-           IsVisible="{Binding EmailError, Converter={StaticResource StringToBoolConverter}}"/>
+                                   TextColor="#EF4444" FontSize="12"
+                                   Margin="0,6,0,0"
+                                   IsVisible="{Binding EmailError, Converter={StaticResource StringToBoolConverter}}"/>
                         </VerticalStackLayout>
 
+                        <!-- Password -->
                         <VerticalStackLayout Spacing="0">
                             <Label Text="PASSWORD"
-           TextColor="#475569" FontSize="11"
-           FontAttributes="Bold" CharacterSpacing="2"
-           Margin="0,18,0,4"/>
+                                   TextColor="#FFFFFF" FontSize="11"
+                                   FontAttributes="Bold" CharacterSpacing="2"
+                                   Margin="0,18,0,4"/>
                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
-                                <Border Grid.Column="0" StrokeThickness="0" BackgroundColor="Transparent" Padding="0">
+                                <Border Grid.Column="0"
+                                        StrokeThickness="0"
+                                        BackgroundColor="Transparent"
+                                        Padding="0">
                                     <Entry Text="{Binding Password}"
-                   Placeholder="••••••••"
-                   IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
-                   TextColor="#F8FAFC"
-                   PlaceholderColor="#334155"
-                   FontSize="16"
-                   BackgroundColor="Transparent"
-                   HeightRequest="35"
-                   Margin="0,0,0,-8"/>
+                                           Placeholder="••••••••"
+                                           IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolConverter}}"
+                                           TextColor="#F8FAFC"
+                                           PlaceholderColor="#334155"
+                                           FontSize="16"
+                                           BackgroundColor="Transparent"
+                                           HeightRequest="35"
+                                           Margin="0,0,0,-8"/>
                                 </Border>
 
-                                <Label Grid.Column="1"
-               Text="{Binding IsPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
-               FontSize="20"
-               TextColor="#64748B"
-               VerticalOptions="Center"
-               Padding="8,0,0,5">
-                                    <Label.GestureRecognizers>
+                                <!-- ── Eye toggle image ── -->
+                                <Image Grid.Column="1"
+                                       Source="{Binding IsPasswordVisible, Converter={StaticResource PasswordIconConverter}}"
+                                       WidthRequest="22"
+                                       HeightRequest="22"
+                                       Aspect="AspectFit"
+                                       VerticalOptions="Center"
+                                       Margin="8,0,0,0">
+                                    <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding TogglePasswordVisibilityCommand}"/>
-                                    </Label.GestureRecognizers>
-                                </Label>
+                                    </Image.GestureRecognizers>
+                                </Image>
+
                             </Grid>
-
                             <BoxView HeightRequest="1"
-             BackgroundColor="#475569"
-             HorizontalOptions="Fill"
-             Margin="0,0,0,0"/>
-
+                                     BackgroundColor="#475569"
+                                     HorizontalOptions="Fill"/>
                             <Label Text="{Binding PasswordError}"
-           TextColor="#EF4444" FontSize="12"
-           Margin="0,6,0,0"
-           IsVisible="{Binding PasswordError, Converter={StaticResource StringToBoolConverter}}"/>
+                                   TextColor="#EF4444" FontSize="12"
+                                   Margin="0,6,0,0"
+                                   IsVisible="{Binding PasswordError, Converter={StaticResource StringToBoolConverter}}"/>
                         </VerticalStackLayout>
 
                         <!-- API Error -->

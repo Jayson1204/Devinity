@@ -1,6 +1,5 @@
 ﻿namespace LearningApp.Models
 {
-    // ── Existing models (unchanged) ──────────────────────────────
     public class Course
     {
         public string Id { get; set; }
@@ -46,8 +45,6 @@
         public string ExpectedOutput { get; set; }
     }
 
-    // ── CollectionView UI models ─────────────────────────────────
-    // Base item for DataTemplateSelector
     public abstract class CourseItem
     {
         public string Level { get; set; }

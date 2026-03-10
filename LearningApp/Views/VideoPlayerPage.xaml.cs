@@ -11,13 +11,11 @@ namespace LearningApp.Views
             VideoTitleLabel.Text = title;
             DurationLabel.Text = duration;
 
-            // Set the Firebase direct video URL
             VideoPlayer.Source = MediaSource.FromUri(videoUrl);
         }
 
         private async void OnCloseClicked(object sender, EventArgs e)
         {
-            // Stop video before closing to release resources
             VideoPlayer.Stop();
             await Navigation.PopModalAsync();
         }

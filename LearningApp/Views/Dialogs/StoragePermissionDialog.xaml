@@ -6,7 +6,6 @@
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
 
-    <!-- Dimmed backdrop — tap to dismiss -->
     <Grid>
         <BoxView Color="#000000"
                  Opacity="0.55"

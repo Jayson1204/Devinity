@@ -5,7 +5,6 @@ using System.Windows.Input;
 
 namespace LearningApp.Views
 {
-    // ── Display model ──
     public class CourseProgressItem
     {
         public string Category { get; set; }
@@ -15,7 +14,6 @@ namespace LearningApp.Views
         public int CompletedAssessments { get; set; }
         public double Percentage { get; set; }
 
-        // True when the category has a real PNG asset
         public bool HasImage => Category switch
         {
             "PHP" => true,
@@ -29,7 +27,6 @@ namespace LearningApp.Views
             _ => false
         };
 
-        // PNG filename — only used when HasImage is true
         public string ImageFile => Category switch
         {
             "PHP" => "php.png",
@@ -43,7 +40,6 @@ namespace LearningApp.Views
             _ => ""
         };
 
-        // Emoji fallback — only shown when HasImage is false
         public string Emoji => Category switch
         {
             "JavaScript" => "⚡",

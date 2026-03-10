@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using LearningApp.Services;
-using Microsoft.Extensions.Logging;          // ← new
+using Microsoft.Extensions.Logging;       
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace LearningApp
@@ -9,7 +9,6 @@ namespace LearningApp
     {
         public static MauiApp CreateMauiApp()
         {
-            // ← new: must run before any PdfSharpCore type is touched
 
             var builder = MauiApp.CreateBuilder();
             builder

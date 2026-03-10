@@ -1,7 +1,4 @@
-﻿// LearningApp/Controls/SkeletonView.cs
-// Reusable animated shimmer skeleton block
-
-namespace LearningApp.Controls
+﻿namespace LearningApp.Controls
 {
     public class SkeletonView : ContentView
     {

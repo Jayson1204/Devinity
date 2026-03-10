@@ -19,7 +19,7 @@ namespace LearningApp.Api.Services
         Task<UserData> GetUserByIdAsync(string userId);
         Task<UpdateProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request);
         Task<UploadAvatarResponse> UploadAvatarAsync(string userId, Stream imageStream, string fileName);
-        Task ClearAvatarAsync(string userId); // ← ADDED
+        Task ClearAvatarAsync(string userId); 
     }
 
     public class AuthService : IAuthService

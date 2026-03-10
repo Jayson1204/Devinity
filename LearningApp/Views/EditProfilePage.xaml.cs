@@ -1,15 +1,13 @@
 ﻿using System.Net.Http.Json;
 using LearningApp.Services;
 using LearningApp.Constants;
+using LearningApp.Views.Dialogs;
 
 namespace LearningApp.Views;
 
 public partial class EditProfilePage : ContentPage
 {
     private readonly HttpClient _httpClient;
-    private bool _showCurrentPw = false;
-    private bool _showNewPw = false;
-    private bool _showConfirmPw = false;
     private string? _pendingImagePath = null;
 
     public EditProfilePage()
@@ -32,10 +30,18 @@ public partial class EditProfilePage : ContentPage
         }
     }
 
-    private async void OnChangeAvatarTapped(object sender, EventArgs e)
+    // ── Avatar ────────────────────────────────────────────────────────────────
+
+    private async void OnChangeAvatarClicked(object sender, EventArgs e)
     {
         try
         {
+            // Show permission dialog first
+            var dialog = new StoragePermissionDialog();
+            await Shell.Current.Navigation.PushModalAsync(dialog, false);
+            var confirmed = await dialog.Result;
+            if (!confirmed) return;
+
             var result = await MediaPicker.Default.PickPhotoAsync(
                 new MediaPickerOptions { Title = "Choose a profile photo" });
 
@@ -61,6 +67,8 @@ public partial class EditProfilePage : ContentPage
         }
     }
 
+    // ── Password toggles ──────────────────────────────────────────────────────
+
     private void OnToggleCurrentPassword(object sender, EventArgs e)
     {
         CurrentPasswordEntry.IsPassword = !CurrentPasswordEntry.IsPassword;
@@ -78,6 +86,8 @@ public partial class EditProfilePage : ContentPage
         ConfirmPasswordEntry.IsPassword = !ConfirmPasswordEntry.IsPassword;
         ConfirmPasswordEyeIcon.Source = ConfirmPasswordEntry.IsPassword ? "eye_open.png" : "eye_closed.png";
     }
+
+    // ── Save ──────────────────────────────────────────────────────────────────
 
     private async void OnSaveTapped(object sender, EventArgs e)
     {
@@ -152,7 +162,7 @@ public partial class EditProfilePage : ContentPage
                     var avatarResult = await avatarResp.Content
                         .ReadFromJsonAsync<UploadAvatarResult>();
 
-                    if (avatarResult?.Success == true && avatarResult.AvatarUrl != null)
+                    if (avatarResult?.AvatarUrl != null)
                     {
                         Preferences.Set("UserAvatarUrl", avatarResult.AvatarUrl);
                         try { File.Delete(_pendingImagePath); } catch { }
@@ -161,7 +171,6 @@ public partial class EditProfilePage : ContentPage
                 }
             }
 
-            // 2. Update profile name / password
             SaveBtn.Text = "Saving...";
 
             var response = await _httpClient.PutAsJsonAsync(
@@ -201,6 +210,8 @@ public partial class EditProfilePage : ContentPage
             SaveBtn.Text = "Save Changes";
         }
     }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private void ShowError(string message)
     {

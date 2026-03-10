@@ -1,5 +1,4 @@
 ﻿using LearningApp.Constants;
-// LearningApp/ViewModels/CourseDetailViewModel.cs
 using LearningApp.Models;
 using LearningApp.Services;
 using System.Collections.ObjectModel;
@@ -112,7 +111,7 @@ namespace LearningApp.ViewModels
             }
         }
 
-        // Call this after completing an assessment to refresh progress
+       
         public void InvalidateCache() => _cache.Remove(_courseName);
 
         private async Task<List<FirebaseVideoDto>> FetchVideos()

@@ -3,10 +3,6 @@ using Microsoft.Maui.Controls.Shapes;
 
 namespace LearningApp.Controls;
 
-/// <summary>
-/// Transparent full-screen modal page that shows the motivational quote card.
-/// Pushed modally over any page — works across the entire app with no layout hacks.
-/// </summary>
 public class QuotePopupPage : ContentPage
 {
     private Border _card = null!;
@@ -30,7 +26,7 @@ public class QuotePopupPage : ContentPage
             StrokeShape = new RoundRectangle { CornerRadius = 28 }
         };
 
-        // ── Top row ────────────────────────────────────────────────────────────
+        // ── Top row ───
         var iconBadge = new Border
         {
             BackgroundColor = Color.FromArgb("#3B82F620"),
@@ -92,14 +88,14 @@ public class QuotePopupPage : ContentPage
         topRow.Add(titleLabel, 1, 0);
         topRow.Add(closeBadge, 2, 0);
 
-        // ── Divider ───────────────────────────────────────────────────────────
+        // ── Divider ───
         var divider = new BoxView
         {
             HeightRequest = 1,
             Color = Color.FromArgb("#334155")
         };
 
-        // ── Quote text ────────────────────────────────────────────────────────
+        // ── Quote text ──
         var quoteLabel = new Label
         {
             Text = $"\u201c{quote.Text}\u201d",
@@ -111,7 +107,7 @@ public class QuotePopupPage : ContentPage
             LineHeight = 1.4
         };
 
-        // ── Author row ────────────────────────────────────────────────────────
+        // ── Author row ───
         var authorRow = new HorizontalStackLayout
         {
             HorizontalOptions = LayoutOptions.Center,
@@ -140,7 +136,7 @@ public class QuotePopupPage : ContentPage
             }
         };
 
-        // ── Keep Going button ─────────────────────────────────────────────────
+        // ── Keep Going button ───
         var btnLabel = new Label
         {
             Text = "Keep Going ",
@@ -164,14 +160,14 @@ public class QuotePopupPage : ContentPage
             Command = new Command(async () => await DismissAsync())
         });
 
-        // ── Assemble card ─────────────────────────────────────────────────────
+        // ── Assemble card ───
         _card.Content = new VerticalStackLayout
         {
             Spacing = 20,
             Children = { topRow, divider, quoteLabel, authorRow, btnBorder }
         };
 
-        // ── Root: Grid so dim background tap also dismisses ───────────────────
+        
         var rootGrid = new Grid();
         var dimTap = new TapGestureRecognizer
         {

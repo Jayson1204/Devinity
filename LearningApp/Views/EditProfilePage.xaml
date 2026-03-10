@@ -42,43 +42,63 @@
                 <!-- ── Avatar Section ── -->
                 <VerticalStackLayout HorizontalOptions="Center"
                                      Spacing="12" Margin="0,16,0,32">
-                    <Grid HorizontalOptions="Center">
+
+                    <!-- Avatar grid with invisible Button on top -->
+                    <Grid HorizontalOptions="Center"
+                          WidthRequest="100" HeightRequest="100">
+
+                        <!-- Avatar circle -->
                         <Border x:Name="AvatarBorder"
                                 BackgroundColor="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"
                                 StrokeThickness="3" Stroke="#3B82F6"
-                                WidthRequest="100" HeightRequest="100">
+                                WidthRequest="100" HeightRequest="100"
+                                InputTransparent="True">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="50"/>
                             </Border.StrokeShape>
-                            <Grid>
+                            <Grid InputTransparent="True">
                                 <Label x:Name="AvatarEmoji"
                                        Text="👤" FontSize="52"
                                        HorizontalOptions="Center"
-                                       VerticalOptions="Center"/>
+                                       VerticalOptions="Center"
+                                       InputTransparent="True"/>
                                 <Image x:Name="AvatarImage"
                                        Aspect="AspectFill"
                                        IsVisible="False"
                                        HorizontalOptions="Fill"
-                                       VerticalOptions="Fill"/>
+                                       VerticalOptions="Fill"
+                                       InputTransparent="True"/>
                             </Grid>
                         </Border>
+
+                        <!-- Camera badge -->
                         <Border BackgroundColor="#3B82F6"
                                 StrokeThickness="2"
                                 Stroke="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                 WidthRequest="32" HeightRequest="32"
                                 HorizontalOptions="End" VerticalOptions="End"
-                                Margin="0,0,2,2">
+                                Margin="0,0,2,2"
+                                InputTransparent="True">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="16"/>
                             </Border.StrokeShape>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnChangeAvatarTapped"/>
-                            </Border.GestureRecognizers>
                             <Label Text="📷" FontSize="14"
                                    HorizontalOptions="Center"
-                                   VerticalOptions="Center"/>
+                                   VerticalOptions="Center"
+                                   InputTransparent="True"/>
                         </Border>
+
+                        <!-- Invisible Button — reliable tap on Android -->
+                        <Button Text=""
+                                BackgroundColor="Transparent"
+                                BorderWidth="0"
+                                WidthRequest="100" HeightRequest="100"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Clicked="OnChangeAvatarClicked"/>
+
                     </Grid>
+
                     <Label Text="Tap camera to change photo"
                            FontSize="12" TextColor="#64748B"
                            HorizontalOptions="Center"/>
@@ -131,7 +151,6 @@
                                        FontSize="16"
                                        BackgroundColor="Transparent"
                                        Margin="0,-6,0,-6"/>
-                                <!-- Replace eye_open.png with your actual icon file -->
                                 <Image x:Name="CurrentPasswordEyeIcon"
                                        Grid.Column="1"
                                        Source="eye_open.png"

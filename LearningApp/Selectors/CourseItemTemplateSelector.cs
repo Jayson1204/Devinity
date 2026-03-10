@@ -1,5 +1,4 @@
-﻿// LearningApp/Selectors/CourseItemTemplateSelector.cs
-using LearningApp.Models;
+﻿using LearningApp.Models;
 
 namespace LearningApp.Selectors
 {

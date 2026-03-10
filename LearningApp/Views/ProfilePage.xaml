@@ -2,12 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:LearningApp.Controls"
+             xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
              x:Class="LearningApp.Views.ProfilePage"
              BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="*">
+    <Grid>
         <Grid Grid.Row="0">
 
             <!-- Skeleton -->
@@ -53,64 +54,73 @@
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16"
                           Padding="24,24,24,0">
 
-                        <!-- ── Avatar (tappable) ── CHANGED: added tap + camera badge -->
-                        <Grid Grid.Column="0">
+                        <!-- ── Avatar ── -->
+                        <Grid Grid.Column="0"
+                              WidthRequest="80" HeightRequest="80">
 
+                            <!-- Avatar visual -->
                             <Border BackgroundColor="{AppThemeBinding Light=#E2E8F0, Dark=#1E293B}"
                                     StrokeThickness="2"
                                     Stroke="{AppThemeBinding Light=#CBD5E1, Dark=#334155}"
-                                    WidthRequest="80" HeightRequest="80">
+                                    WidthRequest="80" HeightRequest="80"
+                                    InputTransparent="True">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="24"/>
                                 </Border.StrokeShape>
-                                <!-- ADDED: tap to change photo -->
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnAvatarTapped"/>
-                                </Border.GestureRecognizers>
-                                <Grid>
+                                <Grid InputTransparent="True">
                                     <Label x:Name="AvatarLabel"
                                            Text="👤" FontSize="40"
                                            HorizontalOptions="Center"
-                                           VerticalOptions="Center"/>
+                                           VerticalOptions="Center"
+                                           InputTransparent="True"/>
                                     <Image x:Name="AvatarImage"
                                            Aspect="AspectFill"
                                            IsVisible="False"
                                            HorizontalOptions="Fill"
-                                           VerticalOptions="Fill"/>
+                                           VerticalOptions="Fill"
+                                           InputTransparent="True"/>
                                 </Grid>
                             </Border>
 
-                            <!-- Online dot (unchanged) -->
+                            <!-- Online dot -->
                             <Border BackgroundColor="#22C55E"
                                     StrokeThickness="2"
                                     Stroke="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                     WidthRequest="16" HeightRequest="16"
                                     HorizontalOptions="End" VerticalOptions="End"
-                                    Margin="0,0,2,2">
+                                    Margin="0,0,2,2"
+                                    InputTransparent="True">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="8"/>
                                 </Border.StrokeShape>
                             </Border>
 
-                            <!-- ADDED: camera badge top-right -->
+                            <!-- Camera badge -->
                             <Border BackgroundColor="#3B82F6"
                                     StrokeThickness="1.5"
                                     Stroke="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                     WidthRequest="24" HeightRequest="24"
-                                    HorizontalOptions="End" VerticalOptions="Start">
+                                    HorizontalOptions="End" VerticalOptions="Start"
+                                    InputTransparent="True">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="12"/>
                                 </Border.StrokeShape>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnAvatarTapped"/>
-                                </Border.GestureRecognizers>
                                 <Label Text="📷" FontSize="11"
                                        HorizontalOptions="Center"
-                                       VerticalOptions="Center"/>
+                                       VerticalOptions="Center"
+                                       InputTransparent="True"/>
                             </Border>
 
+                            <!-- Invisible Button on top — most reliable tap on Android -->
+                            <Button Text=""
+                                    BackgroundColor="Transparent"
+                                    BorderWidth="0"
+                                    WidthRequest="80" HeightRequest="80"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Fill"
+                                    Clicked="OnAvatarClicked"/>
+
                         </Grid>
-                        <!-- ── End Avatar ── -->
 
                         <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
                             <Label x:Name="FullNameLabel"
@@ -255,7 +265,7 @@
                                              Color="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
                                              Margin="6,0,6,8"/>
 
-                                    <!-- Edit Profile -->
+                                    <!-- Privacy & Security -->
                                     <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                             StrokeThickness="0" Padding="14,12">
                                         <Border.StrokeShape>
@@ -280,7 +290,7 @@
                                                        VerticalOptions="Center"/>
                                             </Border>
                                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
-                                                <Label Text="Edit Profile"
+                                                <Label Text="Privacy And Security"
                                                        FontSize="14" FontAttributes="Bold"
                                                        TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
                                                 <Label Text="Update your personal info"
@@ -328,43 +338,6 @@
                                         </Grid>
                                     </Border>
 
-                                    <!-- Privacy & Security -->
-                                    <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
-                                            StrokeThickness="0" Padding="14,12">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="12"/>
-                                        </Border.StrokeShape>
-                                        <Border.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnPrivacyTapped"/>
-                                        </Border.GestureRecognizers>
-                                        <Grid ColumnDefinitions="Auto,*,Auto">
-                                            <Border Grid.Column="0"
-                                                    BackgroundColor="#22C55E20"
-                                                    StrokeThickness="0"
-                                                    WidthRequest="34" HeightRequest="34"
-                                                    Margin="0,0,12,0">
-                                                <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="10"/>
-                                                </Border.StrokeShape>
-                                                <Image Source="privacy.png"
-                                                       HeightRequest="17" WidthRequest="17"
-                                                       Aspect="AspectFit"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center"/>
-                                            </Border>
-                                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
-                                                <Label Text="Privacy &amp; Security"
-                                                       FontSize="14" FontAttributes="Bold"
-                                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                                                <Label Text="Control your data and privacy"
-                                                       FontSize="11" TextColor="#64748B"/>
-                                            </VerticalStackLayout>
-                                            <Label Grid.Column="2" Text="›"
-                                                   FontSize="20" TextColor="#475569"
-                                                   VerticalOptions="Center"/>
-                                        </Grid>
-                                    </Border>
-
                                     <!-- Help & Support -->
                                     <Border BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}"
                                             StrokeThickness="0" Padding="14,12">
@@ -383,7 +356,7 @@
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10"/>
                                                 </Border.StrokeShape>
-                                                <Image Source="ic_help.png"
+                                                <Image Source="support.png"
                                                        HeightRequest="17" WidthRequest="17"
                                                        Aspect="AspectFit"
                                                        HorizontalOptions="Center"
@@ -515,5 +488,28 @@
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>
+
+        <!-- ── Loading Overlay ── -->
+        <Grid x:Name="LoadingOverlay" IsVisible="False" BackgroundColor="#990F172A">
+            <Border BackgroundColor="#1E293B"
+                    StrokeThickness="1" Stroke="#334155"
+                    Padding="40,32"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <skia:SKLottieView Source="loading.json"
+                                       RepeatCount="-1"
+                                       WidthRequest="80"
+                                       HeightRequest="80"
+                                       HorizontalOptions="Center"/>
+                    <Label Text="Signing Out..."
+                           TextColor="#F8FAFC" FontSize="15"
+                           FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
     </Grid>
 </ContentPage>

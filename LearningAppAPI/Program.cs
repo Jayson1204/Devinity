@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// ── Swagger ───────────────────────────────────────────────────────────────────
+// ── Swagger ─--
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -47,12 +47,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ── Database ──────────────────────────────────────────────────────────────────
+// ── Database ───
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 0))));
 
-// ── JWT ───────────────────────────────────────────────────────────────────────
+// ── JWT ─────
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
@@ -78,7 +78,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// ── CORS ──────────────────────────────────────────────────────────────────────
+// ── CORS ────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -89,7 +89,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// ── Rate Limiting ─────────────────────────────────────────────────────────────
+// ── Rate Limiting ───
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -137,7 +137,7 @@ builder.Services.AddRateLimiter(options =>
     };
 });
 
-// ── Services ──────────────────────────────────────────────────────────────────
+// ── Services ───
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IAvatarService, AvatarService>();
@@ -151,13 +151,13 @@ builder.Services.AddLogging(logging =>
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
 
-// ── Build ─────────────────────────────────────────────────────────────────────
+// ── Build ───
 var app = builder.Build();
 
 // Ensure upload directory exists on startup
 Directory.CreateDirectory("/app/uploads/avatars");
 
-// ── Middleware pipeline ───────────────────────────────────────────────────────
+// ── Middleware pipeline ───
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -190,6 +190,6 @@ app.MapGet("/info", () => new
     timestamp = DateTime.UtcNow
 }).RequireRateLimiting("static");
 
-// ── Run ───────────────────────────────────────────────────────────────────────
+// ── Run ───
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");

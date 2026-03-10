@@ -60,7 +60,6 @@ public partial class CertificatePage : ContentPage
         DownloadBtn.Text = "Generating...";
         try
         {
-            // ← Remove the QuestPDF line, SkiaSharp needs no initialization
             var pdfPath = await Task.Run(() =>
                 CertificateGenerator.Generate(
                     _studentName,
@@ -74,9 +73,9 @@ public partial class CertificatePage : ContentPage
                 File = new ShareFile(pdfPath, "application/pdf")
             });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await DisplayAlert("Error", $"Could not generate PDF: {ex.Message}", "OK");
+            await DisplayAlert("Error", "Could not generate PDF", "OK");
         }
         finally
         {

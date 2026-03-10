@@ -89,7 +89,7 @@ namespace LearningApp.Api.Controllers
 
         public class CompleteRequest
         {
-            public string UserId { get; set; }  // string GUID
+            public string UserId { get; set; }
             public int AssessmentId { get; set; }
             public string Category { get; set; }
             public string Level { get; set; }

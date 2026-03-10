@@ -1,5 +1,4 @@
-﻿// LearningApp.Api/Controllers/FirebaseVideoController.cs
-using LearningApp.Api.Data;
+﻿using LearningApp.Api.Data;
 using LearningApp.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

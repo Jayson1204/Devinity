@@ -5,16 +5,13 @@ namespace LearningApp.Services;
 
 public class MotivationalQuoteService
 {
-    // ── Singleton ──────────────────────────────────────────────────────────────
     public static readonly MotivationalQuoteService Instance = new();
 
-    // ── Event raised on UI thread ──────────────────────────────────────────────
     public event Action<Quote>? QuoteReady;
 
-    // ── Quote model ────────────────────────────────────────────────────────────
     public record Quote(string Text, string Author);
 
-    // ── Quote bank ────────────────────────────────────────────────────────────
+    // ── Quote bank ───
     private readonly List<Quote> _quotes =
     [
         new("I can do all things through Christ who strengthens me.", "Philippians 4:13"),
@@ -50,22 +47,16 @@ public class MotivationalQuoteService
         _timer.AutoReset = true;
     }
 
-    // ── Public API ─────────────────────────────────────────────────────────────
-
-    /// <summary>Call once from App.xaml.cs after shell loads.</summary>
     public void Start() => _timer.Start();
 
     public void Stop() => _timer.Stop();
 
-    /// <summary>Fires immediately — handy for testing without waiting 2 hours.</summary>
     public void TriggerNow() => RaiseQuote();
 
-    // ── Internals ──────────────────────────────────────────────────────────────
 
     private void RaiseQuote()
     {
         var quote = PickRandom();
-        // Always deliver on the main thread so UI can respond directly
         MainThread.BeginInvokeOnMainThread(() => QuoteReady?.Invoke(quote));
     }
 

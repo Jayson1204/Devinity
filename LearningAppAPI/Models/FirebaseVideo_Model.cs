@@ -6,7 +6,7 @@ namespace LearningApp.Api.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string FirebaseUrl { get; set; }   // Direct .mp4 URL from Firebase Storage
+        public string FirebaseUrl { get; set; }   
         public string ThumbnailUrl { get; set; }
         public string Level { get; set; }          // beginner, intermediate, advanced
         public string Category { get; set; }       // PHP, Python, JavaScript, etc.

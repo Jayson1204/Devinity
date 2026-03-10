@@ -24,18 +24,12 @@ namespace LearningApp
             return window;
         }
 
-        /// <summary>
-        /// Call after successful login to show the first quote and start the timer.
-        /// </summary>
         public void StartQuoteTimer()
         {
             MotivationalQuoteService.Instance.Start();
             MotivationalQuoteService.Instance.TriggerNow();
         }
 
-        /// <summary>
-        /// Call on logout to stop quote popups.
-        /// </summary>
         public void StopQuoteTimer()
         {
             MotivationalQuoteService.Instance.Stop();

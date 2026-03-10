@@ -11,7 +11,7 @@ namespace LearningApp.Api.Models
 
         [Required]
         [MaxLength(36)]
-        public string UserId { get; set; }  // string GUID to match User.Id
+        public string UserId { get; set; }  
         public int AssessmentId { get; set; }
         public string Category { get; set; }
         public string Level { get; set; }

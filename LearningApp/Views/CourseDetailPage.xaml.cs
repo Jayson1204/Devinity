@@ -25,11 +25,9 @@ namespace LearningApp.Views
         {
             base.OnAppearing();
 
-            // Show skeleton immediately so the page renders fast
             SkeletonScroll.IsVisible = true;
             CourseCollectionView.IsVisible = false;
 
-            // Defer data loading to next frame so navigation animation completes first
             Dispatcher.Dispatch(async () =>
             {
                 await _viewModel.LoadAsync(forceRefresh: _needsRefresh);

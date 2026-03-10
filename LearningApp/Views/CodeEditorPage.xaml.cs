@@ -63,7 +63,7 @@ namespace LearningApp.Views
             HintLabel.Text = GenerateHint(_currentChallenge);
         }
 
-        // ── Hint Generator ───────────────────────────────────────────────────
+        // ── Hint Generator ──
         private string GenerateHint(CodeChallenge challenge)
         {
             if (challenge == null) return "Think through the problem step by step.";
@@ -87,7 +87,7 @@ namespace LearningApp.Views
             return "Read the question carefully and check your syntax.";
         }
 
-        // ── Code Wrapper ─────────────────────────────────────────────────────
+        // ── Code Wrapper ───
         private string WrapCode(string code, string language)
         {
             switch (language.ToLower())
@@ -122,7 +122,7 @@ namespace LearningApp.Views
             }
         }
 
-        // ── Judge0 API Code Execution ────────────────────────────────────────
+        // ── Judge0 API Code Execution ──
         private async Task<string> ExecuteCode(string code, string language)
         {
             if (language.ToLower() == "mysql")
