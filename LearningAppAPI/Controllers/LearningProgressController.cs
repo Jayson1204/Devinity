@@ -10,7 +10,7 @@ namespace LearningApp.Api.Controllers
     public class LearningProgressController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly string[] _categories = { "PHP", "Python", "JavaScript", "Java", "C#", "C++", "C", "MySQL" };
+        private readonly string[] _categories = { "PHP", "Python", "JavaScript", "Java", "C#", "C++", "C", "MySQL", "web" };
 
         public LearningProgressController(ApplicationDbContext context)
         {

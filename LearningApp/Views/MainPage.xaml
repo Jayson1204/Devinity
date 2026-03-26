@@ -87,7 +87,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="PHP" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -107,7 +107,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="Java" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -127,7 +127,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="JavaScript" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -147,7 +147,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="Python" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -167,7 +167,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="C++" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -187,7 +187,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="C" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -207,7 +207,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="C#" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -227,7 +227,7 @@
                                    Aspect="AspectFit" HorizontalOptions="Center"/>
                             <Label Text="GO" FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"/>
-                            <Label Text="5 assessments" FontSize="12" TextColor="#94A3B8"/>
+                            <Label Text="10 assessments" FontSize="12" TextColor="#94A3B8"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -252,7 +252,7 @@
                         <RoundRectangle CornerRadius="24"/>
                     </Border.StrokeShape>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnFeaturedCourseTapped"/>
+                        <TapGestureRecognizer Tapped="OnFeaturedCourseTapped" CommandParameter="web"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout>
                         <Border BackgroundColor="#1E293B" HeightRequest="150" StrokeThickness="0">
@@ -266,10 +266,10 @@
                                    HeightRequest="150"/>
                         </Border>
                         <VerticalStackLayout Padding="16" Spacing="5">
-                            <Label Text="Complete Web Development Course"
+                            <Label Text="Web Development Course"
                                    FontSize="16" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#0F172A, Dark=White}"/>
-                            <Label Text="By: Martin, Romualdez" FontSize="13" TextColor="#9097C0"/>
+                            <Label Text="By: Youtube Academy" FontSize="13" TextColor="#9097C0"/>
                             <Label Text="52 hours" FontSize="13" TextColor="#A7BBEC" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>

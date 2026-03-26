@@ -190,6 +190,11 @@ app.MapGet("/info", () => new
     timestamp = DateTime.UtcNow
 }).RequireRateLimiting("static");
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
 // ── Run ───
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");

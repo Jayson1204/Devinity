@@ -1,4 +1,4 @@
-namespace LearningApp.Views
+﻿namespace LearningApp.Views
 {
     public partial class MainPage : ContentPage
     {
@@ -39,8 +39,9 @@ namespace LearningApp.Views
         private async void OnFeaturedCourseTapped(object sender, TappedEventArgs e)
         {
             var border = (Border)sender;
+            var courseName = e.Parameter.ToString(); // ← same as OnCategoryTapped
             _ = border.ScaleTo(0.98, 50).ContinueWith(_ => border.ScaleTo(1.0, 50));
-            await Navigation.PushAsync(new CourseDetailPage("Web Development"));
+            await Navigation.PushAsync(new CourseDetailPage(courseName));
         }
 
         private async void OnHomeTapped(object sender, EventArgs e) { }

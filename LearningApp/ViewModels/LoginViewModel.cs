@@ -118,7 +118,7 @@ namespace LearningApp.ViewModels
                 await Shell.Current.GoToAsync("///MainPage");
 
                 // Small delay so MainPage finishes rendering before popup appears
-                await Task.Delay(2000);
+                await Task.Delay(10000);
                 if (Application.Current is App app)
                     app.StartQuoteTimer();
             }
