@@ -190,10 +190,35 @@ app.MapGet("/info", () => new
     timestamp = DateTime.UtcNow
 }).RequireRateLimiting("static");
 
+// ── Migrate with retry ───
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    var retries = 0;
+    const int maxRetries = 5;
+
+    while (retries < maxRetries)
+    {
+        try
+        {
+            db.Database.Migrate();
+            logger.LogInformation("Database migration successful.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            retries++;
+            logger.LogWarning("Migration attempt {Retry}/{Max} failed: {Message}", retries, maxRetries, ex.Message);
+            if (retries >= maxRetries)
+            {
+                logger.LogError("All migration attempts failed. Starting app anyway.");
+                break;
+            }
+            Thread.Sleep(TimeSpan.FromSeconds(5 * retries)); // back-off: 5s, 10s, 15s...
+        }
+    }
 }
 // ── Run ───
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
